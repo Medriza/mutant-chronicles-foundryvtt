@@ -1,0 +1,27 @@
+{
+    "id": "mutant-chronicles",
+    "title": "Mutant Chronicles 3rd Edition",
+    "description": "A Foundry VTT system for Mutant Chronicles 3rd Edition.",
+    "version": "0.1.0",
+    "compatibility": {
+        "minimum": "13",
+        "verified": "13"
+    },
+    "authors": [
+        {
+            "name": "Peter Medrano",
+            "email": "cucuy@medriza.com"
+        }
+    ],
+    "esmodules": ["mutant-chronicles.js"],
+    "styles": ["styles/mutant-chronicles.css"],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ],
+    "socket": false,
+    "url": "https://github.com/Medriza/mutant-chronicles-foundryvtt"
+}
