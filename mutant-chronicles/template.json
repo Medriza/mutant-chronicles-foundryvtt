@@ -4,38 +4,64 @@
         "templates": {
             "attributes": {
                 "attributes": {
-                    "strength":       { "value": 8, "bonus": 0 },
-                    "agility":        { "value": 8, "bonus": 0 },
-                    "awareness":      { "value": 8, "bonus": 0 },
-                    "coordination":    { "value": 8, "bonus": 0 },
-                    "intelligence":     { "value": 8, "bonus": 0 },
-                    "mentalstrength":     { "value": 8, "bonus": 0 },
-                    "personality":     { "value": 8, "bonus": 0 }
+                    "agility":        { "value": 5 },
+                    "awareness":      { "value": 5 },
+                    "coordination":   { "value": 5 },
+                    "intelligence":   { "value": 5 },
+                    "mentalStrength": { "value": 5 },
+                    "personality":    { "value": 5 },
+                    "physique":       { "value": 5 },
+                    "strength":       { "value": 5 }
                 }
             },
-            "derived": {
-                "wounds": { "value": 0, "max": 0 },
-                "corruption": { "value": 0, "max": 0 },
-                "movement": { "value": 0 }
+            "wounds": {
+                "wounds": {
+                    "light": {
+                        "head":     { "value": 0, "max": 5 },
+                        "leftArm":  { "value": 0, "max": 5 },
+                        "rightArm": { "value": 0, "max": 5 },
+                        "torso":    { "value": 0, "max": 5 },
+                        "leftLeg":  { "value": 0, "max": 5 },
+                        "rightLeg": { "value": 0, "max": 5 }
+                    },
+                    "serious":  { "value": 0, "max": 5 },
+                    "critical": { "value": 0, "max": 5 }
+                }
             },
-            "pools": {
-                "momentum": 0,
-                "doom": 0
+            "mentalWounds": {
+                "mentalWounds": {
+                    "max": 5,
+                    "slots": {
+                        "0": { "filled": false, "tainted": false },
+                        "1": { "filled": false, "tainted": false },
+                        "2": { "filled": false, "tainted": false },
+                        "3": { "filled": false, "tainted": false },
+                        "4": { "filled": false, "tainted": false }
+                    }
+                }
+            },
+            "derivedStats": {
+                "derivedStats": {
+                    "meleeBonusDamage": 0,
+                    "rangedBonusDamage": 0,
+                    "influence": 0
+                }
             }
         },
         "character": {
-            "templates": ["attributes", "derived", "pools"],
+            "templates": ["attributes", "wounds", "mentalWounds", "derivedStats"],
             "details": {
                 "faction": "",
                 "caste": "",
                 "career": "",
-                "earnings": 0,
+                "earningsRating": 0,
+                "assets": "",
                 "biography": "",
                 "notes": ""
             }
         },
         "npc": {
-            "templates": ["attributes", "derived", "pools"],
+            "templates": ["attributes", "wounds", "mentalWounds", "derivedStats"],
             "details": {
                 "faction": "",
                 "role": "",
@@ -48,7 +74,7 @@
         "skill": {
             "attribute": "",
             "rating": 0,
-            "focuses": ""
+            "focuses": []
         },
         "talent": {
             "prerequisites": "",
