@@ -1,42 +1,100 @@
 {
     "Actor": {
-        "types": ["character", "npc"],
+        "types": [
+            "character",
+            "npc"
+        ],
         "templates": {
             "attributes": {
                 "attributes": {
-                    "agility":        { "value": 5 },
-                    "awareness":      { "value": 5 },
-                    "coordination":   { "value": 5 },
-                    "intelligence":   { "value": 5 },
-                    "mentalStrength": { "value": 5 },
-                    "personality":    { "value": 5 },
-                    "physique":       { "value": 5 },
-                    "strength":       { "value": 5 }
+                    "agility": {
+                        "value": 5
+                    },
+                    "awareness": {
+                        "value": 5
+                    },
+                    "coordination": {
+                        "value": 5
+                    },
+                    "intelligence": {
+                        "value": 5
+                    },
+                    "mentalStrength": {
+                        "value": 5
+                    },
+                    "personality": {
+                        "value": 5
+                    },
+                    "physique": {
+                        "value": 5
+                    },
+                    "strength": {
+                        "value": 5
+                    }
                 }
             },
             "wounds": {
                 "wounds": {
                     "light": {
-                        "head":     { "value": 0, "max": 5 },
-                        "leftArm":  { "value": 0, "max": 5 },
-                        "rightArm": { "value": 0, "max": 5 },
-                        "torso":    { "value": 0, "max": 5 },
-                        "leftLeg":  { "value": 0, "max": 5 },
-                        "rightLeg": { "value": 0, "max": 5 }
+                        "head": {
+                            "value": 0,
+                            "max": 5
+                        },
+                        "leftArm": {
+                            "value": 0,
+                            "max": 5
+                        },
+                        "rightArm": {
+                            "value": 0,
+                            "max": 5
+                        },
+                        "torso": {
+                            "value": 0,
+                            "max": 5
+                        },
+                        "leftLeg": {
+                            "value": 0,
+                            "max": 5
+                        },
+                        "rightLeg": {
+                            "value": 0,
+                            "max": 5
+                        }
                     },
-                    "serious":  { "value": 0, "max": 5 },
-                    "critical": { "value": 0, "max": 5 }
+                    "serious": {
+                        "value": 0,
+                        "max": 5
+                    },
+                    "critical": {
+                        "value": 0,
+                        "max": 5
+                    }
                 }
             },
             "mentalWounds": {
                 "mentalWounds": {
                     "max": 5,
                     "slots": {
-                        "0": { "filled": false, "tainted": false },
-                        "1": { "filled": false, "tainted": false },
-                        "2": { "filled": false, "tainted": false },
-                        "3": { "filled": false, "tainted": false },
-                        "4": { "filled": false, "tainted": false }
+                        "0": {
+                            "filled": false,
+                            "tainted": false
+                        },
+                        "1": {
+                            "filled": false,
+                            "tainted": false
+                        },
+                        "2": {
+                            "filled": false,
+                            "tainted": false
+                        },
+                        "3": {
+                            "filled": false,
+                            "tainted": false
+                        },
+                        "4": {
+                            "filled": false,
+                            "tainted": false
+                        }
                     }
                 }
             },
@@ -49,7 +107,15 @@
             }
         },
         "character": {
-            "templates": ["attributes", "wounds", "mentalWounds", "derivedStats"],
+            "templates": [
+                "attributes",
+                "wounds",
+                "mentalWounds",
+                "derivedStats"
+            ],
+            "useMysticism": false,
+            "status": "",
+            "criticalInjuries": [],
             "details": {
                 "faction": "",
                 "caste": "",
@@ -58,10 +124,546 @@
                 "assets": "",
                 "biography": "",
                 "notes": ""
+            },
+            "lifePath": {
+                "birthFaction": "",
+                "familyHeritage": "",
+                "education": "",
+                "freeCareerChoice": "",
+                "careers": [
+                    {
+                        "name": "",
+                        "description": ""
+                    },
+                    {
+                        "name": "",
+                        "description": ""
+                    },
+                    {
+                        "name": "",
+                        "description": ""
+                    },
+                    {
+                        "name": "",
+                        "description": ""
+                    }
+                ],
+                "age": 0,
+                "lifePoints": 0,
+                "chroniclePoints": 0,
+                "traitsAndEvents": "",
+                "attributeContributions": {
+                    "agility": {
+                        "starting": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "customisation": 0
+                    },
+                    "awareness": {
+                        "starting": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "customisation": 0
+                    },
+                    "coordination": {
+                        "starting": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "customisation": 0
+                    },
+                    "intelligence": {
+                        "starting": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "customisation": 0
+                    },
+                    "mentalStrength": {
+                        "starting": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "customisation": 0
+                    },
+                    "personality": {
+                        "starting": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "customisation": 0
+                    },
+                    "physique": {
+                        "starting": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "customisation": 0
+                    },
+                    "strength": {
+                        "starting": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "customisation": 0
+                    }
+                },
+                "skillContributions": {
+                    "acrobatics": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "animalHandling": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "athletics": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "closeCombat": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "command": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "education": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "gunnery": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "heavyWeapons": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "insight": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "lifestyle": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "linguistics": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "mechanics": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "medicine": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "mysticism": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "observation": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "persuade": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "pilot": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "psychotherapy": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "rangedWeapons": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "resistance": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "sciences": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "space": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "stealth": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "survival": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "thievery": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "treatment": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "unarmedCombat": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "vacuum": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    },
+                    "willpower": {
+                        "signature": false,
+                        "expertise": 0,
+                        "focus": 0,
+                        "birthFaction": 0,
+                        "status": 0,
+                        "environment": 0,
+                        "education": 0,
+                        "career1": 0,
+                        "career2": 0,
+                        "career3": 0,
+                        "career4": 0,
+                        "customisationLifePoints": 0,
+                        "customisation2Skills": 0
+                    }
+                }
             }
         },
         "npc": {
-            "templates": ["attributes", "wounds", "mentalWounds", "derivedStats"],
+            "templates": [
+                "attributes",
+                "wounds",
+                "mentalWounds",
+                "derivedStats"
+            ],
             "details": {
                 "faction": "",
                 "role": "",
@@ -70,7 +672,14 @@
         }
     },
     "Item": {
-        "types": ["skill", "talent", "weapon", "armour", "equipment"],
+        "types": [
+            "skill",
+            "talent",
+            "weapon",
+            "armour",
+            "equipment",
+            "spell"
+        ],
         "skill": {
             "attribute": "",
             "rating": 0,
@@ -95,6 +704,13 @@
         "equipment": {
             "quantity": 1,
             "description": ""
+        },
+        "spell": {
+            "category": "spell",
+            "difficulty": "",
+            "target": "",
+            "duration": "",
+            "effect": ""
         }
     }
 }
