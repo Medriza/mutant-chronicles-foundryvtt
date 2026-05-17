@@ -8,6 +8,8 @@
  *
  * Plus several private event-handler methods (_onItemCreate, _onItemEdit, etc.).
  */
+const { ActorSheet } = foundry.appv1.sheets;
+
 export class MC3CharacterSheet extends ActorSheet {
 
   /**

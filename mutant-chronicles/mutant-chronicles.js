@@ -10,6 +10,8 @@ import { MC3Actor } from "./module/actor.js";
 import { MC3Item }  from "./module/item.js";
 import { MC3CharacterSheet } from "./module/sheets/character-sheet.js";
 
+const { Actors } = foundry.documents.collections;
+
 /**
  * The 'init' hook fires once, very early in Foundry's startup — after the
  * settings system is online but before any documents are loaded from the
