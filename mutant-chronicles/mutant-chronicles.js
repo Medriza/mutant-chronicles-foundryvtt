@@ -8,6 +8,7 @@
 
 import { MC3Actor } from "./module/actor.js";
 import { MC3Item }  from "./module/item.js";
+import { MC3CharacterSheet } from "./module/sheets/character-sheet.js";
 
 /**
  * The 'init' hook fires once, very early in Foundry's startup — after the
@@ -22,4 +23,13 @@ Hooks.once('init', () => {
   // the base Actor class. Same for Item.
   CONFIG.Actor.documentClass = MC3Actor;
   CONFIG.Item.documentClass  = MC3Item;
+
+  // Register our character sheet as the default for the 'character' actor type.
+  // makeDefault: true means Foundry uses ours when opening a character actor,
+  // rather than the generic base ActorSheet.
+  Actors.registerSheet('mutant-chronicles', MC3CharacterSheet, {
+    types: ['character'],
+    makeDefault: true,
+    label: 'MC3.SheetClassCharacter'
+  });
 });
