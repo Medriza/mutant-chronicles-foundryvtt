@@ -1,0 +1,26 @@
+{{!-- ── Bio Tab ──────────────────────────────────────────────────── --}}
+<div class="tab bio flexcol" data-group="primary" data-tab="bio">
+
+  <div class="bio-fields flexrow">
+    <div class="form-group">
+      <label>Assets</label>
+      <input type="text" name="system.details.assets"
+             value="{{system.details.assets}}" placeholder="Assets…" />
+    </div>
+  </div>
+
+  <div class="form-group biography-group">
+    <label>Biography</label>
+    <textarea name="system.details.biography"
+              placeholder="Character background, history, and description…"
+              rows="8">{{system.details.biography}}</textarea>
+  </div>
+
+  <div class="form-group notes-group">
+    <label>Notes</label>
+    <textarea name="system.details.notes"
+              placeholder="Session notes, reminders, and miscellaneous…"
+              rows="6">{{system.details.notes}}</textarea>
+  </div>
+
+</div>

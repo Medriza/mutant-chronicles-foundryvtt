@@ -1,0 +1,121 @@
+{{!-- ── Gear Tab ─────────────────────────────────────────────────── --}}
+{{!-- Three sections: Weapons, Armour, Belongings (equipment items).
+     Columns match the official MC3 character sheet layout.
+     Some Belongings columns (load, reliability, etc.) are placeholders
+     until item types are expanded in the post-Module-8 backlog. --}}
+<div class="tab gear flexcol" data-group="primary" data-tab="gear">
+
+  {{!-- Weapons ───────────────────────────────────────────────────── --}}
+  <section class="gear-section">
+    <header class="gear-section-header flexrow">
+      <h3>Weapons</h3>
+      <a class="item-create" data-item-type="weapon" title="Add Weapon">
+        <i class="fas fa-plus"></i> Add
+      </a>
+    </header>
+    {{#if weapons.length}}
+    <table class="weapons-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Damage</th>
+          <th>Range</th>
+          <th>Qualities</th>
+          <th class="controls"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each weapons as |weapon|}}
+        <tr class="weapon-row" data-item-id="{{weapon.id}}">
+          <td>{{weapon.name}}</td>
+          <td>{{weapon.system.damage}}</td>
+          <td>{{weapon.system.range}}</td>
+          <td>{{weapon.system.qualities}}</td>
+          <td class="controls flexrow">
+            <a class="item-edit" title="Edit"><i class="fas fa-edit"></i></a>
+            <a class="item-delete" title="Delete"><i class="fas fa-trash"></i></a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{else}}
+      <p class="empty-label">No weapons.</p>
+    {{/if}}
+  </section>
+
+  {{!-- Armour ────────────────────────────────────────────────────── --}}
+  <section class="gear-section">
+    <header class="gear-section-header flexrow">
+      <h3>Armour</h3>
+      <a class="item-create" data-item-type="armour" title="Add Armour">
+        <i class="fas fa-plus"></i> Add
+      </a>
+    </header>
+    {{#if armours.length}}
+    <table class="armour-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Rating</th>
+          <th>Coverage</th>
+          <th>Qualities</th>
+          <th class="controls"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each armours as |armour|}}
+        <tr class="armour-row" data-item-id="{{armour.id}}">
+          <td>{{armour.name}}</td>
+          <td>{{armour.system.rating}}</td>
+          <td>{{armour.system.coverage}}</td>
+          <td>{{armour.system.qualities}}</td>
+          <td class="controls flexrow">
+            <a class="item-edit" title="Edit"><i class="fas fa-edit"></i></a>
+            <a class="item-delete" title="Delete"><i class="fas fa-trash"></i></a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{else}}
+      <p class="empty-label">No armour.</p>
+    {{/if}}
+  </section>
+
+  {{!-- Belongings ────────────────────────────────────────────────── --}}
+  <section class="gear-section">
+    <header class="gear-section-header flexrow">
+      <h3>Belongings</h3>
+      <a class="item-create" data-item-type="equipment" title="Add Equipment">
+        <i class="fas fa-plus"></i> Add
+      </a>
+    </header>
+    {{#if equipment.length}}
+    <table class="equipment-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Qty</th>
+          <th class="controls"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each equipment as |item|}}
+        <tr class="equipment-row" data-item-id="{{item.id}}">
+          <td>{{item.name}}</td>
+          <td>{{item.system.quantity}}</td>
+          <td class="controls flexrow">
+            <a class="item-edit" title="Edit"><i class="fas fa-edit"></i></a>
+            <a class="item-delete" title="Delete"><i class="fas fa-trash"></i></a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{else}}
+      <p class="empty-label">No belongings.</p>
+    {{/if}}
+  </section>
+
+</div>

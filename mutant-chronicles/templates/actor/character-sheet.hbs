@@ -1,0 +1,73 @@
+{{!-- ================================================================
+     Mutant Chronicles 3rd Edition — PC Character Sheet
+     Master template. Renders the sheet frame, header, tab navigation,
+     and {{> include}}s one Handlebars partial per tab from tabs/.
+     Data context is prepared by MC3CharacterSheet.getData() in
+     module/sheets/character-sheet.js.
+     ================================================================ --}}
+
+<form class="{{cssClass}} flexcol" autocomplete="off">
+
+  {{!-- ── Sheet Header ────────────────────────────────────────────── --}}
+  <header class="sheet-header flexrow">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+    <div class="header-fields flexcol">
+      <h1 class="charname">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Character Name" />
+      </h1>
+      <div class="header-details flexrow">
+        <div class="form-group">
+          <label>Faction</label>
+          <input type="text" name="system.details.faction"
+                 value="{{system.details.faction}}" placeholder="Faction" />
+        </div>
+        <div class="form-group">
+          <label>Caste</label>
+          <input type="text" name="system.details.caste"
+                 value="{{system.details.caste}}" placeholder="Caste" />
+        </div>
+        <div class="form-group">
+          <label>Career</label>
+          <input type="text" name="system.details.career"
+                 value="{{system.details.career}}" placeholder="Career" />
+        </div>
+        <div class="form-group">
+          <label>Earnings</label>
+          <input type="number" name="system.details.earningsRating"
+                 value="{{system.details.earningsRating}}" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- ── Tab Navigation ──────────────────────────────────────────── --}}
+  {{!-- navSelector '.sheet-tabs' is set in MC3CharacterSheet.defaultOptions.
+       Each <a> with data-tab must have a matching .tab[data-tab] in .sheet-body. --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="stats">Stats</a>
+    <a class="item" data-tab="skills">Skills</a>
+    <a class="item" data-tab="talents">Talents</a>
+    <a class="item" data-tab="gear">Gear</a>
+    <a class="item" data-tab="bio">Bio</a>
+    {{#if system.useMysticism}}
+      <a class="item" data-tab="spells">Spells</a>
+    {{/if}}
+    <a class="item" data-tab="lifepath">Life Path</a>
+  </nav>
+
+  {{!-- ── Tab Body ───────────────────────────────────────────────── --}}
+  {{!-- contentSelector '.sheet-body' is set in MC3CharacterSheet.defaultOptions.
+       Each partial contains its own <div class="tab" data-tab="…"> wrapper. --}}
+  <section class="sheet-body">
+    {{> actor/character/tabs/tab-stats}}
+    {{> actor/character/tabs/tab-skills}}
+    {{> actor/character/tabs/tab-talents}}
+    {{> actor/character/tabs/tab-gear}}
+    {{> actor/character/tabs/tab-bio}}
+    {{#if system.useMysticism}}
+      {{> actor/character/tabs/tab-spells}}
+    {{/if}}
+    {{> actor/character/tabs/tab-lifepath}}
+  </section>
+
+</form>

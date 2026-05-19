@@ -1,0 +1,117 @@
+{{!-- ── Stats Tab ─────────────────────────────────────────────────── --}}
+{{!-- Three-column layout: Attributes | Wounds | Status & Injuries    --}}
+<div class="tab stats flexrow" data-group="primary" data-tab="stats">
+
+  {{!-- Column 1: Attributes + Derived Stats ──────────────────────── --}}
+  <div class="attributes-section flexcol">
+    <h3 class="section-header">Attributes</h3>
+    {{!-- {{#each obj as |value key|}} iterates the attributes object.
+         'key' is the property name (agility, awareness, etc.),
+         'attr' is the value object { value: 5 }.
+         The name attribute uses dot notation so Foundry knows which
+         field to update when the user changes a number. --}}
+    <ol class="attributes-list">
+      {{#each system.attributes as |attr key|}}
+      <li class="attribute flexrow" data-attribute="{{key}}">
+        <span class="attribute-label">{{key}}</span>
+        <input class="attribute-value" type="number"
+               name="system.attributes.{{key}}.value"
+               value="{{attr.value}}" min="2" max="17" />
+      </li>
+      {{/each}}
+    </ol>
+
+    <h3 class="section-header">Derived Stats</h3>
+    <div class="derived-stat flexrow">
+      <label>Melee Bonus Dmg</label>
+      <input type="number" name="system.derivedStats.meleeBonusDamage"
+             value="{{system.derivedStats.meleeBonusDamage}}" />
+    </div>
+    <div class="derived-stat flexrow">
+      <label>Ranged Bonus Dmg</label>
+      <input type="number" name="system.derivedStats.rangedBonusDamage"
+             value="{{system.derivedStats.rangedBonusDamage}}" />
+    </div>
+    <div class="derived-stat flexrow">
+      <label>Influence</label>
+      <input type="number" name="system.derivedStats.influence"
+             value="{{system.derivedStats.influence}}" />
+    </div>
+  </div>
+
+  {{!-- Column 2: Physical + Mental Wounds ────────────────────────── --}}
+  <div class="wounds-section flexcol">
+    <h3 class="section-header">Physical Wounds</h3>
+
+    <h4>Light Wounds (by location)</h4>
+    {{!-- Each location: head, leftArm, rightArm, torso, leftLeg, rightLeg --}}
+    {{#each system.wounds.light as |loc key|}}
+    <div class="wound-location flexrow">
+      <label class="wound-label">{{key}}</label>
+      <input type="number" name="system.wounds.light.{{key}}.value"
+             value="{{loc.value}}" min="0" max="{{loc.max}}" />
+      <span class="wound-sep">/</span>
+      <input type="number" name="system.wounds.light.{{key}}.max"
+             value="{{loc.max}}" min="0" />
+    </div>
+    {{/each}}
+
+    <div class="serious-wounds flexrow">
+      <label class="wound-label">Serious</label>
+      <input type="number" name="system.wounds.serious.value"
+             value="{{system.wounds.serious.value}}"
+             min="0" max="{{system.wounds.serious.max}}" />
+      <span class="wound-sep">/</span>
+      <input type="number" name="system.wounds.serious.max"
+             value="{{system.wounds.serious.max}}" min="0" />
+    </div>
+
+    <div class="critical-wounds flexrow">
+      <label class="wound-label">Critical</label>
+      <input type="number" name="system.wounds.critical.value"
+             value="{{system.wounds.critical.value}}"
+             min="0" max="{{system.wounds.critical.max}}" />
+      <span class="wound-sep">/</span>
+      <input type="number" name="system.wounds.critical.max"
+             value="{{system.wounds.critical.max}}" min="0" />
+    </div>
+
+    <h3 class="section-header">Mental Wounds</h3>
+    {{!-- Slots are stored as an object { "0": {filled, tainted}, "1": … }.
+         data-dtype="Boolean" tells Foundry's form handler to treat the
+         checkbox value as a boolean rather than the string "on". --}}
+    <div class="mental-wounds-slots flexrow">
+      {{#each system.mentalWounds.slots as |slot key|}}
+      <div class="mental-slot {{#if slot.tainted}}tainted{{/if}}" data-slot="{{key}}">
+        <input type="checkbox" name="system.mentalWounds.slots.{{key}}.filled"
+               data-dtype="Boolean" {{#if slot.filled}}checked{{/if}} />
+        {{#if slot.tainted}}<span class="taint-pip" title="Corrupted">✦</span>{{/if}}
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
+  {{!-- Column 3: Status, Mysticism toggle, Critical Injuries ─────── --}}
+  <div class="status-section flexcol">
+    <h3 class="section-header">Status</h3>
+    <input type="text" name="system.status" value="{{system.status}}"
+           placeholder="Current conditions…" />
+
+    <h3 class="section-header">Mysticism</h3>
+    <div class="form-group flexrow">
+      <label>Enable Spells Tab</label>
+      <input type="checkbox" name="system.useMysticism"
+             data-dtype="Boolean" {{#if system.useMysticism}}checked{{/if}} />
+    </div>
+
+    <h3 class="section-header">Critical Injuries</h3>
+    <div class="critical-injuries-list">
+      {{#each system.criticalInjuries}}
+        <div class="critical-injury">{{this}}</div>
+      {{else}}
+        <p class="empty-label">No critical injuries.</p>
+      {{/each}}
+    </div>
+  </div>
+
+</div>

@@ -9,6 +9,7 @@
 import { MC3Actor } from "./module/actor.js";
 import { MC3Item }  from "./module/item.js";
 import { MC3CharacterSheet } from "./module/sheets/character-sheet.js";
+import { preloadHandlebarsTemplates } from "./module/templates.js";
 
 const { Actors } = foundry.documents.collections;
 
@@ -25,6 +26,9 @@ Hooks.once('init', () => {
   // the base Actor class. Same for Item.
   CONFIG.Actor.documentClass = MC3Actor;
   CONFIG.Item.documentClass  = MC3Item;
+
+  // Register Handlebars Partials
+  preloadHandlebarsTemplates();
 
   // Register our character sheet as the default for the 'character' actor type.
   // makeDefault: true means Foundry uses ours when opening a character actor,

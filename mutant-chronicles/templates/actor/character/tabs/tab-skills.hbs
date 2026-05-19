@@ -1,0 +1,51 @@
+{{!-- ── Skills Tab ───────────────────────────────────────────────── --}}
+{{!-- Skills are embedded Items on the actor. getData() groups them
+     into context.skillsByAttribute — an object keyed by attribute name,
+     each containing an array of skill items for that attribute.
+     Skills are displayed read-only here; the edit button opens the
+     item's own sheet where rating, focuses, and attribute are changed. --}}
+<div class="tab skills flexcol" data-group="primary" data-tab="skills">
+
+  {{#each skillsByAttribute as |skillGroup attrKey|}}
+    {{!-- Handlebars won't call .length on a plain array without help,
+         but it does evaluate arrays as truthy when non-empty. --}}
+    {{#if skillGroup.length}}
+    <div class="skill-group" data-attribute="{{attrKey}}">
+      <h3 class="skill-group-header">{{attrKey}}</h3>
+      <ol class="skill-list">
+        {{#each skillGroup as |skill|}}
+        <li class="skill-row flexrow" data-item-id="{{skill.id}}">
+          <span class="skill-name">{{skill.name}}</span>
+          <span class="skill-rating">{{skill.system.rating}}</span>
+          <a class="item-edit" title="Edit Skill"><i class="fas fa-edit"></i></a>
+          <a class="item-delete" title="Delete Skill"><i class="fas fa-trash"></i></a>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+    {{/if}}
+  {{/each}}
+
+  {{!-- Skills whose attribute field is blank or unrecognised land here --}}
+  {{#if skillsByAttribute.unassigned.length}}
+  <div class="skill-group unassigned">
+    <h3 class="skill-group-header">⚠ Unassigned Attribute</h3>
+    <ol class="skill-list">
+      {{#each skillsByAttribute.unassigned as |skill|}}
+      <li class="skill-row flexrow" data-item-id="{{skill.id}}">
+        <span class="skill-name">{{skill.name}}</span>
+        <a class="item-edit" title="Edit Skill"><i class="fas fa-edit"></i></a>
+        <a class="item-delete" title="Delete Skill"><i class="fas fa-trash"></i></a>
+      </li>
+      {{/each}}
+    </ol>
+  </div>
+  {{/if}}
+
+  <div class="tab-footer">
+    <a class="item-create" data-item-type="skill" title="Add Skill">
+      <i class="fas fa-plus"></i> Add Skill
+    </a>
+  </div>
+
+</div>

@@ -1,0 +1,26 @@
+{{!-- ── Talents Tab ──────────────────────────────────────────────── --}}
+<div class="tab talents flexcol" data-group="primary" data-tab="talents">
+
+  <header class="tab-header flexrow">
+    <a class="item-create" data-item-type="talent" title="Add Talent">
+      <i class="fas fa-plus"></i> Add Talent
+    </a>
+  </header>
+
+  {{#if talents.length}}
+  <ol class="talent-list">
+    {{#each talents as |talent|}}
+    <li class="talent-row flexrow" data-item-id="{{talent.id}}">
+      <span class="talent-name">{{talent.name}}</span>
+      <span class="talent-prereqs">{{talent.system.prerequisites}}</span>
+      <span class="talent-desc">{{talent.system.description}}</span>
+      <a class="item-edit" title="Edit Talent"><i class="fas fa-edit"></i></a>
+      <a class="item-delete" title="Delete Talent"><i class="fas fa-trash"></i></a>
+    </li>
+    {{/each}}
+  </ol>
+  {{else}}
+    <p class="empty-label">No talents yet. Click + to add one.</p>
+  {{/if}}
+
+</div>

@@ -1,0 +1,48 @@
+{{!-- ── Spells Tab ───────────────────────────────────────────────── --}}
+{{!-- This tab is only rendered when system.useMysticism is true.
+     The master template wraps both the nav item and this partial in
+     {{#if system.useMysticism}} … {{/if}}, so the sheet re-renders
+     automatically when the checkbox on the Stats tab is toggled. --}}
+<div class="tab spells flexcol" data-group="primary" data-tab="spells">
+
+  <header class="tab-header flexrow">
+    <a class="item-create" data-item-type="spell" title="Add Spell / Dark Gift / Mutation">
+      <i class="fas fa-plus"></i> Add Spell / Dark Gift / Mutation
+    </a>
+  </header>
+
+  {{#if spells.length}}
+  <table class="spells-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Difficulty</th>
+        <th>Target</th>
+        <th>Duration</th>
+        <th>Effect</th>
+        <th class="controls"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each spells as |spell|}}
+      <tr class="spell-row" data-item-id="{{spell.id}}">
+        <td>{{spell.name}}</td>
+        <td>{{spell.system.category}}</td>
+        <td>{{spell.system.difficulty}}</td>
+        <td>{{spell.system.target}}</td>
+        <td>{{spell.system.duration}}</td>
+        <td>{{spell.system.effect}}</td>
+        <td class="controls flexrow">
+          <a class="item-edit" title="Edit"><i class="fas fa-edit"></i></a>
+          <a class="item-delete" title="Delete"><i class="fas fa-trash"></i></a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+    <p class="empty-label">No spells, dark gifts, or mutations.</p>
+  {{/if}}
+
+</div>

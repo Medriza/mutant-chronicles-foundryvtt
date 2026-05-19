@@ -1,0 +1,189 @@
+{{!-- ── Life Path Tab ─────────────────────────────────────────────── --}}
+{{!-- Full character-creation worksheet. Data lives in system.lifePath.
+     Two dense matrices at the bottom — attribute contributions (8×6)
+     and skill contributions (29×13) — use {{#each}} to avoid writing
+     hundreds of individual input fields by hand. --}}
+<div class="tab lifepath flexcol" data-group="primary" data-tab="lifepath">
+
+  {{!-- Basic fields ────────────────────────────────────────────────── --}}
+  <div class="lifepath-basics flexrow">
+    <div class="form-group">
+      <label>Birth Faction</label>
+      <input type="text" name="system.lifePath.birthFaction"
+             value="{{system.lifePath.birthFaction}}" />
+    </div>
+    <div class="form-group">
+      <label>Family Heritage</label>
+      <input type="text" name="system.lifePath.familyHeritage"
+             value="{{system.lifePath.familyHeritage}}" />
+    </div>
+    <div class="form-group">
+      <label>Education</label>
+      <input type="text" name="system.lifePath.education"
+             value="{{system.lifePath.education}}" />
+    </div>
+    <div class="form-group">
+      <label>Free Career Choice</label>
+      <input type="text" name="system.lifePath.freeCareerChoice"
+             value="{{system.lifePath.freeCareerChoice}}" />
+    </div>
+    <div class="form-group">
+      <label>Age</label>
+      <input type="number" name="system.lifePath.age"
+             value="{{system.lifePath.age}}" />
+    </div>
+    <div class="form-group">
+      <label>Life Points</label>
+      <input type="number" name="system.lifePath.lifePoints"
+             value="{{system.lifePath.lifePoints}}" />
+    </div>
+    <div class="form-group">
+      <label>Chronicle Points</label>
+      <input type="number" name="system.lifePath.chroniclePoints"
+             value="{{system.lifePath.chroniclePoints}}" />
+    </div>
+  </div>
+
+  {{!-- Careers ─────────────────────────────────────────────────────── --}}
+  <div class="careers-section">
+    <h3>Careers</h3>
+    {{!-- careers is an array of 4 objects. The array index (key) becomes
+         the path segment: system.lifePath.careers.0.name etc. --}}
+    {{#each system.lifePath.careers as |career key|}}
+    <div class="career-block flexrow">
+      <label>Career {{key}}</label>
+      <input type="text" name="system.lifePath.careers.{{key}}.name"
+             value="{{career.name}}" placeholder="Career name…" />
+      <input type="text" name="system.lifePath.careers.{{key}}.description"
+             value="{{career.description}}" placeholder="Notes…" />
+    </div>
+    {{/each}}
+  </div>
+
+  {{!-- Traits & Events ─────────────────────────────────────────────── --}}
+  <div class="form-group">
+    <label>Traits &amp; Events</label>
+    <textarea name="system.lifePath.traitsAndEvents"
+              rows="4">{{system.lifePath.traitsAndEvents}}</textarea>
+  </div>
+
+  {{!-- Attribute Contribution Matrix (8 attributes × 6 sources) ────── --}}
+  {{!-- {{#each obj as |value key|}} — key is the attribute name (agility…),
+       value is the contributions object {starting, status, environment…}. --}}
+  <div class="contribution-matrix">
+    <h3>Attribute Contributions</h3>
+    <table class="attr-matrix">
+      <thead>
+        <tr>
+          <th>Attribute</th>
+          <th>Starting</th>
+          <th>Status</th>
+          <th>Environment</th>
+          <th>Education</th>
+          <th>Career 1</th>
+          <th>Customisation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each system.lifePath.attributeContributions as |contrib attr|}}
+        <tr>
+          <td class="matrix-label">{{attr}}</td>
+          <td><input type="number"
+               name="system.lifePath.attributeContributions.{{attr}}.starting"
+               value="{{contrib.starting}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.attributeContributions.{{attr}}.status"
+               value="{{contrib.status}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.attributeContributions.{{attr}}.environment"
+               value="{{contrib.environment}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.attributeContributions.{{attr}}.education"
+               value="{{contrib.education}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.attributeContributions.{{attr}}.career1"
+               value="{{contrib.career1}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.attributeContributions.{{attr}}.customisation"
+               value="{{contrib.customisation}}" /></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  {{!-- Skill Contribution Matrix (29 skills × 13 sources) ─────────── --}}
+  {{!-- Same pattern: key is the skill name (acrobatics…),
+       value is the contributions object. Column headers are hardcoded
+       because they don't come from the data. --}}
+  <div class="contribution-matrix">
+    <h3>Skill Contributions</h3>
+    <table class="skill-matrix">
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>Sig</th>
+          <th>Exp</th>
+          <th>Foc</th>
+          <th>Birth Fac</th>
+          <th>Status</th>
+          <th>Environ</th>
+          <th>Edu</th>
+          <th>C1</th>
+          <th>C2</th>
+          <th>C3</th>
+          <th>C4</th>
+          <th>LP Pts</th>
+          <th>2 Skills</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each system.lifePath.skillContributions as |contrib skill|}}
+        <tr>
+          <td class="matrix-label">{{skill}}</td>
+          <td><input type="checkbox"
+               name="system.lifePath.skillContributions.{{skill}}.signature"
+               data-dtype="Boolean" {{#if contrib.signature}}checked{{/if}} /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.expertise"
+               value="{{contrib.expertise}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.focus"
+               value="{{contrib.focus}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.birthFaction"
+               value="{{contrib.birthFaction}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.status"
+               value="{{contrib.status}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.environment"
+               value="{{contrib.environment}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.education"
+               value="{{contrib.education}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.career1"
+               value="{{contrib.career1}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.career2"
+               value="{{contrib.career2}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.career3"
+               value="{{contrib.career3}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.career4"
+               value="{{contrib.career4}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.customisationLifePoints"
+               value="{{contrib.customisationLifePoints}}" /></td>
+          <td><input type="number"
+               name="system.lifePath.skillContributions.{{skill}}.customisation2Skills"
+               value="{{contrib.customisation2Skills}}" /></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+</div>
