@@ -1,4 +1,99 @@
 /* Mutant Chronicles 3rd Edition — system stylesheet.
  * Empty placeholder created in Lesson 4.4.
- * Real styling for character sheets and item sheets comes in Module 5.
+ * Full layout styling comes during the CSS polish pass (post-Module 5).
+ * This file currently holds only the wound-box styles, which are functional
+ * and travel with the wound section wherever it moves in the layout.
  */
+
+/* ── Wound Box Layout ────────────────────────────────────────────────────── */
+
+/* Each wound location row: label | soak | boxes */
+.wound-location {
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
+/* Fixed-width label so all box rows start at the same column */
+.wound-label {
+  flex: 0 0 60px;
+  font-size: 0.75em;
+}
+
+/* Soak number input — small, sits between the label and the boxes */
+.soak-value {
+  flex: 0 0 28px;
+  width: 28px;
+  text-align: center;
+  font-size: 0.75em;
+  padding: 0 2px;
+}
+
+/* Flex container for the boxes themselves; no-wrap keeps them in one row */
+.wound-slots {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 2px;
+  align-items: center;
+}
+
+/* ── Individual Wound Box ─────────────────────────────────────────────────── */
+
+.wound-slot,
+.mental-slot {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;          /* don't grow or shrink — fixed size */
+  border: 1px solid #555;
+  border-radius: 2px;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative;      /* needed for ::after taint pip */
+}
+
+/* Filled — wound taken */
+.wound-slot.filled,
+.mental-slot.filled {
+  background-color: #333;
+  border-color: #333;
+}
+
+/* Active — available but empty (default look is already correct: transparent) */
+.wound-slot.active,
+.mental-slot.active {
+  background-color: transparent;
+}
+
+/* Inactive — beyond this character's derived max; greyed and not clickable */
+.wound-slot.inactive,
+.mental-slot.inactive {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 3px,
+    #999 3px,
+    #999 4px
+  );
+  border-color: #aaa;
+  cursor: default;
+  opacity: 0.45;
+}
+
+/* Mental wound taint marker — small pip drawn via CSS, no extra HTML needed */
+.mental-slot.tainted::after {
+  content: '✦';
+  font-size: 7px;
+  line-height: 14px;
+  color: #8b008b;          /* dark magenta */
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tainted + filled — wound is both taken and corrupted */
+.mental-slot.filled.tainted {
+  background-color: #4a004a;
+  border-color: #8b008b;
+}

@@ -44,49 +44,52 @@
     <h3 class="section-header">Physical Wounds</h3>
 
     <h4>Light Wounds (by location)</h4>
-    {{!-- Each location: head, leftArm, rightArm, torso, leftLeg, rightLeg --}}
-    {{#each system.wounds.light as |loc key|}}
-    <div class="wound-location flexrow">
-      <label class="wound-label">{{key}}</label>
-      <input type="number" name="system.wounds.light.{{key}}.value"
-             value="{{loc.value}}" min="0" max="{{loc.max}}" />
-      <span class="wound-sep">/</span>
-      <input type="number" name="system.wounds.light.{{key}}.max"
-             value="{{loc.max}}" min="0" />
+    {{!-- lightWoundSlots is an array of location objects: { loc, path, soak, slots }.
+         slot.state is 'filled' | 'active' | 'inactive' — drives the CSS class.
+         data-wound-path tells the click handler which actor field to update.
+         Soak is a temporary manual input until the armour system automates it. --}}
+    {{#each lightWoundSlots as |locationData|}}
+    <div class="wound-location flexrow" data-wound-path="{{locationData.path}}">
+      <label class="wound-label">{{locationData.loc}}</label>
+      <input class="soak-value" type="number"
+             name="{{locationData.path}}.soak"
+             value="{{locationData.soak}}" min="0" title="Soak" />
+      <div class="wound-slots flexrow">
+        {{#each locationData.slots as |slot|}}
+        <div class="wound-slot {{slot.state}}"></div>
+        {{/each}}
+      </div>
     </div>
     {{/each}}
 
-    <div class="serious-wounds flexrow">
+    <div class="serious-wounds flexrow" data-wound-path="{{seriousWoundSlots.path}}">
       <label class="wound-label">Serious</label>
-      <input type="number" name="system.wounds.serious.value"
-             value="{{system.wounds.serious.value}}"
-             min="0" max="{{system.wounds.serious.max}}" />
-      <span class="wound-sep">/</span>
-      <input type="number" name="system.wounds.serious.max"
-             value="{{system.wounds.serious.max}}" min="0" />
+      <div class="wound-slots flexrow">
+        {{#each seriousWoundSlots.slots as |slot|}}
+        <div class="wound-slot {{slot.state}}"></div>
+        {{/each}}
+      </div>
     </div>
 
-    <div class="critical-wounds flexrow">
+    <div class="critical-wounds flexrow" data-wound-path="{{criticalWoundSlots.path}}">
       <label class="wound-label">Critical</label>
-      <input type="number" name="system.wounds.critical.value"
-             value="{{system.wounds.critical.value}}"
-             min="0" max="{{system.wounds.critical.max}}" />
-      <span class="wound-sep">/</span>
-      <input type="number" name="system.wounds.critical.max"
-             value="{{system.wounds.critical.max}}" min="0" />
+      <div class="wound-slots flexrow">
+        {{#each criticalWoundSlots.slots as |slot|}}
+        <div class="wound-slot {{slot.state}}"></div>
+        {{/each}}
+      </div>
     </div>
 
     <h3 class="section-header">Mental Wounds</h3>
-    {{!-- Slots are stored as an object { "0": {filled, tainted}, "1": … }.
-         data-dtype="Boolean" tells Foundry's form handler to treat the
-         checkbox value as a boolean rather than the string "on". --}}
+    {{!-- mentalWoundSlots is always 20 entries (the physical sheet max).
+         slot.state drives the CSS class: 'filled' | 'active' | 'inactive'.
+         slot.tainted adds the 'tainted' class, which the CSS uses to draw
+         the corruption pip via ::after. Click handlers in activateListeners()
+         enforce left-to-right fill / right-to-left clear. --}}
     <div class="mental-wounds-slots flexrow">
-      {{#each system.mentalWounds.slots as |slot key|}}
-      <div class="mental-slot {{#if slot.tainted}}tainted{{/if}}" data-slot="{{key}}">
-        <input type="checkbox" name="system.mentalWounds.slots.{{key}}.filled"
-               data-dtype="Boolean" {{#if slot.filled}}checked{{/if}} />
-        {{#if slot.tainted}}<span class="taint-pip" title="Corrupted">✦</span>{{/if}}
-      </div>
+      {{#each mentalWoundSlots as |slot|}}
+      <div class="mental-slot {{slot.state}}{{#if slot.tainted}} tainted{{/if}}"
+           data-slot="{{slot.key}}"></div>
       {{/each}}
     </div>
   </div>

@@ -38,27 +38,33 @@
                     "light": {
                         "head": {
                             "value": 0,
-                            "max": 5
+                            "max": 5,
+                            "soak": 0
                         },
                         "leftArm": {
                             "value": 0,
-                            "max": 5
+                            "max": 5,
+                            "soak": 0
                         },
                         "rightArm": {
                             "value": 0,
-                            "max": 5
+                            "max": 5,
+                            "soak": 0
                         },
                         "torso": {
                             "value": 0,
-                            "max": 5
+                            "max": 5,
+                            "soak": 0
                         },
                         "leftLeg": {
                             "value": 0,
-                            "max": 5
+                            "max": 5,
+                            "soak": 0
                         },
                         "rightLeg": {
                             "value": 0,
-                            "max": 5
+                            "max": 5,
+                            "soak": 0
                         }
                     },
                     "serious": {

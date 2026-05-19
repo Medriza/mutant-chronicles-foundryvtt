@@ -68,6 +68,84 @@ export class MC3CharacterSheet extends ActorSheet {
     // always pair with one specific attribute).
     context.skillsByAttribute = this._groupSkillsByAttribute(context.skills);
 
+    // Mental wound slots - build a display array matching the derived max.
+    // storedSlots may have fewer entries than max (e.g. MENSTR just increased),
+    // so we use optional chaining (?.) and nullish coalescing (??) to default
+    // missing slots to false rather than crashing on undefined.
+    // ── Mental Wounds ─────────────────────────────────────────────────────────
+    // Physical max from the official MC3 character sheet: 20 boxes.
+    // Active boxes = derived mentalWounds.max (= MEN attribute score).
+    // Each slot carries its taint state independently of fill state.
+    // 'state' drives the CSS class: 'filled' | 'active' | 'inactive'.
+    const MENTAL_PHYSICAL_MAX = 20;
+    const storedSlots = actor.system.mentalWounds.slots;
+    const mentalMax = actor.system.mentalWounds.max;
+    context.mentalWoundSlots = Array.from(
+      { length: MENTAL_PHYSICAL_MAX },
+      (_, i) => ({
+        key:     String(i),
+        tainted: storedSlots[String(i)]?.tainted ?? false,
+        state:   i >= mentalMax                        ? 'inactive'
+               : storedSlots[String(i)]?.filled        ? 'filled'
+               :                                         'active',
+      })
+    );
+
+    // ── Physical Wound Slots ───────────────────────────────────────────────────
+    // Physical maxes from the official MC3 character sheet (the total printed
+    // boxes, which are always more than any derived max from the table).
+    // 'state' drives the CSS class: 'filled' | 'active' | 'inactive'.
+    //   filled   → index < value  (wound taken)
+    //   active   → value ≤ index < max  (available, empty)
+    //   inactive → index ≥ max  (greyed out — beyond this character's capacity)
+    const WOUND_PHYSICAL_MAX = {
+      head: 10, torso: 12,
+      leftArm: 10, rightArm: 10,
+      leftLeg: 10, rightLeg: 10,
+    };
+    const SERIOUS_PHYSICAL_MAX  = 10;
+    const CRITICAL_PHYSICAL_MAX = 6;
+
+    const woundsData = actor.system.wounds;
+
+    // lightWoundSlots is an array of location objects so the template can iterate
+    // with a single {{#each}} and access loc, path, soak, and slots together.
+    context.lightWoundSlots = Object.entries(woundsData.light).map(([loc, data]) => ({
+      loc,
+      path:  `system.wounds.light.${loc}`,
+      soak:  data.soak ?? 0,
+      slots: Array.from(
+        { length: WOUND_PHYSICAL_MAX[loc] ?? 10 },
+        (_, i) => ({
+          state: i < data.value ? 'filled' : i < data.max ? 'active' : 'inactive',
+        })
+      ),
+    }));
+
+    context.seriousWoundSlots = {
+      path:  'system.wounds.serious',
+      slots: Array.from(
+        { length: SERIOUS_PHYSICAL_MAX },
+        (_, i) => ({
+          state: i < woundsData.serious.value ? 'filled'
+               : i < woundsData.serious.max   ? 'active'
+               :                                'inactive',
+        })
+      ),
+    };
+
+    context.criticalWoundSlots = {
+      path:  'system.wounds.critical',
+      slots: Array.from(
+        { length: CRITICAL_PHYSICAL_MAX },
+        (_, i) => ({
+          state: i < woundsData.critical.value ? 'filled'
+               : i < woundsData.critical.max   ? 'active'
+               :                                 'inactive',
+        })
+      ),
+    };
+
     return context;
   }
 
@@ -109,8 +187,17 @@ export class MC3CharacterSheet extends ActorSheet {
     html.find('.item-edit').click(this._onItemEdit.bind(this));
     html.find('.item-delete').click(this._onItemDelete.bind(this));
 
-    // Wound box clicks, mental-slot clicks, skill rolls, etc. — wired in
-    // later lessons (Module 5.3+ and Module 6).
+    // Physical wound boxes — left-click fills next slot, right-click clears last.
+    // Each box is a div.wound-slot; its ancestor carries data-wound-path so the
+    // handler knows which field (system.wounds.light.head, etc.) to update.
+    html.find('.wound-slot').click(this._onWoundFill.bind(this));
+    html.find('.wound-slot').contextmenu(this._onWoundClear.bind(this));
+
+    // Mental wound boxes — same left/right-click pattern, but the data model
+    // uses per-slot objects ({ filled, tainted }) rather than a simple count,
+    // so the handlers scan the slots object directly.
+    html.find('.mental-slot').click(this._onMentalWoundFill.bind(this));
+    html.find('.mental-slot').contextmenu(this._onMentalWoundClear.bind(this));
   }
 
   /* ------------------------------------------------------------------------ */
@@ -152,5 +239,70 @@ export class MC3CharacterSheet extends ActorSheet {
     event.preventDefault();
     const li = event.currentTarget.closest('[data-item-id]');
     return this.actor.deleteEmbeddedDocuments('Item', [li.dataset.itemId]);
+  }
+
+  /* ------------------------------------------------------------------------ */
+  /*   Wound box handlers                                                      */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * Left-click on a physical wound box: fill the next available slot.
+   * Ignores clicks on inactive boxes (beyond the character's derived max).
+   * The clicked box's ancestor carries data-wound-path, which maps directly
+   * to a field in system.wounds (e.g. "system.wounds.light.head").
+   */
+  async _onWoundFill(event) {
+    event.preventDefault();
+    if (event.currentTarget.classList.contains('inactive')) return;
+    const path = event.currentTarget.closest('[data-wound-path]').dataset.woundPath;
+    const data  = foundry.utils.getProperty(this.actor.system, path.replace('system.', ''));
+    const next  = Math.min((data.value ?? 0) + 1, data.max ?? 0);
+    if (next !== data.value) await this.actor.update({ [`${path}.value`]: next });
+  }
+
+  /**
+   * Right-click on a physical wound box: clear the last filled slot.
+   */
+  async _onWoundClear(event) {
+    event.preventDefault();
+    if (event.currentTarget.classList.contains('inactive')) return;
+    const path = event.currentTarget.closest('[data-wound-path]').dataset.woundPath;
+    const data  = foundry.utils.getProperty(this.actor.system, path.replace('system.', ''));
+    const next  = Math.max((data.value ?? 0) - 1, 0);
+    if (next !== data.value) await this.actor.update({ [`${path}.value`]: next });
+  }
+
+  /**
+   * Left-click on a mental wound box: fill the leftmost unfilled active slot.
+   * Mental wounds use per-slot objects ({ filled, tainted }) so we scan the
+   * stored slots rather than incrementing a counter.
+   */
+  async _onMentalWoundFill(event) {
+    event.preventDefault();
+    if (event.currentTarget.classList.contains('inactive')) return;
+    const max   = this.actor.system.mentalWounds.max;
+    const slots = this.actor.system.mentalWounds.slots;
+    for (let i = 0; i < max; i++) {
+      if (!slots[String(i)]?.filled) {
+        await this.actor.update({ [`system.mentalWounds.slots.${i}.filled`]: true });
+        return;
+      }
+    }
+  }
+
+  /**
+   * Right-click on a mental wound box: clear the rightmost filled active slot.
+   */
+  async _onMentalWoundClear(event) {
+    event.preventDefault();
+    if (event.currentTarget.classList.contains('inactive')) return;
+    const max   = this.actor.system.mentalWounds.max;
+    const slots = this.actor.system.mentalWounds.slots;
+    for (let i = max - 1; i >= 0; i--) {
+      if (slots[String(i)]?.filled) {
+        await this.actor.update({ [`system.mentalWounds.slots.${i}.filled`]: false });
+        return;
+      }
+    }
   }
 }
