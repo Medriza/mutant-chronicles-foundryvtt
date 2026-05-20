@@ -19,9 +19,8 @@ export class MC3Actor extends Actor {
     super.prepareData();
 
     // Route to type-specific preparation.
-    // NPC derivations are minimal for now (Lesson 5.5 adds the NPC sheet);
-    // character derivations implement the full MC3 data model.
     if (this.type === 'character') this._prepareCharacterData();
+    if (this.type === 'npc')       this._prepareNpcData();
   }
 
   /* ------------------------------------------------------------------------ */
@@ -59,6 +58,29 @@ export class MC3Actor extends Actor {
     //   Melee Bonus Damage  → Strength
     //   Ranged Bonus Damage → Awareness
     //   Influence           → Personality
+    system.derivedStats.meleeBonusDamage  = this._bonusFromAttribute(attrs.strength.value);
+    system.derivedStats.rangedBonusDamage = this._bonusFromAttribute(attrs.awareness.value);
+    system.derivedStats.influence         = this._bonusFromAttribute(attrs.personality.value);
+  }
+
+  /* ------------------------------------------------------------------------ */
+  /*   Private — NPC data preparation                                         */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * Compute derived values for an NPC actor.
+   *
+   * NPC wound maxes are NOT derived here — they come directly from the
+   * creature's stat block and are set by the GM on the sheet. Overwriting
+   * them in prepareData() would undo anything the GM typed in.
+   *
+   * Bonus stats are still computed (same formula as PCs) so the dice roller
+   * in Module 6 can reference them without needing to know actor type.
+   */
+  _prepareNpcData() {
+    const { system } = this;
+    const attrs = system.attributes;
+
     system.derivedStats.meleeBonusDamage  = this._bonusFromAttribute(attrs.strength.value);
     system.derivedStats.rangedBonusDamage = this._bonusFromAttribute(attrs.awareness.value);
     system.derivedStats.influence         = this._bonusFromAttribute(attrs.personality.value);

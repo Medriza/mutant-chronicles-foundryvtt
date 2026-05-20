@@ -38,48 +38,49 @@
                     "light": {
                         "head": {
                             "value": 0,
-                            "max": 5,
+                            "max": 0,
                             "soak": 0
                         },
                         "leftArm": {
                             "value": 0,
-                            "max": 5,
+                            "max": 0,
                             "soak": 0
                         },
                         "rightArm": {
                             "value": 0,
-                            "max": 5,
+                            "max": 0,
                             "soak": 0
                         },
                         "torso": {
                             "value": 0,
-                            "max": 5,
+                            "max": 0,
                             "soak": 0
                         },
                         "leftLeg": {
                             "value": 0,
-                            "max": 5,
+                            "max": 0,
                             "soak": 0
                         },
                         "rightLeg": {
                             "value": 0,
-                            "max": 5,
+                            "max": 0,
                             "soak": 0
                         }
                     },
                     "serious": {
                         "value": 0,
-                        "max": 5
+                        "max": 0
                     },
                     "critical": {
                         "value": 0,
-                        "max": 5
+                        "max": 0
                     }
                 }
             },
             "mentalWounds": {
                 "mentalWounds": {
-                    "max": 5,
+                    "value": 0,
+                    "max": 0,
                     "slots": {
                         "0": {
                             "filled": false,
@@ -670,6 +671,16 @@
                 "mentalWounds",
                 "derivedStats"
             ],
+            "useLocationWounds": false,
+            "simpleWounds": { "value": 0, "max": 0 },
+            "expertise": {
+                "movement":  { "exp": 0, "foc": 0 },
+                "combat":    { "exp": 0, "foc": 0 },
+                "fortitude": { "exp": 0, "foc": 0 },
+                "technical": { "exp": 0, "foc": 0 },
+                "social":    { "exp": 0, "foc": 0 },
+                "senses":    { "exp": 0, "foc": 0 }
+            },
             "details": {
                 "faction": "",
                 "role": "",
@@ -684,7 +695,8 @@
             "weapon",
             "armour",
             "equipment",
-            "spell"
+            "spell",
+            "darksymmetry"
         ],
         "skill": {
             "attribute": "",
@@ -696,8 +708,10 @@
             "description": ""
         },
         "weapon": {
-            "damage": "",
+            "weaponType": "melee",
             "range": "",
+            "damageFlat": 0,
+            "damageDice": 0,
             "qualities": "",
             "description": ""
         },
@@ -716,6 +730,10 @@
             "difficulty": "",
             "target": "",
             "duration": "",
+            "effect": ""
+        },
+        "darksymmetry": {
+            "cost": 0,
             "effect": ""
         }
     }

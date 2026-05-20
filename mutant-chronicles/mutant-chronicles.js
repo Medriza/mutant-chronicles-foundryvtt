@@ -9,6 +9,7 @@
 import { MC3Actor } from "./module/actor.js";
 import { MC3Item }  from "./module/item.js";
 import { MC3CharacterSheet } from "./module/sheets/character-sheet.js";
+import { MC3NpcSheet } from "./module/sheets/npc-sheet.js";
 import { preloadHandlebarsTemplates } from "./module/templates.js";
 
 const { Actors } = foundry.documents.collections;
@@ -37,5 +38,10 @@ Hooks.once('init', () => {
     types: ['character'],
     makeDefault: true,
     label: 'MC3.SheetClassCharacter'
+  });
+  Actors.registerSheet('mutant-chronicles', MC3NpcSheet, {
+    types: ['npc'],
+    makeDefault: true,
+    label: 'MC3.SheetClassNpc'
   });
 });

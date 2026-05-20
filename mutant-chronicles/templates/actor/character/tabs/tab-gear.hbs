@@ -18,6 +18,7 @@
       <thead>
         <tr>
           <th>Name</th>
+          <th>Type</th>
           <th>Damage</th>
           <th>Range</th>
           <th>Qualities</th>
@@ -28,7 +29,8 @@
         {{#each weapons as |weapon|}}
         <tr class="weapon-row" data-item-id="{{weapon.id}}">
           <td>{{weapon.name}}</td>
-          <td>{{weapon.system.damage}}</td>
+          <td>{{weapon.system.weaponType}}</td>
+          <td>{{weapon.system.damageFlat}}+{{weapon.system.damageDice}}CD</td>
           <td>{{weapon.system.range}}</td>
           <td>{{weapon.system.qualities}}</td>
           <td class="controls flexrow">
