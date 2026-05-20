@@ -1,0 +1,75 @@
+{{!-- ── MC3 Roll Dialog ──────────────────────────────────────────────── --}}
+{{!-- Rendered inside a Foundry Dialog popup before any dice are thrown.
+     The 'mode' helper variable determines which block renders:
+       mode === 'skill'      → PC skill roll  (TN pre-calculated)
+       mode === 'expertise'  → NPC expertise roll (attribute chosen here)
+
+     All <input> elements are read by the Dialog's confirm callback via
+     the html argument: html.find('[name="difficulty"]').val(), etc.       --}}
+
+<form class="mc3-roll-dialog">
+
+  {{!-- ── PC Skill Roll ─────────────────────────────────────────────── --}}
+  {{#if isSkill}}
+  <div class="roll-summary">
+    <p class="roll-label">
+      <strong>{{skillName}}</strong>
+      &nbsp;·&nbsp;
+      {{attributeLabel}} {{attributeValue}}
+      &nbsp;+&nbsp;
+      EXP {{expertiseValue}}
+      &nbsp;=&nbsp;
+      <strong>TN {{tn}}</strong>
+    </p>
+    <p class="roll-focus">Focus ≤ {{focusValue}} → 2 successes</p>
+  </div>
+  {{/if}}
+
+  {{!-- ── NPC Expertise Roll ──────────────────────────────────────────── --}}
+  {{#if isExpertise}}
+  <div class="roll-summary">
+    <p class="roll-label">
+      <strong>{{fieldLabel}}</strong>
+      &nbsp;·&nbsp;
+      EXP {{expertiseValue}}
+      &nbsp;|&nbsp;
+      FOC {{focusValue}}
+    </p>
+  </div>
+
+  {{!-- NPC: GM picks which attribute to combine with this Field of Expertise --}}
+  <div class="form-group">
+    <label for="attr-select">Attribute</label>
+    <select id="attr-select" name="attribute">
+      {{#each attributes as |attr|}}
+      <option value="{{attr.key}}">{{attr.label}} ({{attr.value}})</option>
+      {{/each}}
+    </select>
+  </div>
+
+  <p class="roll-tn-preview">
+    TN = selected attribute + EXP ({{expertiseValue}})
+    <span class="tn-preview-note">(calculated when you confirm)</span>
+  </p>
+  {{/if}}
+
+  {{!-- ── Shared controls ─────────────────────────────────────────────── --}}
+  <div class="form-group">
+    <label for="difficulty">Difficulty</label>
+    <select id="difficulty" name="difficulty">
+      <option value="0">D0 — Routine</option>
+      <option value="1">D1 — Average</option>
+      <option value="2" selected>D2 — Challenging</option>
+      <option value="3">D3 — Daunting</option>
+      <option value="4">D4 — Dire</option>
+      <option value="5">D5 — Epic</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="bonus-dice">Bonus Dice</label>
+    <input id="bonus-dice" name="bonusDice" type="number" value="0" min="0" max="5" />
+    <span class="hint">Extra d20s (Momentum spends, assists, etc.)</span>
+  </div>
+
+</form>

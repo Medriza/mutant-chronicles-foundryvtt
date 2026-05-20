@@ -11,6 +11,7 @@ import { MC3Item }  from "./module/item.js";
 import { MC3CharacterSheet } from "./module/sheets/character-sheet.js";
 import { MC3NpcSheet } from "./module/sheets/npc-sheet.js";
 import { preloadHandlebarsTemplates } from "./module/templates.js";
+import { registerRollHelpers } from "./module/dice/mc3-roll.js";
 
 const { Actors } = foundry.documents.collections;
 
@@ -27,6 +28,9 @@ Hooks.once('init', () => {
   // the base Actor class. Same for Item.
   CONFIG.Actor.documentClass = MC3Actor;
   CONFIG.Item.documentClass  = MC3Item;
+
+  // Register custom Handlebars helpers (ne, etc.) used by dice templates.
+  registerRollHelpers();
 
   // Register Handlebars Partials
   preloadHandlebarsTemplates();

@@ -700,8 +700,9 @@
         ],
         "skill": {
             "attribute": "",
-            "rating": 0,
-            "focuses": []
+            "expertise": 0,
+            "focus": 0,
+            "isSignature": false
         },
         "talent": {
             "prerequisites": "",

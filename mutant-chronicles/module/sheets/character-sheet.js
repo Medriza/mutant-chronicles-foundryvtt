@@ -8,6 +8,9 @@
  *
  * Plus several private event-handler methods (_onItemCreate, _onItemEdit, etc.).
  */
+import { showSkillRollDialog }          from '../dice/roll-dialog.js';
+import { rollMC3, sendRollToChat }      from '../dice/mc3-roll.js';
+
 const { ActorSheet } = foundry.appv1.sheets;
 
 export class MC3CharacterSheet extends ActorSheet {
@@ -175,6 +178,7 @@ export class MC3CharacterSheet extends ActorSheet {
    */
   activateListeners(html) {
     super.activateListeners(html);
+    html.find('.skill-roll').click(this._onRollSkill.bind(this));
 
     // Don't wire up edit handlers if the current user can't edit the sheet
     // (e.g. a player viewing another player's sheet without owner permission).
@@ -304,5 +308,19 @@ export class MC3CharacterSheet extends ActorSheet {
         return;
       }
     }
+  }
+
+  async _onRollSkill(event) {
+    event.preventDefault();
+    const li    = event.currentTarget.closest('[data-item-id]');
+    const skill = this.actor.items.get(li.dataset.itemId);
+
+    // Open the dialog. If the user cancels, rollParams is null — bail out.
+    const rollParams = await showSkillRollDialog(this.actor, skill);
+    if (!rollParams) return;
+
+    if (!rollParams?.numDice) return;
+    const rollResult = await rollMC3({ ...rollParams, actor: this.actor });
+    await sendRollToChat(rollResult);
   }
 }

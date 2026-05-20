@@ -2,23 +2,34 @@
 {{!-- Skills are embedded Items on the actor. getData() groups them
      into context.skillsByAttribute — an object keyed by attribute name,
      each containing an array of skill items for that attribute.
-     Skills are displayed read-only here; the edit button opens the
-     item's own sheet where rating, focuses, and attribute are changed. --}}
+     EXP = expertise (adds to attribute to form TN).
+     FOC = focus (roll ≤ this for 2 successes instead of 1).
+     ★   = Signature Skill flag (unlocks EXP/FOC range 0–5).
+     Click the skill name to roll. Edit button opens the item sheet. --}}
 <div class="tab skills flexcol" data-group="primary" data-tab="skills">
 
   {{#each skillsByAttribute as |skillGroup attrKey|}}
-    {{!-- Handlebars won't call .length on a plain array without help,
-         but it does evaluate arrays as truthy when non-empty. --}}
     {{#if skillGroup.length}}
     <div class="skill-group" data-attribute="{{attrKey}}">
       <h3 class="skill-group-header">{{attrKey}}</h3>
       <ol class="skill-list">
+        <li class="skill-row skill-header flexrow">
+          <span class="skill-name"></span>
+          <span class="skill-col-label" title="Expertise">EXP</span>
+          <span class="skill-col-label" title="Focus">FOC</span>
+          <span class="skill-col-label" title="Signature Skill">★</span>
+          <span class="skill-controls-spacer"></span>
+        </li>
         {{#each skillGroup as |skill|}}
         <li class="skill-row flexrow" data-item-id="{{skill.id}}">
-          <span class="skill-name">{{skill.name}}</span>
-          <span class="skill-rating">{{skill.system.rating}}</span>
-          <a class="item-edit" title="Edit Skill"><i class="fas fa-edit"></i></a>
-          <a class="item-delete" title="Delete Skill"><i class="fas fa-trash"></i></a>
+          <a class="skill-name skill-roll" title="Roll {{skill.name}}">{{skill.name}}</a>
+          <span class="skill-exp">{{skill.system.expertise}}</span>
+          <span class="skill-foc">{{skill.system.focus}}</span>
+          <span class="skill-sig">{{#if skill.system.isSignature}}★{{/if}}</span>
+          <span class="skill-controls flexrow">
+            <a class="item-edit" title="Edit Skill"><i class="fas fa-edit"></i></a>
+            <a class="item-delete" title="Delete Skill"><i class="fas fa-trash"></i></a>
+          </span>
         </li>
         {{/each}}
       </ol>
@@ -33,9 +44,14 @@
     <ol class="skill-list">
       {{#each skillsByAttribute.unassigned as |skill|}}
       <li class="skill-row flexrow" data-item-id="{{skill.id}}">
-        <span class="skill-name">{{skill.name}}</span>
-        <a class="item-edit" title="Edit Skill"><i class="fas fa-edit"></i></a>
-        <a class="item-delete" title="Delete Skill"><i class="fas fa-trash"></i></a>
+        <a class="skill-name skill-roll" title="Roll {{skill.name}}">{{skill.name}}</a>
+        <span class="skill-exp">{{skill.system.expertise}}</span>
+        <span class="skill-foc">{{skill.system.focus}}</span>
+        <span class="skill-sig">{{#if skill.system.isSignature}}★{{/if}}</span>
+        <span class="skill-controls flexrow">
+          <a class="item-edit" title="Edit Skill"><i class="fas fa-edit"></i></a>
+          <a class="item-delete" title="Delete Skill"><i class="fas fa-trash"></i></a>
+        </span>
       </li>
       {{/each}}
     </ol>

@@ -1,0 +1,69 @@
+{{!-- ── MC3 Roll Chat Card ───────────────────────────────────────────── --}}
+{{!-- Rendered into the chat log after every MC3 skill/expertise roll.
+     Context keys (all set by rollMC3() in mc3-roll.js):
+       rollLabel         — skill or field name + attribute summary
+       tn                — Target Number
+       focus             — Focus threshold
+       difficulty        — D0–D5
+       dice              — array of { result, successes, isComplication, cssClass }
+       totalSuccesses    — sum of all die successes
+       totalComplications
+       momentum          — totalSuccesses - difficulty (can be negative)
+       isSuccess         — boolean                                               --}}
+
+<div class="mc3-roll-card">
+
+  {{!-- Header: roll name + key numbers --}}
+  <div class="roll-card-header">
+    <h3 class="roll-card-title">{{rollLabel}}</h3>
+    <div class="roll-card-meta">
+      <span title="Target Number">TN {{tn}}</span>
+      <span class="meta-sep">·</span>
+      <span title="Focus threshold">FOC {{focus}}</span>
+      <span class="meta-sep">·</span>
+      <span title="Difficulty">D{{difficulty}}</span>
+    </div>
+  </div>
+
+  {{!-- Per-die results --}}
+  <div class="roll-card-dice">
+    {{#each dice as |die|}}
+    <div class="die-result {{die.cssClass}}" title="{{die.result}} → {{die.successes}} success(es)">
+      <span class="die-value">{{die.result}}</span>
+      <span class="die-successes">
+        {{#if die.isComplication}}
+          ⚠
+        {{else}}
+          {{die.successes}}✓
+        {{/if}}
+      </span>
+    </div>
+    {{/each}}
+  </div>
+
+  {{!-- Totals row --}}
+  <div class="roll-card-totals">
+    <span class="total-successes">
+      {{totalSuccesses}} success{{#if (ne totalSuccesses 1)}}es{{/if}}
+    </span>
+    {{#if totalComplications}}
+    <span class="total-complications">
+      · {{totalComplications}} complication{{#if (ne totalComplications 1)}}s{{/if}}
+    </span>
+    {{/if}}
+  </div>
+
+  {{!-- Verdict --}}
+  <div class="roll-card-verdict {{#if isSuccess}}success{{else}}failure{{/if}}">
+    {{#if isSuccess}}
+      <strong>SUCCESS</strong>
+      {{#if momentum}}
+        <span class="momentum">+{{momentum}} Momentum</span>
+      {{/if}}
+    {{else}}
+      <strong>FAILURE</strong>
+      <span class="shortfall">{{momentum}} short</span>
+    {{/if}}
+  </div>
+
+</div>

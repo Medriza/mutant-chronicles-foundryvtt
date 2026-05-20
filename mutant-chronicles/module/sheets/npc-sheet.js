@@ -17,6 +17,9 @@
  * Senses) are stored as inline actor data (system.expertise.*), not as
  * embedded items, because they are always the same six named fields.
  */
+import { showExpertiseRollDialog }      from '../dice/roll-dialog.js';
+import { rollMC3, sendRollToChat }      from '../dice/mc3-roll.js';
+
 const { ActorSheet } = foundry.appv1.sheets;
 
 export class MC3NpcSheet extends ActorSheet {
@@ -68,13 +71,13 @@ export class MC3NpcSheet extends ActorSheet {
    */
   activateListeners(html) {
     super.activateListeners(html);
+    html.find('.expertise-roll').click(this._onRollExpertise.bind(this));
     if (!this.isEditable) return;
 
     // Item CRUD — same pattern as character-sheet.js.
     html.find('.item-create').click(this._onItemCreate.bind(this));
     html.find('.item-edit').click(this._onItemEdit.bind(this));
     html.find('.item-delete').click(this._onItemDelete.bind(this));
-
   }
 
   /* ------------------------------------------------------------------------ */
@@ -102,6 +105,21 @@ export class MC3NpcSheet extends ActorSheet {
     event.preventDefault();
     const li = event.currentTarget.closest('[data-item-id]');
     return this.actor.deleteEmbeddedDocuments('Item', [li.dataset.itemId]);
+  }
+
+  async _onRollExpertise(event) {
+    event.preventDefault();
+    const field     = event.currentTarget.dataset.field;
+    const expertise = this.actor.system.expertise[field];
+
+    // Open the dialog. Null means the GM clicked Cancel — bail out.
+    const rollParams = await showExpertiseRollDialog(this.actor, field, expertise);
+    if (!rollParams) return;
+
+    // Roll the dice and classify each result.
+    if (!rollParams?.numDice) return;
+    const rollResult = await rollMC3({ ...rollParams, actor: this.actor });
+    await sendRollToChat(rollResult);
   }
 
 }

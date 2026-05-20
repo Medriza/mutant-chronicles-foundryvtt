@@ -33,5 +33,14 @@ export async function preloadHandlebarsTemplates() {
     paths[key] = path;
   }
 
-  return foundry.applications.handlebars.loadTemplates(paths);
+  await foundry.applications.handlebars.loadTemplates(paths);
+
+  // Dice templates are used via renderTemplate(), not as partials, so they
+  // don't need short keys — just preload the full paths so there is no
+  // network delay when the first dialog or chat card fires.
+  // NOTE: roll-chat.hbs is added here in Lesson 6.5 once the file exists.
+  await foundry.applications.handlebars.loadTemplates([
+    "systems/mutant-chronicles/templates/dice/roll-dialog.hbs",
+    "systems/mutant-chronicles/templates/dice/roll-chat.hbs",
+  ]);
 }
