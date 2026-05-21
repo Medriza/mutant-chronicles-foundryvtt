@@ -702,7 +702,9 @@
             "attribute": "",
             "expertise": 0,
             "focus": 0,
-            "isSignature": false
+            "isSignature": false,
+            "isAdvanced": false,
+            "parentSkill": ""            
         },
         "talent": {
             "prerequisites": "",

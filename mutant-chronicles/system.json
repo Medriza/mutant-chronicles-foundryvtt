@@ -23,5 +23,14 @@
         }
     ],
     "socket": false,
-    "url": "https://github.com/Medriza/mutant-chronicles-foundryvtt"
+    "url": "https://github.com/Medriza/mutant-chronicles-foundryvtt",
+    "packs": [
+        {
+            "name": "mc3-skills",
+            "label": "MC3 Skills",
+            "path": "packs/mc3-skills",
+            "type": "Item",
+            "system": "mutant-chronicles"
+        }
+    ]
 }

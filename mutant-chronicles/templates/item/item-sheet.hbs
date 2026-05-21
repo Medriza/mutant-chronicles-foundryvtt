@@ -1,0 +1,22 @@
+{{!-- Generic Item Sheet — fallback for talent, weapon, armour, equipment, spell, darksymmetry.
+     These will get their own dedicated sheets in a later module. --}}
+<form class="sheet item-sheet" autocomplete="off">
+
+  {{!-- Header: icon + item name --}}
+  <header class="sheet-header">
+    <img class="item-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1><input class="title-input" name="name" type="text" value="{{item.name}}" /></h1>
+      <div class="item-type-label">{{item.type}}</div>
+    </div>
+  </header>
+
+  {{!-- Body: description only for now --}}
+  <section class="sheet-body">
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="system.description" rows="8">{{system.description}}</textarea>
+    </div>
+  </section>
+
+</form>

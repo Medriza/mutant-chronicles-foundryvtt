@@ -1,0 +1,13 @@
+# LevelDB compendium databases — binary files generated at runtime by Foundry.
+# Regenerate by running packs/build-skills-compendium.js as a Foundry Script Macro.
+mutant-chronicles/packs/*/
+
+# Keep the build scripts that generate the packs
+!mutant-chronicles/packs/*.js
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

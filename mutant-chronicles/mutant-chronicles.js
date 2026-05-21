@@ -10,10 +10,11 @@ import { MC3Actor } from "./module/actor.js";
 import { MC3Item }  from "./module/item.js";
 import { MC3CharacterSheet } from "./module/sheets/character-sheet.js";
 import { MC3NpcSheet } from "./module/sheets/npc-sheet.js";
+import { MC3ItemSheet } from "./module/sheets/item-sheet.js";
 import { preloadHandlebarsTemplates } from "./module/templates.js";
 import { registerRollHelpers } from "./module/dice/mc3-roll.js";
 
-const { Actors } = foundry.documents.collections;
+const { Actors, Items } = foundry.documents.collections;
 
 /**
  * The 'init' hook fires once, very early in Foundry's startup — after the
@@ -47,5 +48,11 @@ Hooks.once('init', () => {
     types: ['npc'],
     makeDefault: true,
     label: 'MC3.SheetClassNpc'
+  });
+
+  // Register our item sheet for all item types.
+  Items.registerSheet('mutant-chronicles', MC3ItemSheet, {
+    makeDefault: true,
+    label: 'MC3.SheetClassItem'
   });
 });

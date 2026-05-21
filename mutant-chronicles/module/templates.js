@@ -42,5 +42,7 @@ export async function preloadHandlebarsTemplates() {
   await foundry.applications.handlebars.loadTemplates([
     "systems/mutant-chronicles/templates/dice/roll-dialog.hbs",
     "systems/mutant-chronicles/templates/dice/roll-chat.hbs",
+    "systems/mutant-chronicles/templates/item/skill-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/item-sheet.hbs",
   ]);
 }
