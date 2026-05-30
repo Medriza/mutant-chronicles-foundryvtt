@@ -11,7 +11,7 @@
  * labelled differently:
  *   weapon      → Attacks
  *   talent      → Special Abilities
- *   darksymmetry → Dark Symmetry Abilities
+ *   specialability → Special Abilities (covers all NPC abilities, including Dark Symmetry)
  *
  * Fields of Expertise (Movement / Combat / Fortitude / Technical / Social /
  * Senses) are stored as inline actor data (system.expertise.*), not as
@@ -33,7 +33,7 @@ export class MC3NpcSheet extends ActorSheet {
       classes: ['mc3', 'sheet', 'actor', 'npc'],
       template: 'systems/mutant-chronicles/templates/actor/npc-sheet.hbs',
       width:  700,
-      height: 800,
+      height: 910,
       scrollY: ['.npc-body']
     });
   }
@@ -56,11 +56,13 @@ export class MC3NpcSheet extends ActorSheet {
     context.system = actor.system;
     context.flags  = actor.flags;
 
-    // Item buckets for the three NPC sections.
-    // (Note: same item *types* as the PC sheet, different display labels.)
+    // Item buckets for the two NPC sections.
+    // specialAbilities uses the 'specialability' type (covers all NPC abilities,
+    // including Dark Symmetry ones — they're all the same item type).
     context.attacks          = actor.items.filter(i => i.type === 'weapon');
-    context.specialAbilities = actor.items.filter(i => i.type === 'talent');
-    context.darkSymmetry     = actor.items.filter(i => i.type === 'darksymmetry');
+    context.specialAbilities = actor.items
+      .filter(i => i.type === 'specialability')
+      .sort((a, b) => a.name.localeCompare(b.name));
 
     return context;
   }
@@ -105,6 +107,39 @@ export class MC3NpcSheet extends ActorSheet {
     event.preventDefault();
     const li = event.currentTarget.closest('[data-item-id]');
     return this.actor.deleteEmbeddedDocuments('Item', [li.dataset.itemId]);
+  }
+
+  /**
+   * Intercept item drops to prevent duplicate special abilities.
+   *
+   * When a specialability is dropped onto the sheet, check whether the actor
+   * already owns one with the same name. If so, increment its Rank (if isRanked)
+   * rather than creating a second copy. All other item types pass through.
+   *
+   * @param {object|object[]} itemData
+   * @override
+   */
+  async _onDropItemCreate(itemData) {
+    const items = Array.isArray(itemData) ? itemData : [itemData];
+    const toCreate = [];
+
+    for (const data of items) {
+      if (data.type === 'specialability') {
+        const existing = this.actor.items.find(
+          i => i.type === 'specialability' && i.name === data.name
+        );
+        if (existing) {
+          if (existing.system.isRanked) {
+            const newRank = (existing.system.rank ?? 1) + 1;
+            await existing.update({ 'system.rank': newRank });
+          }
+          continue; // never create a duplicate, ranked or not
+        }
+      }
+      toCreate.push(data);
+    }
+
+    if (toCreate.length) return super._onDropItemCreate(toCreate);
   }
 
   async _onRollExpertise(event) {

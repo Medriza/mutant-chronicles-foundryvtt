@@ -1,0 +1,97 @@
+{{!-- Spell Item Sheet --}}
+{{!-- Fields (in order):                                                       --}}
+{{!--   Row 1: Aspect | Tier (equal-width text inputs)                         --}}
+{{!--   Row 2: Difficulty | Duration (equal-width text inputs)                 --}}
+{{!--   Row 3: Target (text, full width)                                       --}}
+{{!--   Base Effect (grow textarea, larger)                                    --}}
+{{!--   Momentum (grow textarea, smaller)                                      --}}
+<form class="sheet spell-sheet" autocomplete="off">
+
+  {{!-- Header: icon + item name --}}
+  <header class="item-sheet-header">
+    <img class="item-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="item-header-fields">
+      <input class="item-title-input" name="name" type="text" value="{{item.name}}" placeholder="Spell Name" />
+      <div class="item-type-badge">Spell</div>
+    </div>
+  </header>
+
+  {{!-- Body --}}
+  <section class="item-sheet-body">
+
+    {{!-- Row 1: Aspect + Tier — equal width text inputs --}}
+    <div class="item-form-row">
+      <div class="item-form-group">
+        <label>Aspect</label>
+        <input type="text" name="system.aspect" value="{{system.aspect}}"
+               placeholder="e.g. Kinesetics" />
+      </div>
+      <div class="item-form-group">
+        <label>Tier</label>
+        <input type="text" name="system.tier" value="{{system.tier}}"
+               placeholder="e.g. Tier 1" />
+      </div>
+    </div>
+
+    {{!-- Row 2: Difficulty + Duration --}}
+    <div class="item-form-row">
+      <div class="item-form-group">
+        <label>Difficulty</label>
+        <input type="text" name="system.difficulty" value="{{system.difficulty}}"
+               placeholder="e.g. D2, D2+, D2 or D4" />
+      </div>
+      <div class="item-form-group">
+        <label>Duration</label>
+        <input type="text" name="system.duration" value="{{system.duration}}"
+               placeholder="e.g. Instant, Scene" />
+      </div>
+    </div>
+
+    {{!-- Row 3: Target — full width --}}
+    <div class="item-form-group">
+      <label>Target</label>
+      <input type="text" name="system.target" value="{{system.target}}"
+             placeholder="e.g. 1 creature, Self, Zone" />
+    </div>
+
+    {{!-- Base Effect — fills a large portion of remaining space --}}
+    <div class="item-form-group item-form-group--grow spell-base-effect">
+      <label>Base Effect</label>
+      <textarea name="system.baseEffect"
+                placeholder="Core spell effect, rules text, momentum spends...">{{system.baseEffect}}</textarea>
+    </div>
+
+    {{!-- Momentum spend table — each row: threshold (e.g. "1+") + effect text --}}
+    <div class="item-section-label">Momentum</div>
+    <table class="mc3-effect-table">
+      <thead>
+        <tr>
+          <th class="effect-threshold-col">Spent</th>
+          <th>Effect</th>
+          <th class="effect-controls-col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each system.momentum}}
+        <tr class="effect-row">
+          <td class="effect-threshold-col">
+            <input type="text" name="system.momentum.{{@index}}.threshold"
+                   value="{{this.threshold}}" placeholder="1+" />
+          </td>
+          <td>
+            <input type="text" name="system.momentum.{{@index}}.effect"
+                   value="{{this.effect}}" placeholder="Effect description..." />
+          </td>
+          <td class="effect-controls-col">
+            <a class="dynamic-row-delete" data-field="momentum" data-index="{{@index}}" title="Remove">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <a class="dynamic-row-add" data-field="momentum"><i class="fas fa-plus"></i> Add</a>
+
+  </section>
+</form>

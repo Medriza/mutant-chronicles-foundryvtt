@@ -1,0 +1,109 @@
+{{!-- Weapon Item Sheet --}}
+<form class="sheet weapon-sheet" autocomplete="off">
+
+  {{!-- Header: icon + item name --}}
+  <header class="item-sheet-header">
+    <img class="item-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="item-header-fields">
+      <input class="item-title-input" name="name" type="text" value="{{item.name}}" placeholder="Weapon Name" />
+      <div class="item-type-badge">Weapon</div>
+    </div>
+  </header>
+
+  {{!-- Body --}}
+  <section class="item-sheet-body">
+
+    {{!-- Stats grid: header row + value row --}}
+    <div class="weapon-stats-grid">
+      <div class="wsg-header">Range</div>
+      <div class="wsg-header">Damage</div>
+      <div class="wsg-header">Mode</div>
+      <div class="wsg-header">Enc</div>
+      <div class="wsg-header">Size</div>
+      <div class="wsg-header">Reliability</div>
+
+      <div class="wsg-cell">
+        <select name="system.range">
+          <option value="—"      {{#if (eq system.range "—")}}selected{{/if}}>—</option>
+          <option value="Reach"  {{#if (eq system.range "Reach")}}selected{{/if}}>Reach</option>
+          <option value="Close"  {{#if (eq system.range "Close")}}selected{{/if}}>Close</option>
+          <option value="Medium" {{#if (eq system.range "Medium")}}selected{{/if}}>Medium</option>
+          <option value="Long"   {{#if (eq system.range "Long")}}selected{{/if}}>Long</option>
+          <option value="Extreme" {{#if (eq system.range "Extreme")}}selected{{/if}}>Extreme</option>
+        </select>
+      </div>
+      <div class="wsg-cell wsg-damage">
+        <input type="number" name="system.damageFlat" value="{{system.damageFlat}}" min="0" />
+        <span class="wsg-dmg-sep">+</span>
+        <input type="number" name="system.damageDice" value="{{system.damageDice}}" min="0" />
+        <span class="wsg-dmg-cd">CD</span>
+      </div>
+      <div class="wsg-cell">
+        <select name="system.mode">
+          <option value="—"              {{#if (eq system.mode "—")}}selected{{/if}}>—</option>
+          <option value="Automatic"      {{#if (eq system.mode "Automatic")}}selected{{/if}}>Automatic</option>
+          <option value="Burst"          {{#if (eq system.mode "Burst")}}selected{{/if}}>Burst</option>
+          <option value="Munition"       {{#if (eq system.mode "Munition")}}selected{{/if}}>Munition</option>
+          <option value="Semi-Automatic" {{#if (eq system.mode "Semi-Automatic")}}selected{{/if}}>Semi-Automatic</option>
+        </select>
+      </div>
+      <div class="wsg-cell">
+        <input type="number" name="system.enc" value="{{system.enc}}" min="0" />
+      </div>
+      <div class="wsg-cell">
+        <select name="system.size">
+          <option value="—"         {{#if (eq system.size "—")}}selected{{/if}}>—</option>
+          <option value="1H"        {{#if (eq system.size "1H")}}selected{{/if}}>1H</option>
+          <option value="2H"        {{#if (eq system.size "2H")}}selected{{/if}}>2H</option>
+          <option value="Unwieldy"  {{#if (eq system.size "Unwieldy")}}selected{{/if}}>Unwieldy</option>
+          <option value="Unbalanced" {{#if (eq system.size "Unbalanced")}}selected{{/if}}>Unbalanced</option>
+        </select>
+      </div>
+      <div class="wsg-cell">
+        <select name="system.reliability">
+          <option value="—" {{#if (eq system.reliability "—")}}selected{{/if}}>—</option>
+          <option value="0" {{#if (eq system.reliability "0")}}selected{{/if}}>0</option>
+          <option value="1" {{#if (eq system.reliability "1")}}selected{{/if}}>1</option>
+          <option value="2" {{#if (eq system.reliability "2")}}selected{{/if}}>2</option>
+          <option value="3" {{#if (eq system.reliability "3")}}selected{{/if}}>3</option>
+          <option value="4" {{#if (eq system.reliability "4")}}selected{{/if}}>4</option>
+          <option value="5" {{#if (eq system.reliability "5")}}selected{{/if}}>5</option>
+          <option value="C" {{#if (eq system.reliability "C")}}selected{{/if}}>C</option>
+        </select>
+      </div>
+    </div>{{!-- end .weapon-stats-grid --}}
+
+    {{!-- Qualities --}}
+    <div class="item-form-group">
+      <label>Qualities</label>
+      <input type="text" name="system.qualities" value="{{system.qualities}}"
+             placeholder="e.g. Armour Piercing 1, Vicious 1" />
+    </div>
+
+    {{!-- Restriction + Cost --}}
+    <div class="item-form-row">
+      <div class="item-form-group">
+        <label>Restriction</label>
+        <input type="number" name="system.restriction" value="{{system.restriction}}" min="0" />
+      </div>
+      <div class="item-form-group">
+        <label>Cost</label>
+        <input type="number" name="system.cost" value="{{system.cost}}" min="0" />
+      </div>
+    </div>
+
+    {{!-- Faction --}}
+    <div class="item-form-group">
+      <label>Faction</label>
+      <input type="text" name="system.faction" value="{{system.faction}}"
+             placeholder="e.g. Bauhaus, Brotherhood" />
+    </div>
+
+    {{!-- Description --}}
+    <div class="item-form-group item-form-group--grow">
+      <label>Description</label>
+      <textarea name="system.description" placeholder="Weapon description, special rules...">{{system.description}}</textarea>
+    </div>
+
+  </section>
+</form>

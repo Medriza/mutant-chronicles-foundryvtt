@@ -1,0 +1,36 @@
+{{!-- Special Ability Item Sheet --}}
+{{!-- Used for all NPC special abilities (including Dark Symmetry abilities).  --}}
+{{!-- Fields: optional Rank (checkbox + number, same pattern as talent-sheet)  --}}
+{{!--          + Description textarea that fills remaining space.               --}}
+<form class="sheet specialability-sheet" autocomplete="off">
+
+  {{!-- Header: icon + item name --}}
+  <header class="item-sheet-header">
+    <img class="item-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="item-header-fields">
+      <input class="item-title-input" name="name" type="text" value="{{item.name}}" placeholder="Ability Name" />
+      <div class="item-type-badge">Special Ability</div>
+    </div>
+  </header>
+
+  {{!-- Body --}}
+  <section class="item-sheet-body">
+
+    {{!-- Rank: checkbox enables the number input (same pattern as talent-sheet) --}}
+    <div class="item-form-group--narrow">
+      <label>Ranked</label>
+      <input type="checkbox" name="system.isRanked" {{checked system.isRanked}}
+             title="Check if this ability can be taken at multiple ranks" />
+      <input type="number" name="system.rank" value="{{system.rank}}"
+             min="1" max="9" {{#unless system.isRanked}}disabled{{/unless}} />
+    </div>
+
+    {{!-- Description — fills the rest of the space --}}
+    <div class="item-form-group item-form-group--grow">
+      <label>Description</label>
+      <textarea name="system.description"
+                placeholder="Rules text, trigger conditions, effect...">{{system.description}}</textarea>
+    </div>
+
+  </section>
+</form>

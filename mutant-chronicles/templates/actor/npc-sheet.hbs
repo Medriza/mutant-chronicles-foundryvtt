@@ -30,205 +30,171 @@
 
   <div class="npc-body flexcol">
 
-    {{!-- ── Two-column: Attributes | Fields of Expertise ────────────────── --}}
-    <div class="npc-columns flexrow">
+    {{!-- ── Attributes Grid ─────────────────────────────────────────────────── --}}
+    {{!-- 4-column layout matching the official MC3 stat block.
+         Group 1 (STR / PHY / AGI / AWA) and Group 2 (COO / INT / MEN / PER)
+         each have a dark name row above a value row, with the same
+         gap-as-border trick used in the weapon stats grid.                   --}}
+    <div class="npc-attr-grid">
+      <div class="nag-title">Attributes</div>
 
-      {{!-- Left column: 8 attributes --}}
-      <section class="npc-attributes">
-        <h3 class="section-label">Attributes</h3>
-        <table class="attr-table">
-          <thead>
-            <tr><th>Attribute</th><th>Value</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Agility</td>
-              <td><input type="number" name="system.attributes.agility.value"
-                         value="{{system.attributes.agility.value}}" min="2" max="17" /></td>
-            </tr>
-            <tr>
-              <td>Awareness</td>
-              <td><input type="number" name="system.attributes.awareness.value"
-                         value="{{system.attributes.awareness.value}}" min="2" max="17" /></td>
-            </tr>
-            <tr>
-              <td>Coordination</td>
-              <td><input type="number" name="system.attributes.coordination.value"
-                         value="{{system.attributes.coordination.value}}" min="2" max="17" /></td>
-            </tr>
-            <tr>
-              <td>Intelligence</td>
-              <td><input type="number" name="system.attributes.intelligence.value"
-                         value="{{system.attributes.intelligence.value}}" min="2" max="17" /></td>
-            </tr>
-            <tr>
-              <td>Mental Strength</td>
-              <td><input type="number" name="system.attributes.mentalStrength.value"
-                         value="{{system.attributes.mentalStrength.value}}" min="2" max="17" /></td>
-            </tr>
-            <tr>
-              <td>Personality</td>
-              <td><input type="number" name="system.attributes.personality.value"
-                         value="{{system.attributes.personality.value}}" min="2" max="17" /></td>
-            </tr>
-            <tr>
-              <td>Physique</td>
-              <td><input type="number" name="system.attributes.physique.value"
-                         value="{{system.attributes.physique.value}}" min="2" max="17" /></td>
-            </tr>
-            <tr>
-              <td>Strength</td>
-              <td><input type="number" name="system.attributes.strength.value"
-                         value="{{system.attributes.strength.value}}" min="2" max="17" /></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+      {{!-- All 8 attribute names in a single row --}}
+      <div class="nag-label">Strength</div>
+      <div class="nag-label">Physique</div>
+      <div class="nag-label">Agility</div>
+      <div class="nag-label">Awareness</div>
+      <div class="nag-label">Coordination</div>
+      <div class="nag-label">Intelligence</div>
+      <div class="nag-label">Mental Str.</div>
+      <div class="nag-label">Personality</div>
 
-      {{!-- Right column: 6 fixed Fields of Expertise --}}
-      <section class="npc-expertise">
-        <h3 class="section-label">Fields of Expertise</h3>
-        <table class="expertise-table">
-          <thead>
-            <tr><th>Field</th><th>EXP</th><th>FOC</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><a class="expertise-roll" data-field="movement" title="Roll Movement">Movement</a></td>
-              <td><input type="number" name="system.expertise.movement.exp"
-                         value="{{system.expertise.movement.exp}}" min="0" /></td>
-              <td><input type="number" name="system.expertise.movement.foc"
-                         value="{{system.expertise.movement.foc}}" min="0" /></td>
-            </tr>
-            <tr>
-              <td><a class="expertise-roll" data-field="combat" title="Roll Combat">Combat</a></td>
-              <td><input type="number" name="system.expertise.combat.exp"
-                         value="{{system.expertise.combat.exp}}" min="0" /></td>
-              <td><input type="number" name="system.expertise.combat.foc"
-                         value="{{system.expertise.combat.foc}}" min="0" /></td>
-            </tr>
-            <tr>
-              <td><a class="expertise-roll" data-field="fortitude" title="Roll Fortitude">Fortitude</a></td>
-              <td><input type="number" name="system.expertise.fortitude.exp"
-                         value="{{system.expertise.fortitude.exp}}" min="0" /></td>
-              <td><input type="number" name="system.expertise.fortitude.foc"
-                         value="{{system.expertise.fortitude.foc}}" min="0" /></td>
-            </tr>
-            <tr>
-              <td><a class="expertise-roll" data-field="technical" title="Roll Technical">Technical</a></td>
-              <td><input type="number" name="system.expertise.technical.exp"
-                         value="{{system.expertise.technical.exp}}" min="0" /></td>
-              <td><input type="number" name="system.expertise.technical.foc"
-                         value="{{system.expertise.technical.foc}}" min="0" /></td>
-            </tr>
-            <tr>
-              <td><a class="expertise-roll" data-field="social" title="Roll Social">Social</a></td>
-              <td><input type="number" name="system.expertise.social.exp"
-                         value="{{system.expertise.social.exp}}" min="0" /></td>
-              <td><input type="number" name="system.expertise.social.foc"
-                         value="{{system.expertise.social.foc}}" min="0" /></td>
-            </tr>
-            <tr>
-              <td><a class="expertise-roll" data-field="senses" title="Roll Senses">Senses</a></td>
-              <td><input type="number" name="system.expertise.senses.exp"
-                         value="{{system.expertise.senses.exp}}" min="0" /></td>
-              <td><input type="number" name="system.expertise.senses.foc"
-                         value="{{system.expertise.senses.foc}}" min="0" /></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+      {{!-- All 8 attribute values in a single row --}}
+      <div class="nag-cell">
+        <input type="number" name="system.attributes.strength.value"
+               value="{{system.attributes.strength.value}}" min="2" max="17" />
+      </div>
+      <div class="nag-cell">
+        <input type="number" name="system.attributes.physique.value"
+               value="{{system.attributes.physique.value}}" min="2" max="17" />
+      </div>
+      <div class="nag-cell">
+        <input type="number" name="system.attributes.agility.value"
+               value="{{system.attributes.agility.value}}" min="2" max="17" />
+      </div>
+      <div class="nag-cell">
+        <input type="number" name="system.attributes.awareness.value"
+               value="{{system.attributes.awareness.value}}" min="2" max="17" />
+      </div>
+      <div class="nag-cell">
+        <input type="number" name="system.attributes.coordination.value"
+               value="{{system.attributes.coordination.value}}" min="2" max="17" />
+      </div>
+      <div class="nag-cell">
+        <input type="number" name="system.attributes.intelligence.value"
+               value="{{system.attributes.intelligence.value}}" min="2" max="17" />
+      </div>
+      <div class="nag-cell">
+        <input type="number" name="system.attributes.mentalStrength.value"
+               value="{{system.attributes.mentalStrength.value}}" min="2" max="17" />
+      </div>
+      <div class="nag-cell">
+        <input type="number" name="system.attributes.personality.value"
+               value="{{system.attributes.personality.value}}" min="2" max="17" />
+      </div>
+    </div>{{!-- end .npc-attr-grid --}}
 
-    </div>{{!-- end .npc-columns --}}
+    {{!-- ── Fields of Expertise Grid ────────────────────────────────────────── --}}
+    {{!-- 6-column layout, one column per field. Each column shows:
+           field name (clickable for a roll) → EXP/FOC sub-labels → paired inputs --}}
+    <div class="npc-exp-grid">
+      <div class="neg-title">Fields of Expertise</div>
+
+      {{!-- Field name row (each cell is a roll trigger) --}}
+      <div class="neg-field"><a class="expertise-roll" data-field="movement"  title="Roll Movement">Movement</a></div>
+      <div class="neg-field"><a class="expertise-roll" data-field="combat"    title="Roll Combat">Combat</a></div>
+      <div class="neg-field"><a class="expertise-roll" data-field="fortitude" title="Roll Fortitude">Fortitude</a></div>
+      <div class="neg-field"><a class="expertise-roll" data-field="technical" title="Roll Technical">Technical</a></div>
+      <div class="neg-field"><a class="expertise-roll" data-field="social"    title="Roll Social">Social</a></div>
+      <div class="neg-field"><a class="expertise-roll" data-field="senses"    title="Roll Senses">Senses</a></div>
+
+      {{!-- EXP / FOC sub-label row --}}
+      <div class="neg-sublabel"><span class="neg-sub">EXP</span><span class="neg-sub">FOC</span></div>
+      <div class="neg-sublabel"><span class="neg-sub">EXP</span><span class="neg-sub">FOC</span></div>
+      <div class="neg-sublabel"><span class="neg-sub">EXP</span><span class="neg-sub">FOC</span></div>
+      <div class="neg-sublabel"><span class="neg-sub">EXP</span><span class="neg-sub">FOC</span></div>
+      <div class="neg-sublabel"><span class="neg-sub">EXP</span><span class="neg-sub">FOC</span></div>
+      <div class="neg-sublabel"><span class="neg-sub">EXP</span><span class="neg-sub">FOC</span></div>
+
+      {{!-- Value row — each cell holds a paired EXP + FOC input --}}
+      <div class="neg-value">
+        <input type="number" name="system.expertise.movement.exp"  value="{{system.expertise.movement.exp}}"  min="0" />
+        <input type="number" name="system.expertise.movement.foc"  value="{{system.expertise.movement.foc}}"  min="0" />
+      </div>
+      <div class="neg-value">
+        <input type="number" name="system.expertise.combat.exp"    value="{{system.expertise.combat.exp}}"    min="0" />
+        <input type="number" name="system.expertise.combat.foc"    value="{{system.expertise.combat.foc}}"    min="0" />
+      </div>
+      <div class="neg-value">
+        <input type="number" name="system.expertise.fortitude.exp" value="{{system.expertise.fortitude.exp}}" min="0" />
+        <input type="number" name="system.expertise.fortitude.foc" value="{{system.expertise.fortitude.foc}}" min="0" />
+      </div>
+      <div class="neg-value">
+        <input type="number" name="system.expertise.technical.exp" value="{{system.expertise.technical.exp}}" min="0" />
+        <input type="number" name="system.expertise.technical.foc" value="{{system.expertise.technical.foc}}" min="0" />
+      </div>
+      <div class="neg-value">
+        <input type="number" name="system.expertise.social.exp"    value="{{system.expertise.social.exp}}"    min="0" />
+        <input type="number" name="system.expertise.social.foc"    value="{{system.expertise.social.foc}}"    min="0" />
+      </div>
+      <div class="neg-value">
+        <input type="number" name="system.expertise.senses.exp"    value="{{system.expertise.senses.exp}}"    min="0" />
+        <input type="number" name="system.expertise.senses.foc"    value="{{system.expertise.senses.foc}}"    min="0" />
+      </div>
+    </div>{{!-- end .npc-exp-grid --}}
 
     {{!-- ── Wounds ──────────────────────────────────────────────────────── --}}
     <section class="npc-wounds npc-section">
       <div class="section-header flexrow">
         <h3 class="section-label">Wounds</h3>
         <label class="wound-mode-toggle">
+          Use Location Wounds
           <input type="checkbox" name="system.useLocationWounds"
                  {{#if system.useLocationWounds}}checked{{/if}} />
-          Use location wounds
         </label>
       </div>
 
       {{#if system.useLocationWounds}}
-      {{!-- Location wounds mode ─────────────────────────────────────────── --}}
-      {{!-- Wound maxes are derived from PHY+STR by prepareData() so they    --}}
-      {{!-- update automatically when attributes change, same as on PCs.     --}}
+      {{!-- Location wounds mode — compact two-column layout.                 --}}
+      {{!-- Left group: Head / Torso. Right group: Arms / Legs.               --}}
+      {{!-- Column order per group: Name | Soak | Current | Max.             --}}
+      {{!-- Serious + Critical share one row. Mental spans the left half.    --}}
       <table class="wound-table">
         <thead>
           <tr>
-            <th>Location</th>
+            <th class="wound-name-col"></th>
+            <th>Soak</th>
             <th>Current</th>
             <th>Max</th>
+            <th class="wound-name-col wound-group-divider"></th>
             <th>Soak</th>
+            <th>Current</th>
+            <th>Max</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Head</td>
+            <td class="wound-location-name">Head</td>
+            <td><input type="number" name="system.wounds.light.head.soak"
+                       value="{{system.wounds.light.head.soak}}" min="0" /></td>
             <td><input type="number" name="system.wounds.light.head.value"
                        value="{{system.wounds.light.head.value}}" min="0" /></td>
             <td><input type="number" name="system.wounds.light.head.max"
                        value="{{system.wounds.light.head.max}}" min="0" /></td>
-            <td><input type="number" name="system.wounds.light.head.soak"
-                       value="{{system.wounds.light.head.soak}}" min="0" /></td>
-          </tr>
-          <tr>
-            <td>Torso</td>
-            <td><input type="number" name="system.wounds.light.torso.value"
-                       value="{{system.wounds.light.torso.value}}" min="0" /></td>
-            <td><input type="number" name="system.wounds.light.torso.max"
-                       value="{{system.wounds.light.torso.max}}" min="0" /></td>
-            <td><input type="number" name="system.wounds.light.torso.soak"
-                       value="{{system.wounds.light.torso.soak}}" min="0" /></td>
-          </tr>
-          <tr>
-            {{!-- Arms maps to system.wounds.light.leftArm (rightArm unused on NPCs) --}}
-            <td>Arms</td>
+            {{!-- Arms maps to leftArm — NPCs don't track left/right separately --}}
+            <td class="wound-location-name wound-group-divider">Arms</td>
+            <td><input type="number" name="system.wounds.light.leftArm.soak"
+                       value="{{system.wounds.light.leftArm.soak}}" min="0" /></td>
             <td><input type="number" name="system.wounds.light.leftArm.value"
                        value="{{system.wounds.light.leftArm.value}}" min="0" /></td>
             <td><input type="number" name="system.wounds.light.leftArm.max"
                        value="{{system.wounds.light.leftArm.max}}" min="0" /></td>
-            <td><input type="number" name="system.wounds.light.leftArm.soak"
-                       value="{{system.wounds.light.leftArm.soak}}" min="0" /></td>
           </tr>
           <tr>
-            {{!-- Legs maps to system.wounds.light.leftLeg (rightLeg unused on NPCs) --}}
-            <td>Legs</td>
+            <td class="wound-location-name">Torso</td>
+            <td><input type="number" name="system.wounds.light.torso.soak"
+                       value="{{system.wounds.light.torso.soak}}" min="0" /></td>
+            <td><input type="number" name="system.wounds.light.torso.value"
+                       value="{{system.wounds.light.torso.value}}" min="0" /></td>
+            <td><input type="number" name="system.wounds.light.torso.max"
+                       value="{{system.wounds.light.torso.max}}" min="0" /></td>
+            {{!-- Legs maps to leftLeg — same reason as above --}}
+            <td class="wound-location-name wound-group-divider">Legs</td>
+            <td><input type="number" name="system.wounds.light.leftLeg.soak"
+                       value="{{system.wounds.light.leftLeg.soak}}" min="0" /></td>
             <td><input type="number" name="system.wounds.light.leftLeg.value"
                        value="{{system.wounds.light.leftLeg.value}}" min="0" /></td>
             <td><input type="number" name="system.wounds.light.leftLeg.max"
                        value="{{system.wounds.light.leftLeg.max}}" min="0" /></td>
-            <td><input type="number" name="system.wounds.light.leftLeg.soak"
-                       value="{{system.wounds.light.leftLeg.soak}}" min="0" /></td>
-          </tr>
-          <tr class="wound-overflow">
-            <td>Serious</td>
-            <td><input type="number" name="system.wounds.serious.value"
-                       value="{{system.wounds.serious.value}}" min="0" /></td>
-            <td><input type="number" name="system.wounds.serious.max"
-                       value="{{system.wounds.serious.max}}" min="0" /></td>
-            <td class="wound-nosoak">—</td>
-          </tr>
-          <tr class="wound-overflow">
-            <td>Critical</td>
-            <td><input type="number" name="system.wounds.critical.value"
-                       value="{{system.wounds.critical.value}}" min="0" /></td>
-            <td><input type="number" name="system.wounds.critical.max"
-                       value="{{system.wounds.critical.max}}" min="0" /></td>
-            <td class="wound-nosoak">—</td>
-          </tr>
-          <tr class="wound-mental">
-            {{!-- Mental wounds on NPCs use a simple value/max pair (system.mentalWounds.value --}}
-            {{!-- added to the mentalWounds template). No slot tracking needed for NPCs.        --}}
-            <td>Mental</td>
-            <td><input type="number" name="system.mentalWounds.value"
-                       value="{{system.mentalWounds.value}}" min="0" /></td>
-            <td><input type="number" name="system.mentalWounds.max"
-                       value="{{system.mentalWounds.max}}" min="0" /></td>
-            <td class="wound-nosoak">—</td>
           </tr>
         </tbody>
       </table>
@@ -239,19 +205,25 @@
       {{!-- The GM sets both value and max from the NPC's stat block.        --}}
       <div class="simplified-wounds flexrow">
         <div class="simple-wound-pool">
-          <label>Wounds (current / max)</label>
-          <div class="wound-value-pair flexrow">
-            <input type="number" name="system.simpleWounds.value"
-                   value="{{system.simpleWounds.value}}" min="0" />
-            <span class="wound-sep">/</span>
-            <input type="number" name="system.simpleWounds.max"
-                   value="{{system.simpleWounds.max}}" min="0" />
+          <div class="wound-value-pair">
+            <div class="wound-col">
+              <div class="wound-col-label">Current Wounds</div>
+              <input type="number" name="system.simpleWounds.value"
+                     value="{{system.simpleWounds.value}}" min="0" />
+            </div>
+            <div class="wound-col">
+              <div class="wound-col-label">Max Wounds</div>
+              <input type="number" name="system.simpleWounds.max"
+                     value="{{system.simpleWounds.max}}" min="0" />
+            </div>
           </div>
         </div>
         <div class="simple-soak-block">
-          <label>Soak by Location</label>
           <table class="soak-table">
             <thead>
+              <tr class="soak-title-row">
+                <th colspan="4">Soak by Location</th>
+              </tr>
               <tr>
                 <th>Head</th>
                 <th>Torso</th>
@@ -280,7 +252,7 @@
 
     {{!-- ── Attacks ──────────────────────────────────────────────────────── --}}
     {{!-- Uses the 'weapon' item type; just labelled 'Attacks' on NPC sheets. --}}
-    <section class="npc-section">
+    <section class="npc-attacks npc-section">
       <div class="section-header flexrow">
         <h3 class="section-label">Attacks</h3>
         <a class="item-create" data-item-type="weapon" title="Add Attack">
@@ -295,7 +267,9 @@
             <th>Type</th>
             <th>Range</th>
             <th>Damage</th>
-            <th>Qualities</th>
+            <th>Mode</th>
+            <th>Rel.</th>
+            <th class="col-qualities">Qualities</th>
             <th class="controls"></th>
           </tr>
         </thead>
@@ -306,6 +280,8 @@
             <td>{{attack.system.weaponType}}</td>
             <td>{{attack.system.range}}</td>
             <td>{{attack.system.damageFlat}}+{{attack.system.damageDice}}CD</td>
+            <td>{{attack.system.mode}}</td>
+            <td>{{attack.system.reliability}}</td>
             <td>{{attack.system.qualities}}</td>
             <td class="item-controls flexrow">
               <a class="item-edit" title="Edit"><i class="fas fa-edit"></i></a>
@@ -321,11 +297,12 @@
     </section>
 
     {{!-- ── Special Abilities ────────────────────────────────────────────── --}}
-    {{!-- Uses the 'talent' item type. --}}
-    <section class="npc-section">
+    {{!-- Uses the 'specialability' item type. Covers all NPC abilities       --}}
+    {{!-- (regular and Dark Symmetry). Ranked abilities show rank next to name.--}}
+    <section class="npc-abilities npc-section">
       <div class="section-header flexrow">
         <h3 class="section-label">Special Abilities</h3>
-        <a class="item-create" data-item-type="talent" title="Add Special Ability">
+        <a class="item-create" data-item-type="specialability" title="Add Special Ability">
           <i class="fas fa-plus"></i> Add
         </a>
       </div>
@@ -334,7 +311,9 @@
         <tbody>
           {{#each specialAbilities as |ability|}}
           <tr class="item" data-item-id="{{ability.id}}">
-            <td class="ability-name">{{ability.name}}</td>
+            <td class="ability-name">
+              {{ability.name}}{{#if ability.system.isRanked}} ({{ability.system.rank}})</span>{{/if}}
+            </td>
             <td class="ability-desc">{{ability.system.description}}</td>
             <td class="item-controls flexrow">
               <a class="item-edit" title="Edit"><i class="fas fa-edit"></i></a>
@@ -349,46 +328,8 @@
       {{/if}}
     </section>
 
-    {{!-- ── Dark Symmetry Abilities ─────────────────────────────────────── --}}
-    {{!-- Uses the 'darksymmetry' item type. Cost = DS points to activate.  --}}
-    <section class="npc-section">
-      <div class="section-header flexrow">
-        <h3 class="section-label">Dark Symmetry Abilities</h3>
-        <a class="item-create" data-item-type="darksymmetry" title="Add Dark Symmetry Ability">
-          <i class="fas fa-plus"></i> Add
-        </a>
-      </div>
-      {{#if darkSymmetry.length}}
-      <table class="items-list">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Cost (DS)</th>
-            <th>Effect</th>
-            <th class="controls"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each darkSymmetry as |ability|}}
-          <tr class="item" data-item-id="{{ability.id}}">
-            <td>{{ability.name}}</td>
-            <td class="ds-cost">{{ability.system.cost}}</td>
-            <td>{{ability.system.effect}}</td>
-            <td class="item-controls flexrow">
-              <a class="item-edit" title="Edit"><i class="fas fa-edit"></i></a>
-              <a class="item-delete" title="Delete"><i class="fas fa-trash"></i></a>
-            </td>
-          </tr>
-          {{/each}}
-        </tbody>
-      </table>
-      {{else}}
-      <p class="empty-label">No Dark Symmetry abilities.</p>
-      {{/if}}
-    </section>
-
     {{!-- ── Notes ────────────────────────────────────────────────────────── --}}
-    <section class="npc-section">
+    <section class="npc-notes npc-section">
       <h3 class="section-label">Notes</h3>
       <textarea name="system.details.notes" rows="5"
                 placeholder="GM notes, tactics, description...">{{system.details.notes}}</textarea>

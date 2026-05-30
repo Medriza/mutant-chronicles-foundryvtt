@@ -1,25 +1,177 @@
-{{!-- ── Stats Tab ─────────────────────────────────────────────────── --}}
-{{!-- Three-column layout: Attributes | Wounds | Status & Injuries    --}}
-<div class="tab stats flexrow" data-group="primary" data-tab="stats">
+{{!-- ── Stats Tab ─────────────────────────────────────────────────────────── --}}
+{{!-- Two-column layout mirroring the official MC3 character sheet:           --}}
+{{!--   wounds-column (wide)  — all hit locations + critical injuries         --}}
+{{!--   stats-column  (narrow) — derived stats, chronicle points, dread       --}}
+<div class="tab stats" data-group="primary" data-tab="stats">
 
-  {{!-- Column 1: Attributes + Derived Stats ──────────────────────── --}}
-  <div class="attributes-section flexcol">
-    <h3 class="section-header">Attributes</h3>
-    {{!-- {{#each obj as |value key|}} iterates the attributes object.
-         'key' is the property name (agility, awareness, etc.),
-         'attr' is the value object { value: 5 }.
-         The name attribute uses dot notation so Foundry knows which
-         field to update when the user changes a number. --}}
-    <ol class="attributes-list">
-      {{#each system.attributes as |attr key|}}
-      <li class="attribute flexrow" data-attribute="{{key}}">
-        <span class="attribute-label">{{key}}</span>
-        <input class="attribute-value" type="number"
-               name="system.attributes.{{key}}.value"
-               value="{{attr.value}}" min="2" max="17" />
-      </li>
-      {{/each}}
-    </ol>
+  {{!-- ── LEFT COLUMN: Hit Locations + Critical Injuries ──────────────────── --}}
+  <div class="wounds-column flexcol">
+
+    {{!-- Top info row: Status (left) | Critical Injuries (right) ───────────
+         Both use the same dark location-banner so they match the hit-location
+         cards below. Critical Injuries is now here instead of at the bottom. --}}
+    <div class="info-row">
+
+      <div class="info-card status-card">
+        <div class="location-banner">
+          <span class="location-name">Status</span>
+        </div>
+        <input type="text" name="system.status" value="{{system.status}}"
+               placeholder="Current conditions…" />
+      </div>
+
+      <div class="info-card injury-card">
+        <div class="location-banner">
+          <span class="location-name">Critical Injuries</span>
+        </div>
+        <div class="critical-injuries-list">
+          {{#each system.criticalInjuries}}
+            <div class="critical-injury">{{this}}</div>
+          {{else}}
+            <p class="empty-label">No critical injuries.</p>
+          {{/each}}
+        </div>
+      </div>
+
+    </div>{{!-- /.info-row --}}
+
+    {{!-- Hit location grid — 2 columns.
+         Each card: range badge | name | soak input | wound-slots-grid.
+         Torso spans both columns. Mental Wounds shares Row 1 with Head.
+         data-wound-path on the card lets the wound-click handlers in
+         activateListeners() resolve which actor field to update. --}}
+    <div class="hit-location-grid">
+
+      {{!-- Row 1: Head (left) | Mental Wounds (right) --}}
+      <div class="location-card" data-wound-path="{{lightWoundSlots.head.path}}">
+        <div class="location-banner">
+          <span class="location-range">{{lightWoundSlots.head.range}}</span>
+          <span class="location-name">{{lightWoundSlots.head.label}}</span>
+          <span class="soak-value" title="Soak (from worn armour)">{{lightWoundSlots.head.soak}}</span>
+        </div>
+        <div class="wound-slots-grid">
+          {{#each lightWoundSlots.head.slots as |slot|}}
+          <div class="wound-slot {{slot.state}}"></div>
+          {{/each}}
+        </div>
+      </div>
+
+      {{!-- Mental Wounds: no soak, no hit-range; 20 boxes in a 5-per-row grid.
+           mental-slot (not wound-slot) so its own handlers fire correctly. --}}
+      <div class="mental-wounds-card">
+        <div class="location-banner">
+          <span class="location-name">Mental Wounds</span>
+        </div>
+        <div class="wound-slots-grid mental-wounds-slots">
+          {{#each mentalWoundSlots as |slot|}}
+          <div class="mental-slot {{slot.state}}{{#if slot.tainted}} tainted{{/if}}"
+               data-slot="{{slot.key}}"></div>
+          {{/each}}
+        </div>
+      </div>
+
+      {{!-- Row 2: Left Arm (left) | Right Arm (right) --}}
+      <div class="location-card" data-wound-path="{{lightWoundSlots.leftArm.path}}">
+        <div class="location-banner">
+          <span class="location-range">{{lightWoundSlots.leftArm.range}}</span>
+          <span class="location-name">{{lightWoundSlots.leftArm.label}}</span>
+          <span class="soak-value" title="Soak (from worn armour)">{{lightWoundSlots.leftArm.soak}}</span>
+        </div>
+        <div class="wound-slots-grid">
+          {{#each lightWoundSlots.leftArm.slots as |slot|}}
+          <div class="wound-slot {{slot.state}}"></div>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="location-card" data-wound-path="{{lightWoundSlots.rightArm.path}}">
+        <div class="location-banner">
+          <span class="location-range">{{lightWoundSlots.rightArm.range}}</span>
+          <span class="location-name">{{lightWoundSlots.rightArm.label}}</span>
+          <span class="soak-value" title="Soak (from worn armour)">{{lightWoundSlots.rightArm.soak}}</span>
+        </div>
+        <div class="wound-slots-grid">
+          {{#each lightWoundSlots.rightArm.slots as |slot|}}
+          <div class="wound-slot {{slot.state}}"></div>
+          {{/each}}
+        </div>
+      </div>
+
+      {{!-- Row 3: Torso (full width, 12 boxes in 6-per-row grid) --}}
+      <div class="location-card torso-card" data-wound-path="{{lightWoundSlots.torso.path}}">
+        <div class="location-banner">
+          <span class="location-range">{{lightWoundSlots.torso.range}}</span>
+          <span class="location-name">{{lightWoundSlots.torso.label}}</span>
+          <span class="soak-value" title="Soak (from worn armour)">{{lightWoundSlots.torso.soak}}</span>
+        </div>
+        <div class="wound-slots-grid torso-slots">
+          {{#each lightWoundSlots.torso.slots as |slot|}}
+          <div class="wound-slot {{slot.state}}"></div>
+          {{/each}}
+        </div>
+      </div>
+
+      {{!-- Row 4: Left Leg (left) | Right Leg (right) --}}
+      <div class="location-card" data-wound-path="{{lightWoundSlots.leftLeg.path}}">
+        <div class="location-banner">
+          <span class="location-range">{{lightWoundSlots.leftLeg.range}}</span>
+          <span class="location-name">{{lightWoundSlots.leftLeg.label}}</span>
+          <span class="soak-value" title="Soak (from worn armour)">{{lightWoundSlots.leftLeg.soak}}</span>
+        </div>
+        <div class="wound-slots-grid">
+          {{#each lightWoundSlots.leftLeg.slots as |slot|}}
+          <div class="wound-slot {{slot.state}}"></div>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="location-card" data-wound-path="{{lightWoundSlots.rightLeg.path}}">
+        <div class="location-banner">
+          <span class="location-range">{{lightWoundSlots.rightLeg.range}}</span>
+          <span class="location-name">{{lightWoundSlots.rightLeg.label}}</span>
+          <span class="soak-value" title="Soak (from worn armour)">{{lightWoundSlots.rightLeg.soak}}</span>
+        </div>
+        <div class="wound-slots-grid">
+          {{#each lightWoundSlots.rightLeg.slots as |slot|}}
+          <div class="wound-slot {{slot.state}}"></div>
+          {{/each}}
+        </div>
+      </div>
+
+    </div>{{!-- /.hit-location-grid --}}
+
+    {{!-- Serious + Critical Wounds — side by side below the grid.
+         Using location-banner (not section-header) so they match the height
+         and style of all the hit-location cards above. --}}
+    <div class="overflow-wounds flexrow">
+      <div class="overflow-wound-group serious-wounds"
+           data-wound-path="{{seriousWoundSlots.path}}">
+        <div class="location-banner">
+          <span class="location-name">Serious Wounds</span>
+        </div>
+        <div class="wound-slots-grid overflow-slots">
+          {{#each seriousWoundSlots.slots as |slot|}}
+          <div class="wound-slot {{slot.state}}"></div>
+          {{/each}}
+        </div>
+      </div>
+      <div class="overflow-wound-group critical-wounds"
+           data-wound-path="{{criticalWoundSlots.path}}">
+        <div class="location-banner">
+          <span class="location-name">Critical Wounds</span>
+        </div>
+        <div class="wound-slots-grid overflow-slots">
+          {{#each criticalWoundSlots.slots as |slot|}}
+          <div class="wound-slot {{slot.state}}"></div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+
+  </div>{{!-- /.wounds-column --}}
+
+  {{!-- ── RIGHT COLUMN: Derived Stats, Chronicle Points, Dread, Mysticism ── --}}
+  <div class="stats-column flexcol">
 
     <h3 class="section-header">Derived Stats</h3>
     <div class="derived-stat flexrow">
@@ -32,89 +184,50 @@
       <input type="number" name="system.derivedStats.rangedBonusDamage"
              value="{{system.derivedStats.rangedBonusDamage}}" />
     </div>
-    <div class="derived-stat flexrow">
-      <label>Influence</label>
-      <input type="number" name="system.derivedStats.influence"
-             value="{{system.derivedStats.influence}}" />
-    </div>
-  </div>
 
-  {{!-- Column 2: Physical + Mental Wounds ────────────────────────── --}}
-  <div class="wounds-section flexcol">
-    <h3 class="section-header">Physical Wounds</h3>
-
-    <h4>Light Wounds (by location)</h4>
-    {{!-- lightWoundSlots is an array of location objects: { loc, path, soak, slots }.
-         slot.state is 'filled' | 'active' | 'inactive' — drives the CSS class.
-         data-wound-path tells the click handler which actor field to update.
-         Soak is a temporary manual input until the armour system automates it. --}}
-    {{#each lightWoundSlots as |locationData|}}
-    <div class="wound-location flexrow" data-wound-path="{{locationData.path}}">
-      <label class="wound-label">{{locationData.loc}}</label>
-      <input class="soak-value" type="number"
-             name="{{locationData.path}}.soak"
-             value="{{locationData.soak}}" min="0" title="Soak" />
-      <div class="wound-slots flexrow">
-        {{#each locationData.slots as |slot|}}
-        <div class="wound-slot {{slot.state}}"></div>
-        {{/each}}
-      </div>
-    </div>
-    {{/each}}
-
-    <div class="serious-wounds flexrow" data-wound-path="{{seriousWoundSlots.path}}">
-      <label class="wound-label">Serious</label>
-      <div class="wound-slots flexrow">
-        {{#each seriousWoundSlots.slots as |slot|}}
-        <div class="wound-slot {{slot.state}}"></div>
-        {{/each}}
-      </div>
-    </div>
-
-    <div class="critical-wounds flexrow" data-wound-path="{{criticalWoundSlots.path}}">
-      <label class="wound-label">Critical</label>
-      <div class="wound-slots flexrow">
-        {{#each criticalWoundSlots.slots as |slot|}}
-        <div class="wound-slot {{slot.state}}"></div>
-        {{/each}}
-      </div>
-    </div>
-
-    <h3 class="section-header">Mental Wounds</h3>
-    {{!-- mentalWoundSlots is always 20 entries (the physical sheet max).
-         slot.state drives the CSS class: 'filled' | 'active' | 'inactive'.
-         slot.tainted adds the 'tainted' class, which the CSS uses to draw
-         the corruption pip via ::after. Click handlers in activateListeners()
-         enforce left-to-right fill / right-to-left clear. --}}
-    <div class="mental-wounds-slots flexrow">
-      {{#each mentalWoundSlots as |slot|}}
-      <div class="mental-slot {{slot.state}}{{#if slot.tainted}} tainted{{/if}}"
-           data-slot="{{slot.key}}"></div>
+    {{!-- Chronicle Points: 5 circular tokens.
+         Left-click: fill next (spend a CP). Right-click: clear last (recover a CP). --}}
+    <h3 class="section-header">Chronicle Points</h3>
+    <div class="chronicle-points">
+      {{#each chroniclePointSlots as |slot|}}
+      <div class="chronicle-point-slot{{#if slot.filled}} filled{{/if}}"
+           data-index="{{slot.index}}" title="Chronicle Point {{slot.index}}"></div>
       {{/each}}
     </div>
-  </div>
 
-  {{!-- Column 3: Status, Mysticism toggle, Critical Injuries ─────── --}}
-  <div class="status-section flexcol">
-    <h3 class="section-header">Status</h3>
-    <input type="text" name="system.status" value="{{system.status}}"
-           placeholder="Current conditions…" />
+    {{!-- Dread Track: 5 stepped rows (1/2/3/4/5 boxes = 15 total).
+         Range column: complication range when that row is COMPLETED.
+         Difficulty column: Psychotherapy difficulty to reduce Dread.
+         Left-click: fill next box. Right-click: clear last box.
+         The box state is driven purely by dread.value (a global count 0–15). --}}
+    <h3 class="section-header">Dread</h3>
+    <div class="dread-track">
+      {{#each dreadRows as |row|}}
+      <div class="dread-row" data-row-index="{{row.rowIndex}}">
+        <span class="dread-range">{{row.range}}</span>
+        <div class="dread-slots">
+          {{#each row.slots as |slot|}}
+          <div class="dread-slot {{slot.state}}"
+               data-global-index="{{slot.globalIndex}}"></div>
+          {{/each}}
+        </div>
+        <span class="dread-difficulty">{{#if row.difficulty}}{{row.difficulty}}{{else}}—{{/if}}</span>
+      </div>
+      {{/each}}
+    </div>
 
-    <h3 class="section-header">Mysticism</h3>
-    <div class="form-group flexrow">
+    <h3 class="section-header">Options</h3>
+    <div class="option-row flexrow">
       <label>Enable Spells Tab</label>
       <input type="checkbox" name="system.useMysticism"
              data-dtype="Boolean" {{#if system.useMysticism}}checked{{/if}} />
     </div>
-
-    <h3 class="section-header">Critical Injuries</h3>
-    <div class="critical-injuries-list">
-      {{#each system.criticalInjuries}}
-        <div class="critical-injury">{{this}}</div>
-      {{else}}
-        <p class="empty-label">No critical injuries.</p>
-      {{/each}}
+    <div class="option-row flexrow">
+      <label>Enable Life Path Tab</label>
+      <input type="checkbox" name="system.useLifePath"
+             data-dtype="Boolean" {{#if system.useLifePath}}checked{{/if}} />
     </div>
-  </div>
 
-</div>
+  </div>{{!-- /.stats-column --}}
+
+</div>{{!-- /.tab.stats --}}

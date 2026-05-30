@@ -42,7 +42,16 @@ export async function preloadHandlebarsTemplates() {
   await foundry.applications.handlebars.loadTemplates([
     "systems/mutant-chronicles/templates/dice/roll-dialog.hbs",
     "systems/mutant-chronicles/templates/dice/roll-chat.hbs",
+    // Item sheets — one per type
     "systems/mutant-chronicles/templates/item/skill-sheet.hbs",
-    "systems/mutant-chronicles/templates/item/item-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/talent-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/weapon-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/armour-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/equipment-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/spell-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/darkgift-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/specialability-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/weaponquality-sheet.hbs",
+    "systems/mutant-chronicles/templates/item/item-sheet.hbs",  // generic fallback
   ]);
 }

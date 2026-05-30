@@ -61,6 +61,9 @@ export class MC3Actor extends Actor {
     system.derivedStats.meleeBonusDamage  = this._bonusFromAttribute(attrs.strength.value);
     system.derivedStats.rangedBonusDamage = this._bonusFromAttribute(attrs.awareness.value);
     system.derivedStats.influence         = this._bonusFromAttribute(attrs.personality.value);
+
+    // ── Derived soak (from worn armour items) ──────────────────────────────
+    this._prepareSoak();
   }
 
   /* ------------------------------------------------------------------------ */
@@ -84,6 +87,37 @@ export class MC3Actor extends Actor {
     system.derivedStats.meleeBonusDamage  = this._bonusFromAttribute(attrs.strength.value);
     system.derivedStats.rangedBonusDamage = this._bonusFromAttribute(attrs.awareness.value);
     system.derivedStats.influence         = this._bonusFromAttribute(attrs.personality.value);
+  }
+
+  /**
+   * Derive per-location soak from all worn armour items.
+   *
+   * MC3 rule: when multiple armour pieces are worn, each location uses the
+   * HIGHEST soak value among all worn pieces — armour does not stack.
+   *
+   * If no armour is worn every location resets to 0. Called from
+   * _prepareCharacterData() so it re-runs on every actor update, including
+   * when an item's worn flag changes.
+   */
+  _prepareSoak() {
+    const locations = ['head', 'leftArm', 'rightArm', 'torso', 'leftLeg', 'rightLeg'];
+
+    // Start every location at 0.
+    const soak = Object.fromEntries(locations.map(loc => [loc, 0]));
+
+    // For each worn armour item, keep the higher value per location.
+    for (const item of this.items) {
+      if (item.type !== 'armour' || !item.system.worn) continue;
+      for (const loc of locations) {
+        soak[loc] = Math.max(soak[loc], item.system.soak[loc] ?? 0);
+      }
+    }
+
+    // Write the computed values back into the wound data so the stats tab
+    // template can read them as system.wounds.light.{loc}.soak.
+    for (const loc of locations) {
+      this.system.wounds.light[loc].soak = soak[loc];
+    }
   }
 
   /**

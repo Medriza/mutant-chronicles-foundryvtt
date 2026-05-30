@@ -1,9 +1,41 @@
 /* Mutant Chronicles 3rd Edition — system stylesheet.
  * Empty placeholder created in Lesson 4.4.
  * Full layout styling comes during the CSS polish pass (post-Module 5).
- * This file currently holds only the wound-box styles, which are functional
- * and travel with the wound section wherever it moves in the layout.
+ * Fonts: Bebas Neue (headers/labels) + Oswald (body) via Google Fonts.
  */
+
+/* ── Google Fonts ─────────────────────────────────────────────────────────── */
+/* Bebas Neue: tall condensed display font for section headers and labels.
+   Oswald: clean condensed sans-serif for all body text, skill names, inputs. */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600&display=swap');
+
+/* ── Font definitions ─────────────────────────────────────────────────────── */
+
+/* Bebas Neue applied to all section/group headers and tab labels */
+.app.mc3 .section-header,
+.app.mc3 .skill-group-name,
+.app.mc3 .sheet-tabs .item,
+.app.mc3 .roll-card-title,
+.app.mc3 h1,
+.app.mc3 h2,
+.app.mc3 h3,
+.app.mc3 h4 {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  letter-spacing: 0.08em;
+}
+
+/* Oswald applied to all body text: labels, skill names, inputs, stat values */
+.app.mc3 {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+}
+
+/* Oswald also in the chat card — targets the roll card regardless of sheet */
+.mc3-roll-card {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+}
+.roll-card-title {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+}
 
 /* ── Wound Box Layout ────────────────────────────────────────────────────── */
 
@@ -97,3 +129,2922 @@
   background-color: #4a004a;
   border-color: #8b008b;
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MC3 ROLL CHAT CARD
+   Rendered into Foundry's chat log by sendRollToChat() in mc3-roll.js.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.mc3-roll-card {
+  background: #1a1a1e;
+  border: 1px solid #3d3020;
+  border-radius: 4px;
+  color: #d0c8b8;
+  font-size: 0.9em;
+  overflow: hidden;
+  margin: 2px 0;
+}
+
+/* ── Header: roll name + TN / FOC / Difficulty ──────────────────────────── */
+
+.roll-card-header {
+  background: #22201c;
+  border-bottom: 1px solid #3d3020;
+  padding: 6px 10px;
+}
+
+.roll-card-title {
+  color: #c8a84b;           /* brass / corporate gold */
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin: 0 0 3px 0;
+  padding: 0;
+  border: none;
+  text-shadow: none;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.roll-card-meta {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  color: #7a7060;
+  font-size: 0.8em;
+}
+
+.meta-sep {
+  color: #3d3020;
+}
+
+/* ── Die grid ────────────────────────────────────────────────────────────── */
+
+.roll-card-dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px 10px;
+}
+
+.die-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 3px;
+  border: 1px solid #333;
+  box-sizing: border-box;
+}
+
+.die-value {
+  font-size: 1.05em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.die-successes {
+  font-size: 0.65em;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* Hit — roll ≤ TN but > Focus: amber */
+.die-result.hit {
+  background: #1e1a10;
+  border-color: #6a5020;
+  color: #c8a84b;
+}
+
+/* Focus hit — roll ≤ Focus: bright gold, subtle glow */
+.die-result.focus {
+  background: #281e08;
+  border-color: #c8a84b;
+  color: #f0c860;
+  box-shadow: 0 0 5px rgba(200, 168, 75, 0.25);
+}
+
+/* Miss — roll > TN: dim grey */
+.die-result.miss {
+  background: #141414;
+  border-color: #282828;
+  color: #484848;
+}
+
+/* Complication — roll of 20: blood red */
+.die-result.complication {
+  background: #1e0c0c;
+  border-color: #6b1a1a;
+  color: #b83030;
+}
+
+/* ── Totals row ──────────────────────────────────────────────────────────── */
+
+.roll-card-totals {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 0.8em;
+  border-top: 1px solid #262220;
+  color: #7a7060;
+}
+
+.total-successes {
+  color: #9a9080;
+}
+
+.total-complications {
+  color: #8a3030;
+}
+
+/* ── Verdict ─────────────────────────────────────────────────────────────── */
+
+.roll-card-verdict {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-top: 1px solid #262220;
+  font-size: 0.88em;
+}
+
+.roll-card-verdict.success {
+  background: #141a0e;
+}
+
+.roll-card-verdict.success strong {
+  color: #78b030;
+  letter-spacing: 0.1em;
+  font-size: 1em;
+}
+
+.roll-card-verdict.failure {
+  background: #1a0e0e;
+}
+
+.roll-card-verdict.failure strong {
+  color: #b83030;
+  letter-spacing: 0.1em;
+  font-size: 1em;
+}
+
+.momentum {
+  color: #78b030;
+  font-size: 0.9em;
+}
+
+.shortfall {
+  color: #8a3030;
+  font-size: 0.9em;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SKILLS TAB
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Skills tab — two-column grid layout ─────────────────────────────────── */
+/* .app.mc3 .tab.skills has higher specificity than Foundry's .flexcol, so
+   display:grid overrides the flex context without needing !important.
+   Each .skill-group becomes a grid cell; the 8 groups flow into 4 rows of 2.
+   Column pairing by default order: AGI+AWA, COO+INT, MEN+PER, PHY+STR. */
+
+.app.mc3 .tab.skills.active {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 14px;
+  align-content: start;
+  padding: 4px 2px;
+}
+
+/* Unassigned group spans the full grid width */
+.app.mc3 .skill-group.unassigned {
+  grid-column: 1 / -1;
+}
+
+/* ── Attribute group block ───────────────────────────────────────────────── */
+
+.skill-group {
+  margin-bottom: 6px;  /* tighter than 10px — helps content fit without scroll */
+}
+
+/* Attribute group header — brass band, now a flex row holding name + col labels.
+   align-items: flex-end puts everything on the same baseline at the bottom of
+   the band, matching the "true header" position Pedro wants for EXP/FOC. */
+.skill-group-header {
+  background: #22201c;
+  border: 1px solid #3d3020;
+  border-radius: 3px;
+  display: flex;
+  align-items: flex-end;
+  margin: 0 0 2px 0;
+  padding: 3px 4px 5px 8px;
+}
+
+/* Attribute name — left side of the header band.
+   Bebas Neue renders small at low em values; 1em here matches the visual
+   weight of the Oswald col labels. Not bold — Bebas Neue has no bold variant
+   and the extra weight declaration just adds visual noise. */
+.skill-group-name {
+  color: #e8d080;
+  flex: 1 1 auto;
+  font-size: 1em;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Column labels inside the header band — slightly larger than the data rows */
+.skill-group-header .skill-col-label {
+  color: #c8b060;
+  font-size: 0.88em;
+}
+
+/* Attribute value input — sits on the dark header band between the name
+   and the EXP/FOC column labels. Styled to read as part of the header. */
+.skill-group-attr {
+  background: rgba(255, 230, 150, 0.12);
+  border: 1px solid #6a5828;
+  border-radius: 2px;
+  color: #f0d878;
+  flex: 0 0 32px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95em;
+  font-weight: 600;
+  margin-right: 10px;
+  padding: 0;
+  text-align: center;
+  width: 32px;
+}
+
+/* ── Skill list ──────────────────────────────────────────────────────────── */
+
+.skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Shared row layout — header row and data rows */
+.skill-row {
+  align-items: center;
+  border-bottom: 1px solid #1e1c18;
+  display: flex;
+  min-height: 20px;
+  padding: 1px 4px;
+}
+
+.skill-row:last-child {
+  border-bottom: none;
+}
+
+/* Column header row (EXP / FOC / ★) */
+.skill-row.skill-header {
+  border-bottom: 1px solid #3d3020;
+  padding-bottom: 2px;
+}
+
+.skill-col-label {
+  color: #6a6050;
+  flex: 0 0 28px;
+  font-size: 0.72em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+/* ── Skill name column ───────────────────────────────────────────────────── */
+
+.skill-name {
+  color: #2a1e08;           /* dark brown — readable on amber parchment */
+  flex: 1 1 auto;
+  font-size: 0.95em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Clickable skill name — pointer + darken on hover (parchment-appropriate) */
+a.skill-roll {
+  cursor: pointer;
+}
+
+a.skill-roll:hover {
+  color: #7a5010;           /* dark amber — distinct but not glowing */
+  text-decoration: underline;
+  text-decoration-color: rgba(120, 80, 16, 0.4);
+}
+
+/* Advanced skills — indent under their parent */
+.skill-row.advanced .skill-name {
+  padding-left: 14px;
+  color: #4a3a18;           /* slightly lighter than parent skills */
+}
+
+.skill-row.advanced .skill-name::before {
+  content: '↳';
+  color: #8a7040;
+  font-size: 0.8em;
+  margin-right: 4px;
+  margin-left: -12px;
+}
+
+/* Hover on advanced skills — same parchment-appropriate treatment */
+.skill-row.advanced a.skill-roll:hover {
+  color: #7a5010;
+  text-decoration: underline;
+  text-decoration-color: rgba(120, 80, 16, 0.4);
+}
+
+/* ── EXP / FOC / Signature columns ──────────────────────────────────────── */
+
+.skill-exp,
+.skill-foc {
+  color: #a09070;
+  flex: 0 0 28px;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+.skill-sig {
+  color: #c8a84b;
+  flex: 0 0 28px;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+/* ── Edit / Delete controls ──────────────────────────────────────────────── */
+
+.skill-controls {
+  display: flex;
+  flex: 0 0 36px;
+  gap: 4px;
+  justify-content: flex-end;
+  opacity: 0;           /* hidden until row is hovered */
+  transition: opacity 0.15s ease;
+}
+
+.skill-controls-spacer {
+  flex: 0 0 36px;       /* same width as .skill-controls to keep columns aligned */
+}
+
+.skill-row:hover .skill-controls {
+  opacity: 1;
+}
+
+.skill-controls a {
+  color: #6a6050;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+.skill-controls a:hover {
+  color: #c8a84b;
+}
+
+.skill-controls .item-delete:hover {
+  color: #b83030;
+}
+
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHEET BACKGROUND & CHROME
+   Parchment direction chosen 2026-05-22. Darkened to match the MC3 official
+   sheet's warm amber tone, with thick dark section borders for the card look.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Sheet layout — lock header and tabs to natural height ───────────────── */
+/* The form is a flexcol. Without explicit flex rules, Foundry can distribute
+   extra vertical space between header, tab bar, and body unevenly depending on
+   which tab is active. These rules pin the header and tab nav to their natural
+   sizes so the tab bar always sits immediately below the header. */
+
+.app.mc3 .sheet-header {
+  flex: 0 0 auto;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 8px;
+}
+
+/* ── Portrait: explicit square — no height inheritance tricks ────────────── */
+
+.app.mc3 .profile-img {
+  flex: 0 0 90px;
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 2px solid #3a2a10;
+}
+
+/* ── Header fields column (right of portrait) ────────────────────────────── */
+
+.app.mc3 .header-fields {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+/* ── Name row: character name (wide) + Faction (narrow, same height) ──────── */
+
+.app.mc3 .name-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;   /* both inputs fill the same height */
+  gap: 6px;
+}
+
+/* Character name and Faction — both direct flex children of .name-row.
+   No h1 wrapper means no Foundry h1 overrides to fight. Identical font settings
+   so they look like a matched pair; name grows, faction is fixed-width. */
+
+.app.mc3 .charname-input,
+.app.mc3 .faction-input {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 1.2em;
+  font-weight: 600;
+  letter-spacing: 0;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 8px;
+}
+
+.app.mc3 .charname-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app.mc3 .faction-input {
+  flex: 0 0 110px;
+  text-align: center;
+}
+
+/* ── Header details row: all four items on ONE flex line ─────────────────── */
+/* Foundry's global input{width:100%} would break Social Status out onto its
+   own line. We explicitly force flex-direction:row and override the input width. */
+
+.app.mc3 .header-details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+/* All four header detail form-groups sit in one flex row */
+.app.mc3 .header-details .form-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+/* All form-groups grow proportionally so the row spans the full header width.
+   Social Status and Earnings get twice the share — they carry wider content.
+   Influence and Experience are narrow (label + small number), one share each. */
+.app.mc3 .header-details .form-group {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.app.mc3 .header-details .social-status-group,
+.app.mc3 .header-details .earnings-group {
+  flex: 2 1 0;
+}
+
+/* Labels: larger, no wrapping, always flush against their following input
+   (the 4px gap in .form-group handles the space; labels shrink-wrap to text) */
+.app.mc3 .header-details .form-group label {
+  flex: 0 0 auto;
+  font-size: 1em;
+  color: #5a4020;
+  white-space: nowrap;
+}
+
+/* Social Status input fills remaining group space after its label */
+.app.mc3 .header-details .social-status-group input[type="text"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  font-size: 1.0em;
+  padding: 1px 6px;
+}
+
+/* Influence and Experience: fixed-width number inputs, no growth */
+.app.mc3 .header-details .form-group input[type="number"] {
+  flex: 0 0 38px;
+  width: 38px;
+  text-align: center;
+  font-size: 1.0em;
+}
+
+/* Earnings rating: narrower than other numbers (0–5 only) */
+.app.mc3 .header-details .earnings-group input[type="number"] {
+  flex: 0 0 26px;
+  width: 26px;
+  padding: 0 2px;
+}
+
+/* Earnings descriptor grows to fill the rest of the earnings group.
+   align-self:stretch overrides the form-group's align-items:center so the span
+   matches the exact rendered height of the sibling <input> elements.
+   display:flex + align-items:center then vertically centers the text within it. */
+.app.mc3 .earnings-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 245, 220, 0.55);
+  border: 1px solid #7a6030;
+  border-radius: 2px;
+  color: #3a2808;
+  font-size: 1.0em;
+  font-style: normal;
+  padding: 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.app.mc3 nav.sheet-tabs {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
+.app.mc3 .sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;   /* prevents flex children from overflowing their container */
+}
+
+/* ── Parchment background — darker amber to match the MC3 official sheet ──── */
+
+/* Foundry renders the sheet content inside .window-content. Overriding its
+   background here replaces the default light parchment with a deeper amber tone.
+   The dark skill-group bands read even more distinctly against this colour. */
+.app.mc3 .window-content {
+  background-color: #c8b87a;
+  background-image: none;   /* remove Foundry's default parchment texture image */
+}
+
+/* ── Input fields on amber parchment ─────────────────────────────────────── */
+
+.app.mc3 input[type="text"],
+.app.mc3 input[type="number"],
+.app.mc3 textarea {
+  background: rgba(255, 245, 220, 0.55);
+  border: 1px solid #7a6030;
+  color: #1a1208;
+}
+
+.app.mc3 input[type="text"]:focus,
+.app.mc3 input[type="number"]:focus,
+.app.mc3 textarea:focus {
+  border-color: #3d2800;
+  box-shadow: 0 0 3px rgba(60, 40, 0, 0.35);
+  outline: none;
+}
+
+/* ── Tab navigation bar on parchment ─────────────────────────────────────── */
+
+.app.mc3 .sheet-tabs {
+  border-bottom: 2px solid #3a2a10;
+}
+
+.app.mc3 .sheet-tabs .item {
+  color: #5a4020;
+  font-size: 1.05em;
+  letter-spacing: 0.1em;
+}
+
+.app.mc3 .sheet-tabs .item.active {
+  color: #1a0e00;
+  border-bottom: 2px solid #1a0e00;
+  font-weight: 700;
+}
+
+.app.mc3 .sheet-tabs .item:hover:not(.active) {
+  color: #3a2810;
+}
+
+/* ── Section headers (Derived Stats, Chronicle Points, Dread, Options) ──── */
+/* No bold — Bebas Neue reads crisply at weight 400; bold adds fuzz on dark bg. */
+
+.app.mc3 .section-header {
+  background: #2a2010;
+  border: none;
+  border-radius: 2px;
+  color: #e8d080;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+  padding: 2px 8px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ── Section cards — thick dark border, file-folder look ─────────────────── */
+/* Matches the MC3 official sheet's inset card aesthetic.                      */
+
+.attributes-section,
+.wounds-section,
+.status-section {
+  border: 2px solid #2a2010;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(255, 230, 160, 0.15),
+              2px 2px 5px rgba(0, 0, 0, 0.25);
+  padding: 6px 8px;
+}
+
+/* ── General text on parchment ───────────────────────────────────────────── */
+
+.app.mc3 label,
+.app.mc3 .attribute-label,
+.app.mc3 .derived-stat label {
+  color: #2a1e08;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   END SHEET BACKGROUND & CHROME
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATS TAB — HIT LOCATION GRID + DERIVED STATS + CHRONICLE POINTS + DREAD
+   Two-column layout mirroring the official MC3 character sheet:
+     wounds-column (flex 2) — all wound locations + critical injuries
+     stats-column  (flex 1) — derived stats, chronicle points, dread track
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Stats tab outer container ───────────────────────────────────────────── */
+
+.app.mc3 .tab.stats.active {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 6px;
+  overflow-y: auto;
+  align-items: flex-start;  /* columns don't stretch to full tab height */
+}
+
+/* ── Two main columns ────────────────────────────────────────────────────── */
+
+.app.mc3 .wounds-column {
+  flex: 2 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.app.mc3 .stats-column {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* ── Top info row: Status + Critical Injuries side-by-side ───────────────── */
+/* Uses the same .location-card / .location-banner styling as hit locations.  */
+
+.app.mc3 .info-row {
+  display: flex;
+  gap: 4px;
+}
+
+.app.mc3 .info-card {
+  flex: 1 1 0;
+  border: 1px solid #4a3818;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Status text input fills the card body below its banner */
+.app.mc3 .status-card input[type="text"] {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: #1a1208;
+  font-size: 0.82em;
+  padding: 3px 6px;
+  width: 100%;
+}
+
+.app.mc3 .status-card input[type="text"]:focus {
+  box-shadow: inset 0 0 0 1px rgba(60, 40, 0, 0.25);
+  outline: none;
+}
+
+/* ── Hit location grid ───────────────────────────────────────────────────── */
+
+.app.mc3 .hit-location-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+/* Torso card spans both columns (Row 3 of the hit-location grid) */
+.app.mc3 .location-card.torso-card {
+  grid-column: 1 / -1;
+}
+
+/* ── Individual location card ────────────────────────────────────────────── */
+
+.app.mc3 .location-card,
+.app.mc3 .mental-wounds-card {
+  border: 1px solid #4a3818;
+  border-radius: 2px;
+  background: rgba(20, 15, 5, 0.10);
+  overflow: hidden;             /* clip banner bleed */
+}
+
+/* Dark banner strip at top of each card: range | name | soak.
+   min-height ensures all banners are the same height even without a soak input
+   (Mental Wounds, Serious Wounds, Critical Wounds, Status, Critical Injuries). */
+.app.mc3 .location-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #2a2010;
+  color: #e8d080;
+  min-height: 26px;
+  padding: 3px 6px;
+}
+
+/* Range badge — larger and upright so it's easy to read at a glance.
+   A bit of right padding separates it visually from the location name. */
+.app.mc3 .location-range {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.82em;
+  font-style: normal;
+  font-weight: 300;
+  color: #b0a060;
+  flex: 0 0 auto;
+  min-width: 28px;
+  padding-right: 4px;
+  border-right: 1px solid #4a3818;
+}
+
+/* Location name — centered so the label sits directly above the wound box cluster */
+.app.mc3 .location-name {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.1em;
+  letter-spacing: 0.1em;
+  color: #e8d080;
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+/* Soak display — small read-only span on the right of the banner.
+   display:inline-block lets width/height apply to the span element.
+   Explicit height prevents the span from pushing the banner taller than
+   banners that have no soak display (Mental Wounds, Serious/Critical Wounds). */
+.app.mc3 .location-banner .soak-value {
+  background: rgba(255, 230, 150, 0.10);
+  border: 1px solid #6a5028;
+  border-radius: 2px;
+  color: #f0d878;
+  display: inline-block;
+  flex: 0 0 26px;
+  font-size: 0.8em;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  text-align: center;
+  width: 26px;
+}
+
+/* ── Wound slots grid inside location cards ──────────────────────────────── */
+/* Fixed 14px columns + justify-content:center clusters the boxes together in
+   the middle of the card rather than spreading them edge-to-edge.
+   5 columns for standard 10-box locations (2 rows × 5). */
+
+.app.mc3 .wound-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 14px);
+  gap: 3px;
+  padding: 5px 4px;
+  justify-content: center;    /* cluster boxes horizontally in the card */
+}
+
+/* Torso has 12 boxes — 6 per row. Still centered. */
+.app.mc3 .torso-slots {
+  grid-template-columns: repeat(6, 14px);
+}
+
+/* Mental wounds: 20 boxes in 2 rows of 10. Same fixed column width. */
+.app.mc3 .mental-wounds-slots {
+  grid-template-columns: repeat(10, 14px);
+}
+
+/* Overflow wounds (Serious + Critical) sit below the grid in a flex row */
+.app.mc3 .overflow-wounds {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.app.mc3 .overflow-wound-group {
+  flex: 1 1 0;
+  border: 1px solid #4a3818;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Overflow slots: 5 per row, centered, same fixed width */
+.app.mc3 .overflow-slots {
+  grid-template-columns: repeat(5, 14px);
+  padding: 5px 4px;
+}
+
+/* ── Critical injuries ───────────────────────────────────────────────────── */
+
+.app.mc3 .critical-injuries-list {
+  padding: 2px 4px;
+}
+
+.app.mc3 .critical-injury {
+  background: rgba(80, 20, 20, 0.15);
+  border-left: 2px solid #8a2020;
+  color: #3a0e0e;
+  font-size: 0.8em;
+  margin-bottom: 2px;
+  padding: 2px 6px;
+}
+
+.app.mc3 .empty-label {
+  color: #8a7858;
+  font-size: 0.8em;
+  font-style: italic;
+  margin: 0;
+  padding: 2px 4px;
+}
+
+/* ── Derived stats in the right column ───────────────────────────────────── */
+
+.app.mc3 .derived-stat {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.app.mc3 .derived-stat label {
+  flex: 1 1 auto;
+  font-size: 1.05em;
+  color: #2a1e08;
+}
+
+.app.mc3 .derived-stat input[type="number"] {
+  flex: 0 0 38px;
+  text-align: center;
+  width: 38px;
+}
+
+/* ── Chronicle Points ────────────────────────────────────────────────────── */
+/* Five circular tokens in a row. Left-click fills the next (spends a CP);
+   right-click clears the last (recovers a CP). Filled tokens are solid gold;
+   unfilled tokens are outlined circles. */
+
+.app.mc3 .chronicle-points {
+  display: flex;
+  gap: 5px;
+  padding: 4px 2px;
+  justify-content: center;
+}
+
+.app.mc3 .chronicle-point-slot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #8a7030;
+  background: rgba(255, 240, 160, 0.08);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.app.mc3 .chronicle-point-slot.filled {
+  background: #c8a84b;
+  border-color: #f0d060;
+  box-shadow: 0 0 4px rgba(200, 168, 75, 0.45);
+}
+
+.app.mc3 .chronicle-point-slot:hover {
+  border-color: #c8a84b;
+}
+
+.app.mc3 .chronicle-point-slot.filled:hover {
+  background: #e0c060;
+}
+
+/* ── Dread Track ─────────────────────────────────────────────────────────── */
+/* Stepped layout: 5 rows of 1/2/3/4/5 boxes = 15 total.
+   Each row: range label | stepped boxes | difficulty label.
+   Boxes fill globally (tracked by a single dread.value count 0–15). */
+
+.app.mc3 .dread-track {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 2px 0;
+  align-self: center;       /* center the stepped block horizontally in the column */
+  width: fit-content;       /* shrink-wrap so align-self actually centers it */
+}
+
+.app.mc3 .dread-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-start;
+}
+
+/* Range column — complication range active when row is completed */
+.app.mc3 .dread-range {
+  flex: 0 0 40px;
+  font-size: 0.85em;
+  font-style: normal;
+  color: #7a6838;
+  text-align: right;
+}
+
+/* Difficulty column — Psychotherapy difficulty to reduce Dread.
+   align-self: flex-start pushes the label to the top of each row so it
+   reads against the first (topmost) box rather than centering on the whole row. */
+.app.mc3 .dread-difficulty {
+  flex: 0 0 24px;
+  font-size: 0.85em;
+  color: #9a3020;
+  font-weight: 600;
+  text-align: left;
+  align-self: flex-start;
+}
+
+/* Flex container for the boxes in a row */
+.app.mc3 .dread-slots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+/* Individual dread box — square with rounded corners */
+.app.mc3 .dread-slot {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #7a5820;
+  border-radius: 2px;
+  background: rgba(255, 230, 150, 0.06);
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.1s ease;
+}
+
+/* Filled dread box — deepening red as dread accumulates */
+.app.mc3 .dread-slot.filled {
+  background: #6a1a10;
+  border-color: #9a2820;
+}
+
+.app.mc3 .dread-slot:hover {
+  border-color: #c8a84b;
+}
+
+.app.mc3 .dread-slot.filled:hover {
+  background: #8a2a18;
+}
+
+/* ── Options section (Enable Spells Tab / Enable Life Path Tab) ─────────── */
+
+.app.mc3 .option-row {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 3px;
+  padding: 0 2px;
+}
+
+.app.mc3 .option-row label {
+  flex: 1 1 auto;
+  font-size: 1.05em;
+  color: #2a1e08;
+}
+
+.app.mc3 .option-row input[type="checkbox"] {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+/* ── End Stats Tab ───────────────────────────────────────────────────────── */
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TALENTS TAB
+   List of talent items: name | prerequisites | description | edit/delete.
+   Matches the parchment/dark-band aesthetic of the Skills tab.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* .active required — same specificity rule as .tab.stats.active and .tab.skills.active */
+.app.mc3 .tab.talents.active {
+  padding: 6px;
+  overflow-y: auto;
+}
+
+/* ── Column header for the talent list ───────────────────────────────────── */
+
+.app.mc3 .talent-list-header {
+  background: #3a2e18;
+  border-radius: 2px 2px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px 3px 8px;
+}
+
+.app.mc3 .talent-list-header span {
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.88em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.app.mc3 .talent-list-header .th-name { flex: 0 0 140px; }
+.app.mc3 .talent-list-header .th-attr { flex: 0 0 90px; }
+.app.mc3 .talent-list-header .th-desc { flex: 1 1 auto; }
+.app.mc3 .talent-list-header .th-ctrl { flex: 0 0 44px; }
+.app.mc3 .talent-list-header .th-rank { flex: 0 0 28px; text-align: center; }
+
+/* ── Talent list ─────────────────────────────────────────────────────────── */
+
+.app.mc3 .talent-list {
+  border: 1px solid #4a3818;
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.app.mc3 .talent-row {
+  align-items: flex-start;
+  border-bottom: 1px solid #2a2010;
+  display: flex;
+  gap: 6px;
+  min-height: 26px;
+  padding: 5px 4px 5px 8px;
+}
+
+.app.mc3 .talent-row:last-child {
+  border-bottom: none;
+}
+
+.app.mc3 .talent-row:hover {
+  background: rgba(255, 230, 150, 0.10);
+}
+
+/* Talent name — Bebas Neue heading weight so it reads like a card title */
+.app.mc3 .talent-name {
+  color: #1a1208;
+  flex: 0 0 140px;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.0em;
+  letter-spacing: 0.06em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Attribute — uppercase, readable size */
+.app.mc3 .talent-attr {
+  color: #4a3818;
+  flex: 0 0 90px;
+  font-size: 0.9em;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Description — fills remaining width; wraps naturally for readability */
+.app.mc3 .talent-desc {
+  color: #3a2a10;
+  flex: 1 1 auto;
+  font-size: 0.9em;
+  line-height: 1.35;
+  min-width: 0;
+  overflow: hidden;
+  white-space: normal;
+}
+
+/* Rank display — narrow, centred, only populated for isRanked talents */
+.app.mc3 .talent-rank-display {
+  flex: 0 0 28px;
+  text-align: center;
+  font-size: 0.88em;
+  color: #4a3818;
+  font-weight: 600;
+}
+
+/* Edit / delete controls — hidden until row is hovered */
+.app.mc3 .talent-row .item-edit,
+.app.mc3 .talent-row .item-delete {
+  color: #6a6050;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 0.8em;
+  opacity: 0;
+  padding: 1px 2px;
+  transition: opacity 0.15s ease;
+}
+
+.app.mc3 .talent-row:hover .item-edit,
+.app.mc3 .talent-row:hover .item-delete {
+  opacity: 1;
+}
+
+.app.mc3 .talent-row .item-edit:hover  { color: #c8a84b; }
+.app.mc3 .talent-row .item-delete:hover { color: #b83030; }
+
+/* Empty state message */
+.app.mc3 .tab.talents .empty-label {
+  border: 1px solid #4a3818;
+  border-top: none;
+  padding: 6px 8px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GEAR TAB
+   Three sections: Weapons, Armour, Belongings. Each section has a dark header
+   band (h3 left, Add button right) followed by a styled table. Matches the
+   MC3 official sheet's columnar gear layout.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Must use .active — without it our specificity (0,3,0) beats Foundry's
+   .tab:not(.active){display:none} (0,2,0) and the tab bleeds to all tabs. */
+.app.mc3 .tab.gear.active {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+/* ── Gear section wrapper ────────────────────────────────────────────────── */
+
+.app.mc3 .gear-section {
+  border: 1px solid #4a3818;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Section header: same dark-band treatment as .section-header but flex-row
+   so the h3 sits on the left and the Add button on the right. */
+.app.mc3 .gear-section-header {
+  align-items: center;
+  background: #2a2010;
+  display: flex;
+  padding: 3px 8px;
+}
+
+.app.mc3 .gear-section-header h3 {
+  border: none;
+  box-shadow: none;
+  color: #e8d080;
+  flex: 1 1 auto;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.05em;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  margin: 0;
+  padding: 0;
+  text-shadow: none;
+  width: auto;            /* override Foundry's h3 { width: 100% } */
+}
+
+.app.mc3 .gear-section-header .item-create {
+  color: #8a7858;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 0.8em;
+}
+
+.app.mc3 .gear-section-header .item-create:hover {
+  color: #c8a84b;
+}
+
+/* ── Tables ──────────────────────────────────────────────────────────────── */
+
+.app.mc3 .weapons-table,
+.app.mc3 .armour-table,
+.app.mc3 .equipment-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Column header row */
+.app.mc3 .weapons-table thead tr,
+.app.mc3 .armour-table thead tr,
+.app.mc3 .equipment-table thead tr {
+  background: #3a2e18;
+}
+
+.app.mc3 .weapons-table thead th,
+.app.mc3 .armour-table thead th,
+.app.mc3 .equipment-table thead th {
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.88em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  padding: 3px 6px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.app.mc3 .weapons-table thead th:last-child,
+.app.mc3 .armour-table thead th:last-child,
+.app.mc3 .equipment-table thead th:last-child {
+  border-right: none;
+}
+
+/* ── Data rows ───────────────────────────────────────────────────────────── */
+
+.app.mc3 .weapon-row,
+.app.mc3 .armour-row,
+.app.mc3 .equipment-row {
+  border-bottom: 1px solid #2a2010;
+}
+
+.app.mc3 .weapon-row:last-child,
+.app.mc3 .armour-row:last-child,
+.app.mc3 .equipment-row:last-child {
+  border-bottom: none;
+}
+
+.app.mc3 .weapon-row:hover,
+.app.mc3 .armour-row:hover,
+.app.mc3 .equipment-row:hover {
+  background: rgba(255, 230, 150, 0.10);
+}
+
+.app.mc3 .weapons-table td,
+.app.mc3 .armour-table td,
+.app.mc3 .equipment-table td {
+  color: #2a1e08;
+  font-size: 0.85em;
+  padding: 3px 6px;
+  vertical-align: middle;
+}
+
+/* Controls column (th + td) — narrow, right-aligned */
+.app.mc3 .weapons-table th.controls,
+.app.mc3 .armour-table th.controls,
+.app.mc3 .equipment-table th.controls,
+.app.mc3 .weapons-table td.controls,
+.app.mc3 .armour-table td.controls,
+.app.mc3 .equipment-table td.controls {
+  text-align: right;
+  white-space: nowrap;
+  width: 44px;
+}
+
+/* Hide edit/delete until the row is hovered */
+.app.mc3 .weapon-row .item-edit,
+.app.mc3 .weapon-row .item-delete,
+.app.mc3 .armour-row .item-edit,
+.app.mc3 .armour-row .item-delete,
+.app.mc3 .equipment-row .item-edit,
+.app.mc3 .equipment-row .item-delete {
+  color: #6a6050;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.app.mc3 .weapon-row:hover .item-edit,
+.app.mc3 .weapon-row:hover .item-delete,
+.app.mc3 .armour-row:hover .item-edit,
+.app.mc3 .armour-row:hover .item-delete,
+.app.mc3 .equipment-row:hover .item-edit,
+.app.mc3 .equipment-row:hover .item-delete {
+  opacity: 1;
+}
+
+.app.mc3 .weapon-row    .item-edit:hover,
+.app.mc3 .armour-row    .item-edit:hover,
+.app.mc3 .equipment-row .item-edit:hover  { color: #c8a84b; }
+
+.app.mc3 .weapon-row    .item-delete:hover,
+.app.mc3 .armour-row    .item-delete:hover,
+.app.mc3 .equipment-row .item-delete:hover { color: #b83030; }
+
+/* Armour table — narrow soak location columns (H/RA/LA/T/RL/LL) */
+.app.mc3 .armour-table th.soak-col,
+.app.mc3 .armour-table td.soak-col {
+  text-align: center;
+  width: 26px;
+  min-width: 22px;
+  max-width: 30px;
+  padding: 3px 2px;
+  white-space: nowrap;
+}
+
+/* Centred stat columns used across all gear tables (weapons, armour, belongings).
+   Name and Qualities columns are left-aligned by default; everything else that
+   should be centred gets this class.
+   thead th.location-col needs the `thead` in the selector to match the
+   specificity of the general thead th { text-align: left } rule above. */
+.app.mc3 thead th.location-col,
+.app.mc3 td.location-col {
+  text-align: center;
+  white-space: nowrap;
+  padding: 3px 6px;
+}
+
+/* Worn toggle column — narrow, centred checkbox */
+.app.mc3 .armour-table th.worn-col,
+.app.mc3 .armour-table td.worn-col {
+  text-align: center;
+  width: 36px;
+  padding: 3px 4px;
+}
+
+.app.mc3 .armour-table .armour-worn-toggle {
+  cursor: pointer;
+  height: 14px;
+  margin: 0;
+  width: 14px;
+}
+
+/* Empty state */
+.app.mc3 .gear-section .empty-label {
+  padding: 5px 8px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BIO TAB
+   Simple textarea-heavy layout: Assets (text input) at top, then Biography
+   and Notes as labeled textarea blocks. Labels use the dark section-header
+   band treatment so the tab feels visually consistent with Stats/Skills.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* .active required — same specificity rule as all other custom tab display rules */
+.app.mc3 .tab.bio.active {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+/* Assets row at the top — label + text input side by side */
+.app.mc3 .bio-fields {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.app.mc3 .bio-fields .form-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 1 auto;
+}
+
+.app.mc3 .bio-fields .form-group label {
+  color: #5a4020;
+  flex: 0 0 auto;
+  font-size: 1em;
+  white-space: nowrap;
+}
+
+.app.mc3 .bio-fields .form-group input[type="text"] {
+  flex: 1 1 auto;
+  font-size: 0.9em;
+  padding: 3px 8px;
+  width: auto;            /* override Foundry's input { width: 100% } */
+}
+
+/* Biography and Notes blocks — dark-band label above full-width textarea */
+.app.mc3 .biography-group,
+.app.mc3 .notes-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* The label IS the dark band — same treatment as .section-header */
+.app.mc3 .biography-group label,
+.app.mc3 .notes-group label {
+  background: #2a2010;
+  border-radius: 2px 2px 0 0;
+  color: #e8d080;
+  display: block;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.0em;
+  font-weight: 400;
+  letter-spacing: 0.10em;
+  margin-bottom: 0;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+
+/* Textarea: seamless continuation below the dark label band */
+.app.mc3 .biography-group textarea,
+.app.mc3 .notes-group textarea {
+  border-radius: 0 0 2px 2px;
+  border-top: none;       /* label band acts as the top border */
+  font-size: 0.9em;
+  line-height: 1.5;
+  padding: 6px 8px;
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── End Talents / Gear / Bio Tabs ───────────────────────────────────────── */
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SELECT ELEMENT STYLING
+   Applies to all .app.mc3 sheets (actor sheets AND item sheets).
+   Without this, browser-default selects look jarring against the parchment.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.app.mc3 select {
+  background: rgba(255, 245, 220, 0.55);
+  border: 1px solid #7a6030;
+  border-radius: 2px;
+  color: #1a1208;
+  cursor: pointer;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.9em;
+  padding: 2px 6px;
+}
+
+.app.mc3 select:focus {
+  border-color: #3d2800;
+  box-shadow: 0 0 3px rgba(60, 40, 0, 0.35);
+  outline: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ITEM SHEETS — Scoped to .app.mc3.item
+   All item type sheets (skill, talent, weapon, armour, equipment, spell,
+   specialability) share a common header + body layout. Type-specific rules
+   follow the shared block.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Window background — same parchment as actor sheets ──────────────────── */
+
+.app.mc3.item .window-content {
+  background-color: #c8b87a;
+  background-image: none;
+}
+
+/* The form fills the entire window-content area */
+.app.mc3.item form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Header: icon on left, name + type badge on right ────────────────────── */
+
+.app.mc3.item .item-sheet-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 2px solid #3a2a10;
+  background: rgba(30, 20, 5, 0.08);
+}
+
+/* Item icon — square, dark border, no transparency */
+.app.mc3.item .item-img {
+  flex: 0 0 60px;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 2px solid #3a2a10;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Right side of header — stacks name input and type badge */
+.app.mc3.item .item-header-fields {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+/* Item name input — bold, prominent, like the character name input */
+.app.mc3.item .item-title-input {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 1.15em;
+  font-weight: 600;
+  height: 32px;
+  box-sizing: border-box;
+  padding: 0 8px;
+  width: 100%;
+}
+
+/* Type badge — small Bebas Neue label below the name */
+.app.mc3.item .item-type-badge {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.9em;
+  letter-spacing: 0.14em;
+  color: #8a7040;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Dark Symmetry badge gets a distinctive dark-red colour */
+.app.mc3.item .item-type-badge--dark {
+  color: #8a2828;
+}
+
+/* ── Body: scrollable form fields area ───────────────────────────────────── */
+
+.app.mc3.item .item-sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Section label — dark band used above soak grid in armour sheet ──────── */
+
+.app.mc3.item .item-section-label {
+  background: #2a2010;
+  border-radius: 2px;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.95em;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+/* ── Standard form group — label (fixed width) + control (flexible) ──────── */
+
+.app.mc3.item .item-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 0 0 auto;
+}
+
+/* Label above the field — slightly dimmer than body text */
+.app.mc3.item .item-form-group label {
+  color: #5a4020;
+  font-size: 0.82em;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Text and number inputs inside form groups */
+.app.mc3.item .item-form-group input[type="text"],
+.app.mc3.item .item-form-group input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 3px 8px;
+  font-size: 0.9em;
+}
+
+/* Number inputs — narrower, centred */
+.app.mc3.item .item-form-group input[type="number"] {
+  width: 64px;
+  text-align: center;
+  padding: 3px 4px;
+}
+
+/* Select — inherit full width in its group */
+.app.mc3.item .item-form-group select {
+  width: 100%;
+}
+
+/* Narrow variant — for single-field rows like Quantity or DS Cost */
+.app.mc3.item .item-form-group--narrow {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.app.mc3.item .item-form-group--narrow label {
+  flex: 0 0 auto;
+  text-transform: uppercase;
+}
+
+/* Grow variant — textarea groups that should fill remaining space */
+.app.mc3.item .item-form-group--grow {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.app.mc3.item .item-form-group--grow textarea {
+  flex: 1 1 auto;
+  resize: none;          /* vertical resize would break the flex layout */
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.88em;
+  line-height: 1.5;
+  padding: 6px 8px;
+  min-height: 80px;
+}
+
+/* ── Two-column row for paired fields (type+range, damage, target+duration) ─ */
+
+.app.mc3.item .item-form-row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.app.mc3.item .item-form-row .item-form-group {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Center label + number input when a row column contains a number field
+   (e.g. Restriction / Cost on the weapon sheet). :has() is supported in
+   Foundry v13's Electron/Chromium runtime. */
+.app.mc3.item .item-form-row .item-form-group:has(input[type="number"]) {
+  align-items: center;
+}
+
+/* ── Armour — soak-per-location grid ─────────────────────────────────────── */
+/* Six rows arranged in a 2-column grid: Head | Right Arm
+                                          Left Arm | Torso
+                                          Right Leg | Left Leg
+   The location name is a flex-grow label; the number input is fixed-width.  */
+
+.app.mc3.item .armour-soak-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 8px;
+  margin-bottom: 2px;
+}
+
+.app.mc3.item .armour-soak-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 245, 220, 0.30);
+  border: 1px solid #7a6030;
+  border-radius: 2px;
+  padding: 3px 6px;
+}
+
+.app.mc3.item .soak-location-name {
+  flex: 1 1 auto;
+  color: #2a1e08;
+  font-size: 1em;
+  white-space: nowrap;
+}
+
+/* Soak number input — override the shared .item-form-group rule since
+   these inputs live inside .armour-soak-row, not .item-form-group */
+.app.mc3.item .armour-soak-row input[type="number"] {
+  background: rgba(255, 245, 220, 0.55);
+  border: 1px solid #7a6030;
+  border-radius: 2px;
+  color: #1a1208;
+  flex: 0 0 40px;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.9em;
+  padding: 1px 4px;
+  text-align: center;
+  width: 40px;
+}
+
+/* ── Armour stats grid — Enc / Reliability / Restriction / Cost ─────────── */
+/* Four equal columns, same visual language as the weapon stats grid.        */
+
+.app.mc3.item .armour-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid #2a2010;
+  border-radius: 3px;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.app.mc3.item .armour-stats-grid .asg-header {
+  background: #3a2e18;
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  font-size: 0.85em;
+  letter-spacing: 0.04em;
+  padding: 3px 4px;
+  text-align: center;
+}
+
+.app.mc3.item .armour-stats-grid .asg-header:last-of-type {
+  border-right: none;
+}
+
+.app.mc3.item .armour-stats-grid .asg-cell {
+  background: rgba(255, 245, 220, 0.30);
+  border-right: 1px solid #7a6030;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 4px;
+}
+
+.app.mc3.item .armour-stats-grid .asg-cell:last-of-type {
+  border-right: none;
+}
+
+.app.mc3.item .armour-stats-grid input[type="number"] {
+  background: transparent;
+  border: none;
+  color: #1a1208;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.95em;
+  text-align: center;
+  width: 40px;
+}
+
+.app.mc3.item .armour-stats-grid select {
+  background: transparent;
+  border: none;
+  color: #1a1208;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.95em;
+  text-align: center;
+  width: auto;
+}
+
+/* ── Equipment stat grids ────────────────────────────────────────────────── */
+/* Two grids: 4-column (Quantity/Load/Restriction/Cost) and
+   3-column (Encumbrance/Reliability/Maintenance). Shared header/cell classes
+   (.esg-header, .esg-cell) keep visual style consistent with armour grid.   */
+
+.app.mc3.item .equip-grid-4,
+.app.mc3.item .equip-grid-3 {
+  display: grid;
+  border: 1px solid #2a2010;
+  border-radius: 3px;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.app.mc3.item .equip-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.app.mc3.item .equip-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+.app.mc3.item .esg-header {
+  background: #3a2e18;
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  font-size: 0.85em;
+  letter-spacing: 0.04em;
+  padding: 3px 4px;
+  text-align: center;
+}
+
+.app.mc3.item .esg-header:last-of-type {
+  border-right: none;
+}
+
+.app.mc3.item .esg-cell {
+  background: rgba(255, 245, 220, 0.30);
+  border-right: 1px solid #7a6030;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 4px;
+}
+
+.app.mc3.item .esg-cell:last-of-type {
+  border-right: none;
+}
+
+.app.mc3.item .esg-cell input[type="number"] {
+  background: transparent;
+  border: none;
+  color: #1a1208;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.95em;
+  text-align: center;
+  width: 40px;
+}
+
+.app.mc3.item .esg-cell select {
+  background: transparent;
+  border: none;
+  color: #1a1208;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.95em;
+  text-align: center;
+  width: auto;
+}
+
+/* ── Talent card — Attribute + Rank + Base Cost row ─────────────────────── */
+/* Three equal columns. Attribute fills its column; Rank and Base Cost keep
+   their narrow inputs but are centered horizontally within their column.   */
+
+.app.mc3.item .talent-attr-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;  /* Attribute wider; Rank/Step/Cost equal */
+  gap: 10px;
+}
+
+/* Attribute column: label + select fill the column naturally */
+.app.mc3.item .talent-attr-field {
+  flex: unset;   /* cancel the flex: 1 1 0 inherited from .item-form-row */
+}
+
+.app.mc3.item .talent-attr-field select {
+  width: 100%;
+}
+
+/* Rank column: label + narrow input centered horizontally */
+.app.mc3.item .talent-rank-field {
+  flex: unset;
+  align-items: center;   /* center label and input within the column */
+}
+
+.app.mc3.item .talent-rank-field input[type="number"] {
+  width: 44px;    /* comfortable for one digit + breathing room */
+  text-align: center;
+}
+
+/* Rank column: checkbox sits to the left of the number input, both centered */
+.app.mc3.item .talent-rank-field .rank-input-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* The checkbox itself — no extra margin, sits flush against the number */
+.app.mc3.item .talent-rank-field input[type="checkbox"] {
+  flex: 0 0 auto;
+  cursor: pointer;
+  margin: 0;
+  width: auto;
+}
+
+/* Rank input when disabled — visibly greyed out so it's clear it's locked */
+.app.mc3.item .talent-rank-field input[type="number"]:disabled {
+  background: rgba(200, 190, 160, 0.35);
+  color: #8a7858;
+  border-color: #b0a070;
+  cursor: not-allowed;
+}
+
+/* Step column: identical sizing and centering to Rank */
+.app.mc3.item .talent-step-field {
+  flex: unset;
+  align-items: center;
+}
+
+.app.mc3.item .talent-step-field input[type="number"] {
+  width: 44px;
+  text-align: center;
+}
+
+/* Base Cost column: label + medium input centered horizontally */
+.app.mc3.item .talent-cost-field {
+  flex: unset;
+  align-items: center;   /* center label and input within the column */
+}
+
+.app.mc3.item .talent-cost-field input[type="number"] {
+  width: 64px;    /* comfortable for three digits + breathing room */
+  text-align: center;
+}
+
+/* Short Description: fixed height (not flex-grow) — a brief summary only */
+.app.mc3.item .talent-short-desc textarea {
+  min-height: 52px;
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.95em;
+  line-height: 1.5;
+  padding: 5px 8px;
+}
+
+/* Full Description textarea — bump font to match short description */
+.app.mc3.item .item-form-group--grow textarea {
+  font-size: 0.95em;
+}
+
+/* ── Weapon card — stats grid ────────────────────────────────────────────── */
+/* Two rows of 6 equal columns: header labels on top, value inputs below.
+   The Damage cell is wider because it holds two number inputs + separators. */
+
+.app.mc3.item .weapon-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr 0.7fr 0.9fr 1fr;
+  gap: 0;
+  border: 1px solid #4a3818;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+/* Header cells */
+.app.mc3.item .weapon-stats-grid .wsg-header {
+  background: #3a2e18;
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.85em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  padding: 3px 5px;
+  text-align: center;
+}
+
+.app.mc3.item .weapon-stats-grid .wsg-header:last-of-type {
+  border-right: none;
+}
+
+/* Value cells */
+.app.mc3.item .weapon-stats-grid .wsg-cell {
+  background: rgba(255, 245, 220, 0.30);
+  border-right: 1px solid #7a6030;
+  border-top: 1px solid #7a6030;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 4px;
+}
+
+.app.mc3.item .weapon-stats-grid .wsg-cell:last-of-type {
+  border-right: none;
+}
+
+/* All inputs inside the stats grid */
+.app.mc3.item .weapon-stats-grid input,
+.app.mc3.item .weapon-stats-grid select {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #9a8050;
+  border-radius: 0;
+  color: #1a1208;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.85em;
+  padding: 1px 2px;
+  text-align: center;
+  width: 100%;
+}
+
+.app.mc3.item .weapon-stats-grid input[type="number"] {
+  width: 26px;   /* damage inputs — always single digit */
+}
+
+.app.mc3.item .weapon-stats-grid input[name="system.enc"] {
+  width: 30px;   /* enc can be two digits */
+}
+
+/* Damage cell: two number inputs with + and CD separators */
+.app.mc3.item .weapon-stats-grid .wsg-damage {
+  gap: 2px;
+}
+
+.app.mc3.item .weapon-stats-grid .wsg-dmg-sep,
+.app.mc3.item .weapon-stats-grid .wsg-dmg-cd {
+  color: #5a4020;
+  font-size: 0.78em;
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+/* Size select — slightly wider for text options */
+.app.mc3.item .weapon-stats-grid select {
+  padding: 1px 2px;
+  width: auto;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Base Effect gets a bit more flex weight than the additional-effect field   */
+.app.mc3.item .spell-base-effect {
+  flex: 2 1 80px;
+}
+
+/* ── Dynamic effect table (Momentum on spell, Category Bleed on darkgift) ── */
+/* Shared .mc3-effect-table class; column classes control widths.            */
+
+.app.mc3.item .mc3-effect-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #2a2010;
+  border-radius: 3px;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.app.mc3.item .mc3-effect-table thead th {
+  background: #3a2e18;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.85em;
+  letter-spacing: 0.06em;
+  padding: 4px 6px;
+  text-align: left;
+}
+
+/* Threshold column — narrow, centred */
+.app.mc3.item .mc3-effect-table .effect-threshold-col {
+  width: 52px;
+  text-align: center;
+}
+
+/* Delete button column — icon-width only */
+.app.mc3.item .mc3-effect-table .effect-controls-col {
+  width: 26px;
+  text-align: center;
+}
+
+/* Alternating row tint */
+.app.mc3.item .mc3-effect-table tbody tr {
+  border-top: 1px solid #7a6030;
+}
+
+.app.mc3.item .mc3-effect-table tbody tr:nth-child(even) {
+  background: rgba(255, 245, 220, 0.15);
+}
+
+/* Inputs inside table cells — transparent background, no border */
+.app.mc3.item .mc3-effect-table tbody input[type="text"] {
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+  color: #1a1208;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.88em;
+  padding: 3px 4px;
+  width: 100%;
+}
+
+.app.mc3.item .mc3-effect-table tbody input[type="text"]:focus {
+  background: rgba(255, 245, 220, 0.50);
+  outline: none;
+}
+
+/* Threshold inputs centred within their narrow column */
+.app.mc3.item .mc3-effect-table .effect-threshold-col input[type="text"] {
+  text-align: center;
+}
+
+/* Textareas inside effect table cells (Category Bleed rows) — same transparent
+   style as text inputs, but multi-line so long descriptions wrap and grow.
+   resize: vertical lets the user expand individual rows by dragging.          */
+.app.mc3.item .mc3-effect-table tbody textarea {
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+  color: #1a1208;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.88em;
+  line-height: 1.4;
+  min-height: 2.4em;
+  padding: 3px 4px;
+  resize: vertical;
+  width: 100%;
+}
+
+.app.mc3.item .mc3-effect-table tbody textarea:focus {
+  background: rgba(255, 245, 220, 0.50);
+  outline: none;
+}
+
+/* When a row contains a textarea the delete icon should sit at the top of the
+   cell rather than being vertically centred against a multi-line field.       */
+.app.mc3.item .mc3-effect-table td.effect-controls-col {
+  vertical-align: top;
+  padding-top: 5px;
+}
+
+/* Delete icon */
+.app.mc3.item .dynamic-row-delete {
+  color: #8a5020;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+}
+
+.app.mc3.item .dynamic-row-delete:hover { color: #5a1010; }
+
+/* "+ Add" link below the table (used by the Spell sheet Momentum table) */
+.app.mc3.item .dynamic-row-add {
+  color: #5a4020;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+  margin-top: 3px;
+  padding: 1px 4px;
+}
+
+.app.mc3.item .dynamic-row-add:hover { color: #2a1e08; }
+
+/* "+ Add" button placed inside the table header controls column (Dark Gift
+   Category Bleed). Overrides the parchment-coloured standalone link above so
+   the icon reads clearly against the dark header band.                       */
+.app.mc3.item .mc3-effect-table thead th .dynamic-row-add {
+  color: #c8b060;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+  margin-top: 0;
+  padding: 0;
+}
+
+.app.mc3.item .mc3-effect-table thead th .dynamic-row-add:hover { color: #f0d878; }
+
+/* ── Dark Gift sheet — textarea sizing ───────────────────────────────────── */
+/* Base Effect and Bleed use fixed min-heights; body scrolls if needed.      */
+/* Category Bleed is a dynamic table (see mc3-effect-table above).           */
+/* resize: vertical lets the user expand either field by dragging.           */
+
+.app.mc3.item .darkgift-base-effect textarea,
+.app.mc3.item .darkgift-individual-bleed textarea {
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.88em;
+  line-height: 1.5;
+  padding: 6px 8px;
+}
+
+.app.mc3.item .darkgift-base-effect textarea     { min-height: 100px; }
+.app.mc3.item .darkgift-individual-bleed textarea { min-height: 60px; }
+
+/* ── End Item Sheets ─────────────────────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SPECIAL ABILITY SHEET — minor extras on top of shared item sheet rules
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Rank number input when Ranked is unchecked — greyed out, same as talent */
+.app.mc3.item .specialability-sheet .item-form-group--narrow input[type="number"]:disabled {
+  background: rgba(200, 190, 160, 0.35);
+  color: #8a7858;
+  border-color: #b0a070;
+  cursor: not-allowed;
+}
+
+/* ── NPC sheet: ability rank label shown inline next to the ability name ─── */
+
+/* .ability-rank removed — rank is now rendered as plain "(N)" after the name */
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NPC SHEET — .app.mc3.npc
+   Single-page layout (no tabs). Same parchment/amber palette as the
+   character sheet. The window gets classes: mc3 sheet actor npc, so
+   .app.mc3.npc targets it without touching the PC sheet.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Header: portrait + name + Faction/Role ──────────────────────────────── */
+
+/* Override Foundry's h1 margin/border so the charname input sits flush.
+   font-size: 1rem resets h1's inherited em scale so the input's em value
+   is relative to the sheet root — matching the PC sheet's .charname-input. */
+.app.mc3.npc .charname {
+  border: none;
+  box-shadow: none;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.app.mc3.npc .charname input {
+  box-sizing: border-box;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 1.2em;
+  font-weight: 600;
+  height: 32px;
+  padding: 0 8px;
+  width: 100%;
+}
+
+/* Faction + Role inline row — same pattern as the PC header-details */
+.app.mc3.npc .header-details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.app.mc3.npc .header-details .form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.app.mc3.npc .header-details .form-group label {
+  flex: 0 0 auto;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.app.mc3.npc .header-details .form-group input[type="text"] {
+  flex: 1 1 auto;
+  font-size: 1.0em;
+  padding: 2px 6px;
+  width: auto;
+}
+
+/* ── NPC body — scrollable flex column ───────────────────────────────────── */
+/* Foundry's scrollY: ['.npc-body'] manages the scroll; we provide the
+   flex context and gap between sections.                                    */
+
+.app.mc3.npc .npc-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 8px;
+  min-height: 0;
+  overflow-y: auto;   /* belt-and-suspenders over Foundry's scrollY JS */
+  padding: 6px 8px;
+}
+
+/* ── Standalone section heading band — used only by the Notes section ──────── */
+/* Notes uses a bare h3.section-label (no wrapping .section-header div).
+   Attributes and FoE now use their own grid title cells (nag-title/neg-title). */
+
+.app.mc3.npc h3.section-label {
+  background: #2a2010;
+  border: 1px solid #4a3818;
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+  box-shadow: none;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.0em;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  margin: 0;
+  padding: 3px 8px;
+  text-align: center;
+  text-shadow: none;
+  text-transform: uppercase;
+  width: auto;
+}
+
+/* h3.section-label inside a .section-header flex row (Wounds / Attacks /
+   Special Abilities) — parent div provides the band; h3 is just a flex child */
+.app.mc3.npc .section-header .section-label {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: #e8d080;
+  flex: 1 1 auto;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.0em;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  text-shadow: none;
+  text-transform: uppercase;
+  width: auto;
+}
+
+/* ── Attributes Grid ──────────────────────────────────────────────────────── */
+/* 4-column CSS grid. The gap-as-border trick: the container background colour
+   (#4a3818) shows through the 1px gaps, acting as column/row dividers.
+   No need to remove border-right from the last child — overflow:hidden clips
+   any excess and the container border provides the outer frame.              */
+
+.app.mc3.npc .npc-attr-grid {
+  align-content: start; /* prevent auto rows stretching to fill any extra grid height */
+  background: #4a3818;
+  flex: 0 0 auto; /* size to content; override Foundry's flexcol > * { flex: 1 } */
+  border: 1px solid #4a3818;
+  border-radius: 3px;
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: auto auto 33px;
+  overflow: hidden;
+}
+
+/* Title bar — spans all 8 columns */
+.app.mc3.npc .nag-title {
+  align-items: center;
+  background: #2a2010;
+  color: #e8d080;
+  display: flex;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.0em;
+  font-weight: 400;
+  grid-column: 1 / -1;
+  justify-content: center;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+
+/* Attribute name cells — dark header band with Bebas Neue labels */
+.app.mc3.npc .nag-label {
+  align-items: center;
+  background: #3a2e18;
+  color: #c8b060;
+  display: flex;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.95em;
+  font-weight: 400;
+  justify-content: center;
+  letter-spacing: 0.06em;
+  padding: 0 4px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Value cells — parchment tint, centred input */
+.app.mc3.npc .nag-cell {
+  align-items: center;
+  background: rgba(255, 245, 220, 0.40);
+  display: flex;
+  justify-content: center;
+  padding: 3px 4px;
+}
+
+.app.mc3.npc .nag-cell input[type="number"] {
+  background: transparent;
+  border: none;
+  color: #1a1208;
+  flex: 1;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 1.05em;
+  font-weight: 600;
+  min-width: 0;
+  text-align: center;
+}
+
+/* ── Fields of Expertise Grid ────────────────────────────────────────────── */
+/* 6-column grid: title bar → field name row (clickable) → EXP/FOC sub-label
+   row → value row (each cell has paired EXP + FOC inputs side by side).    */
+
+.app.mc3.npc .npc-exp-grid {
+  background: #4a3818;
+  border: 1px solid #4a3818;
+  border-radius: 3px;
+  display: grid;
+  flex: 0 0 auto; /* size to content; override Foundry's flexcol > * { flex: 1 } */
+  gap: 1px;
+  grid-template-columns: repeat(6, 1fr);
+  overflow: hidden;
+}
+
+/* Title bar — spans all 6 columns */
+.app.mc3.npc .neg-title {
+  align-items: center;
+  background: #2a2010;
+  color: #e8d080;
+  display: flex;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.0em;
+  font-weight: 400;
+  grid-column: 1 / -1;
+  justify-content: center;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  text-transform: uppercase;
+}
+
+/* Field name cells — dark, full-cell link makes the whole header clickable */
+.app.mc3.npc .neg-field {
+  background: #3a2e18;
+  text-align: center;
+}
+
+.app.mc3.npc .neg-field a {
+  align-items: center;
+  color: #c8b060;
+  cursor: pointer;
+  display: flex;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.95em;
+  font-weight: 400;
+  height: 100%;
+  justify-content: center;
+  letter-spacing: 0.06em;
+  padding: 2px 4px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.app.mc3.npc .neg-field a:hover {
+  color: #f0d878;
+}
+
+/* EXP / FOC sub-label cells — slightly lighter than the field name row */
+.app.mc3.npc .neg-sublabel {
+  align-items: center;
+  background: #2e2614;
+  display: flex;
+  justify-content: space-around;
+  padding: 3px 4px;
+}
+
+.app.mc3.npc .neg-sub {
+  color: #8a7040;
+  flex: 1;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.85em;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Value cells — EXP then FOC input, side by side */
+.app.mc3.npc .neg-value {
+  align-items: center;
+  background: rgba(255, 245, 220, 0.40);
+  display: flex;
+  gap: 2px;
+  justify-content: space-around;
+  padding: 3px 3px;
+}
+
+.app.mc3.npc .neg-value input[type="number"] {
+  background: transparent;
+  border: none;
+  color: #1a1208;
+  flex: 1;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 1.05em;
+  font-weight: 600;
+  min-width: 0;
+  text-align: center;
+}
+
+/* ── NPC section wrapper (Wounds / Attacks / Special Abilities / Notes) ───── */
+
+.app.mc3.npc .npc-section {
+  border: 1px solid #4a3818;
+  border-radius: 2px;
+  flex-shrink: 0;   /* prevents sections from being compressed smaller than their content */
+  overflow: hidden;
+}
+
+/* Sections with variable-length content must override to visible so they grow
+   with their content rather than being clipped. */
+.app.mc3.npc .npc-wounds,
+.app.mc3.npc .npc-attacks,
+.app.mc3.npc .npc-abilities,
+.app.mc3.npc .npc-notes {
+  overflow: visible;
+}
+
+/* Section header band — dark strip with h3 on left and button/toggle on right.
+   The global .app.mc3 .section-header already sets background/colour; here we
+   override text-align:center and margin-bottom for the NPC flex layout.      */
+.app.mc3.npc .section-header {
+  align-items: center;
+  border-radius: 0;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 0;
+  padding: 3px 8px;
+  text-align: left;
+}
+
+/* Add button in the section header */
+.app.mc3.npc .section-header .item-create {
+  color: #8a7858;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 0.8em;
+}
+
+.app.mc3.npc .section-header .item-create:hover {
+  color: #c8a84b;
+}
+
+/* Wound mode toggle — pushed to the far right of the header band */
+.app.mc3.npc .wound-mode-toggle {
+  align-items: center;
+  color: #8a7858;
+  cursor: pointer;
+  display: flex;
+  flex: 0 0 auto;
+  font-size: 0.9em;
+  gap: 6px;
+  letter-spacing: 0.04em;
+  margin-left: auto;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.app.mc3.npc .wound-mode-toggle input[type="checkbox"] {
+  cursor: pointer;
+  flex-shrink: 0;
+  height: 14px;
+  margin: 0;
+  width: 14px;
+}
+
+/* ── Wound table (location wounds mode) ──────────────────────────────────── */
+
+.app.mc3.npc .wound-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.app.mc3.npc .wound-table thead th {
+  background: #3a2e18;
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.85em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  padding: 3px 6px;
+  text-align: center;
+}
+
+.app.mc3.npc .wound-table thead th:first-child {
+  text-align: left;
+}
+
+.app.mc3.npc .wound-table thead th:last-child {
+  border-right: none;
+}
+
+.app.mc3.npc .wound-table tbody tr {
+  border-bottom: 1px solid #2a2010;
+}
+
+.app.mc3.npc .wound-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.app.mc3.npc .wound-table td {
+  color: #2a1e08;
+  font-size: 0.9em;
+  padding: 3px 6px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.app.mc3.npc .wound-table td:first-child {
+  text-align: left;
+}
+
+.app.mc3.npc .wound-table input[type="number"] {
+  text-align: center;
+  width: 38px;
+}
+
+/* Serious / Critical rows — subtle red tint */
+.app.mc3.npc .wound-table .wound-overflow {
+  background: rgba(120, 20, 20, 0.06);
+}
+
+/* Mental wounds row — subtle purple tint */
+.app.mc3.npc .wound-table .wound-mental {
+  background: rgba(60, 10, 60, 0.06);
+}
+
+/* Cells where no soak applies */
+.app.mc3.npc .wound-table .wound-nosoak {
+  color: #8a7858;
+}
+
+/* Remove the 4px gap between the WOUNDS header band and the wound table */
+.app.mc3.npc .npc-wounds .section-header {
+  margin-bottom: 0;
+}
+
+/* Allow the wound table to determine the section height instead of clipping it */
+/* Vertical divider between the Head/Torso and Arms/Legs groups */
+.app.mc3.npc .wound-table .wound-group-divider {
+  border-left: 2px solid #4a3818 !important;
+}
+
+/* Location name cells (Head, Torso, Arms, Legs, Serious, Critical, Mental) */
+.app.mc3.npc .wound-table .wound-location-name {
+  color: #2a1e08;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.9em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+/* Fixed width for the location name column header cells */
+.app.mc3.npc .wound-table .wound-name-col {
+  width: 55px;
+}
+
+/* ── Simplified wounds (one pool + per-location soak) ────────────────────── */
+
+.app.mc3.npc .simplified-wounds {
+  /* min-height forces the container taller than its content so align-items has
+     actual free space to center into; without it the container = content height
+     and centering never has room to work */
+  align-items: stretch;
+  gap: 20px;
+  min-height: 90px;
+  padding: 0 10px;
+}
+
+/* Wound pool — fills available horizontal space; centers its two columns */
+.app.mc3.npc .simple-wound-pool {
+  align-items: center;     /* vertically centers wound-value-pair in full height */
+  display: flex;
+  flex: 1 1 0;
+  justify-content: center; /* horizontally centers the pair */
+}
+
+/* Soak block — fills right half of the simplified wounds row; centers the table */
+.app.mc3.npc .simple-soak-block {
+  align-items: center;
+  display: flex;
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+/* "Soak by Location" title row — matches .nag-title styling.
+   Must include .soak-table to beat the specificity of .soak-table thead th. */
+.app.mc3.npc .soak-table .soak-title-row th {
+  background: #2a2010;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.0em;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Two-column wound pool: Current | Max */
+.app.mc3.npc .wound-value-pair {
+  display: flex;
+  gap: 32px;              /* controls the distance between the two boxes */
+}
+
+/* Each column: label above, input below, centered; natural width, not stretched */
+.app.mc3.npc .wound-col {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+}
+
+.app.mc3.npc .wound-col-label {
+  color: #5a4020;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.9em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;    /* single line — no wrapping */
+}
+
+/* Big prominent wound inputs — square-ish and easy to read at a glance */
+.app.mc3.npc .wound-value-pair input[type="number"] {
+  background: rgba(255, 245, 220, 0.60);
+  border: 1px solid #4a3818;
+  border-radius: 3px;
+  color: #1a1208;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 1.5em;
+  font-weight: 600;
+  height: 52px;
+  text-align: center;
+  width: 56px;
+}
+
+.app.mc3.npc .wound-sep {
+  color: #5a4020;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.app.mc3.npc .soak-table {
+  border: 1px solid #4a3818;
+  border-collapse: collapse;
+  border-radius: 2px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.app.mc3.npc .soak-table thead th {
+  background: #3a2e18;
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.82em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  padding: 2px 10px;
+  text-align: center;
+}
+
+.app.mc3.npc .soak-table thead th:last-child {
+  border-right: none;
+}
+
+.app.mc3.npc .soak-table td {
+  border-right: 1px solid #4a3818;
+  padding: 2px 4px;
+  text-align: center;
+}
+
+.app.mc3.npc .soak-table td:last-child {
+  border-right: none;
+}
+
+.app.mc3.npc .soak-table input[type="number"] {
+  text-align: center;
+  width: 34px;
+}
+
+/* ── Attacks table ───────────────────────────────────────────────────────── */
+
+.app.mc3.npc .attacks-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.app.mc3.npc .attacks-table thead th {
+  background: #3a2e18;
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.85em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  padding: 3px 6px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.app.mc3.npc .attacks-table thead th:last-child {
+  border-right: none;
+  text-align: right;
+}
+
+.app.mc3.npc .attacks-table tbody tr {
+  border-bottom: 1px solid #2a2010;
+}
+
+.app.mc3.npc .attacks-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.app.mc3.npc .attacks-table tbody tr:hover {
+  background: rgba(255, 230, 150, 0.10);
+}
+
+.app.mc3.npc .attacks-table td {
+  color: #2a1e08;
+  font-size: 0.85em;
+  padding: 3px 6px;
+  vertical-align: middle;
+  white-space: nowrap; /* all columns compress to content width by default */
+}
+
+/* Qualities column — allow wrapping; other nowrap columns naturally leave it the most space */
+.app.mc3.npc .attacks-table td.col-qualities,
+.app.mc3.npc .attacks-table th.col-qualities {
+  white-space: normal;
+}
+
+/* Center the compact stat columns (Type, Range, Damage, Mode, Rel.) */
+.app.mc3.npc .attacks-table th:nth-child(n+2):nth-child(-n+6),
+.app.mc3.npc .attacks-table td:nth-child(n+2):nth-child(-n+6) {
+  text-align: center;
+}
+
+/* ── Special Abilities table ─────────────────────────────────────────────── */
+
+.app.mc3.npc .items-list {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.app.mc3.npc .items-list tbody tr {
+  border-bottom: 1px solid #2a2010;
+}
+
+.app.mc3.npc .items-list tbody tr:last-child {
+  border-bottom: none;
+}
+
+.app.mc3.npc .items-list tbody tr:hover {
+  background: rgba(255, 230, 150, 0.10);
+}
+
+.app.mc3.npc .ability-name {
+  color: #1a1208;
+  font-size: 0.9em;
+  font-weight: 600;
+  padding: 4px 6px;
+  width: 130px;
+}
+
+.app.mc3.npc .ability-desc {
+  color: #3a2a10;
+  font-size: 0.85em;
+  line-height: 1.35;
+  padding: 4px 6px;
+}
+
+/* ── Item controls (edit / delete) — shared by Attacks and Abilities ──────── */
+
+.app.mc3.npc .item-controls {
+  gap: 4px;
+  justify-content: flex-end;
+  padding: 3px 4px;
+  white-space: nowrap;
+}
+
+.app.mc3.npc .item-edit,
+.app.mc3.npc .item-delete {
+  color: #6a6050;
+  cursor: pointer;
+  font-size: 0.8em;
+  opacity: 0;
+  padding: 1px 3px;
+  transition: opacity 0.15s ease;
+}
+
+.app.mc3.npc .attacks-table tbody tr:hover .item-edit,
+.app.mc3.npc .attacks-table tbody tr:hover .item-delete,
+.app.mc3.npc .items-list tbody tr:hover .item-edit,
+.app.mc3.npc .items-list tbody tr:hover .item-delete {
+  opacity: 1;
+}
+
+.app.mc3.npc .item-edit:hover   { color: #c8a84b; }
+.app.mc3.npc .item-delete:hover { color: #b83030; }
+
+/* ── Notes textarea ──────────────────────────────────────────────────────── */
+/* Notes uses a standalone h3.section-label (dark band) directly above the
+   textarea — no .section-header wrapper. The textarea connects seamlessly.  */
+
+.app.mc3.npc .npc-section > textarea {
+  border-radius: 0 0 2px 2px;
+  border-top: none;
+  box-sizing: border-box;
+  display: block;
+  font-size: 0.9em;
+  line-height: 1.5;
+  min-height: 80px;
+  padding: 6px 8px;
+  resize: vertical;
+  width: 100%;
+}
+
+/* ── End NPC Sheet ───────────────────────────────────────────────────────── */

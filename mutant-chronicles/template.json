@@ -121,13 +121,18 @@
                 "derivedStats"
             ],
             "useMysticism": false,
+            "useLifePath": true,
             "status": "",
             "criticalInjuries": [],
+            "chroniclePoints": { "value": 0 },
+            "dread": { "value": 0 },
             "details": {
                 "faction": "",
+                "socialStatus": "",
+                "earningsRating": 0,
+                "experience": 0,
                 "caste": "",
                 "career": "",
-                "earningsRating": 0,
                 "assets": "",
                 "biography": "",
                 "notes": ""
@@ -696,7 +701,9 @@
             "armour",
             "equipment",
             "spell",
-            "darksymmetry"
+            "darkgift",
+            "specialability",
+            "weaponquality"
         ],
         "skill": {
             "attribute": "",
@@ -708,36 +715,81 @@
         },
         "talent": {
             "prerequisites": "",
-            "description": ""
+            "attribute": "",
+            "isRanked": false,
+            "rank": 0,
+            "step": 0,
+            "baseCost": 0,
+            "shortDescription": "",
+            "fullDescription": ""
         },
         "weapon": {
             "weaponType": "melee",
-            "range": "",
+            "range": "—",
             "damageFlat": 0,
             "damageDice": 0,
+            "mode": "—",
+            "enc": 0,
+            "size": "—",
+            "reliability": "—",
             "qualities": "",
+            "restriction": 0,
+            "cost": 0,
+            "faction": "",
             "description": ""
         },
         "armour": {
-            "rating": 0,
-            "coverage": "",
-            "qualities": "",
+            "worn": false,
+            "soak": {
+                "head":     0,
+                "leftArm":  0,
+                "rightArm": 0,
+                "torso":    0,
+                "leftLeg":  0,
+                "rightLeg": 0
+            },
+            "faction": "",
+            "enc": 0,
+            "reliability": "—",
+            "restriction": 0,
+            "cost": 0,
             "description": ""
         },
         "equipment": {
             "quantity": 1,
+            "load": 0,
+            "restriction": 0,
+            "cost": 0,
+            "enc": 0,
+            "reliability": "—",
+            "maintenance": 0,
             "description": ""
         },
         "spell": {
-            "category": "spell",
+            "aspect": "",
+            "tier": "",
             "difficulty": "",
-            "target": "",
             "duration": "",
-            "effect": ""
+            "target": "",
+            "baseEffect": "",
+            "momentum": []
         },
-        "darksymmetry": {
-            "cost": 0,
-            "effect": ""
+        "darkgift": {
+            "giftCategory": "",
+            "difficulty": "",
+            "duration": "",
+            "target": "",
+            "baseEffect": "",
+            "categoryBleed": "",
+            "individualBleed": ""
+        },
+        "specialability": {
+            "isRanked": false,
+            "rank": 0,
+            "description": ""
+        },
+        "weaponquality": {
+            "description": ""
         }
     }
 }

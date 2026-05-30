@@ -2,18 +2,19 @@
 <form class="sheet skill-sheet" autocomplete="off">
 
   {{!-- Header: icon + item name --}}
-  <header class="sheet-header">
+  <header class="item-sheet-header">
     <img class="item-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
-    <div class="header-fields">
-      <h1><input class="title-input" name="name" type="text" value="{{item.name}}" /></h1>
+    <div class="item-header-fields">
+      <input class="item-title-input" name="name" type="text" value="{{item.name}}" placeholder="Skill Name" />
+      <div class="item-type-badge">Skill</div>
     </div>
   </header>
 
   {{!-- Body: skill fields --}}
-  <section class="sheet-body">
+  <section class="item-sheet-body">
 
     {{!-- Attribute --}}
-    <div class="form-group">
+    <div class="item-form-group">
       <label>Attribute</label>
       <select name="system.attribute">
         <option value="">— Select —</option>
@@ -21,32 +22,33 @@
       </select>
     </div>
 
-    {{!-- Expertise / Focus --}}
-    <div class="form-group">
-      <label>Expertise</label>
-      <input type="number" name="system.expertise" value="{{system.expertise}}" min="0" max="5" />
-    </div>
-
-    <div class="form-group">
-      <label>Focus</label>
-      <input type="number" name="system.focus" value="{{system.focus}}" min="0" max="5" />
+    {{!-- Expertise / Focus — side by side --}}
+    <div class="item-form-row">
+      <div class="item-form-group">
+        <label>Expertise</label>
+        <input type="number" name="system.expertise" value="{{system.expertise}}" min="0" max="5" />
+      </div>
+      <div class="item-form-group">
+        <label>Focus</label>
+        <input type="number" name="system.focus" value="{{system.focus}}" min="0" max="5" />
+      </div>
     </div>
 
     {{!-- Signature Skill --}}
-    <div class="form-group">
+    <div class="item-form-group item-form-group--narrow">
       <label>Signature Skill</label>
       <input type="checkbox" name="system.isSignature" {{checked system.isSignature}} />
     </div>
 
     {{!-- Advanced Skill --}}
-    <div class="form-group">
+    <div class="item-form-group item-form-group--narrow">
       <label>Advanced Skill</label>
       <input type="checkbox" name="system.isAdvanced" {{checked system.isAdvanced}} />
     </div>
 
     {{!-- Parent Skill — dropdown of the 9 skills that have advanced children.
          Blank option ("—") means this skill has no parent. --}}
-    <div class="form-group">
+    <div class="item-form-group">
       <label>Parent Skill</label>
       <select name="system.parentSkill">
         {{selectOptions parentSkills selected=system.parentSkill blank="—"}}

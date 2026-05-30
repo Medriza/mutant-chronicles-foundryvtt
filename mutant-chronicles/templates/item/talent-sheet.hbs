@@ -1,0 +1,74 @@
+{{!-- Talent Item Sheet --}}
+<form class="sheet talent-sheet" autocomplete="off">
+
+  {{!-- Header: icon + name + type badge --}}
+  <header class="item-sheet-header">
+    <img class="item-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="item-header-fields">
+      <input class="item-title-input" name="name" type="text" value="{{item.name}}" placeholder="Talent Name" />
+      <div class="item-type-badge">Talent</div>
+    </div>
+  </header>
+
+  <section class="item-sheet-body">
+
+    {{!-- Prerequisites — full width --}}
+    <div class="item-form-group">
+      <label>Prerequisites</label>
+      <input type="text" name="system.prerequisites" value="{{system.prerequisites}}"
+             placeholder="e.g. Acrobatics 2, Agility 8" />
+    </div>
+
+    {{!-- Attribute | Rank | Base Cost — three fields on one row --}}
+    <div class="item-form-row talent-attr-row">
+
+      {{!-- Attribute: takes the majority of the line --}}
+      <div class="item-form-group talent-attr-field">
+        <label>Attribute</label>
+        <select name="system.attribute">
+          <option value="">— Select —</option>
+          {{selectOptions talentAttributes selected=system.attribute}}
+        </select>
+      </div>
+
+      {{!-- Rank: checkbox enables the field; input disabled when not ranked --}}
+      <div class="item-form-group talent-rank-field">
+        <label>Rank</label>
+        <div class="rank-input-row">
+          <input type="checkbox" name="system.isRanked" {{checked system.isRanked}}
+                 title="Check to allow this talent to be taken multiple times" />
+          <input type="number" name="system.rank" value="{{system.rank}}"
+                 min="0" max="9" {{#unless system.isRanked}}disabled{{/unless}} />
+        </div>
+      </div>
+
+      {{!-- Step: single-digit number, same size as Rank --}}
+      <div class="item-form-group talent-step-field">
+        <label>Step</label>
+        <input type="number" name="system.step" value="{{system.step}}" min="0" max="9" />
+      </div>
+
+      {{!-- Base Cost: up to three digits --}}
+      <div class="item-form-group talent-cost-field">
+        <label>Base Cost</label>
+        <input type="number" name="system.baseCost" value="{{system.baseCost}}" min="0" />
+      </div>
+
+    </div>
+
+    {{!-- Short Description — shown on the character sheet Talents tab --}}
+    <div class="item-form-group talent-short-desc">
+      <label>Short Description</label>
+      <textarea name="system.shortDescription"
+                placeholder="Brief summary shown on the character sheet...">{{system.shortDescription}}</textarea>
+    </div>
+
+    {{!-- Full Description — fills remaining space --}}
+    <div class="item-form-group item-form-group--grow">
+      <label>Full Description</label>
+      <textarea name="system.fullDescription"
+                placeholder="Complete rules text, momentum spends, edge cases...">{{system.fullDescription}}</textarea>
+    </div>
+
+  </section>
+</form>

@@ -9,34 +9,44 @@
 <form class="{{cssClass}} flexcol" autocomplete="off">
 
   {{!-- ── Sheet Header ────────────────────────────────────────────── --}}
+  {{!-- Portrait fills the full header height via align-self: stretch.
+       Name row: character name (wide) + Faction (no label, placeholder only).
+       Details row: Social Status (text) | Earnings | Influence | Experience. --}}
   <header class="sheet-header flexrow">
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
     <div class="header-fields flexcol">
-      <h1 class="charname">
-        <input name="name" type="text" value="{{actor.name}}" placeholder="Character Name" />
-      </h1>
+
+      <div class="name-row">
+        <input class="charname-input" name="name" type="text"
+               value="{{actor.name}}" placeholder="Character Name" />
+        <input class="faction-input" type="text" name="system.details.faction"
+               value="{{system.details.faction}}" placeholder="Faction" />
+      </div>
+
       <div class="header-details flexrow">
-        <div class="form-group">
-          <label>Faction</label>
-          <input type="text" name="system.details.faction"
-                 value="{{system.details.faction}}" placeholder="Faction" />
+        <div class="form-group social-status-group">
+          <label>Social Status</label>
+          <input type="text" name="system.details.socialStatus"
+                 value="{{system.details.socialStatus}}" placeholder="—" />
         </div>
-        <div class="form-group">
-          <label>Caste</label>
-          <input type="text" name="system.details.caste"
-                 value="{{system.details.caste}}" placeholder="Caste" />
-        </div>
-        <div class="form-group">
-          <label>Career</label>
-          <input type="text" name="system.details.career"
-                 value="{{system.details.career}}" placeholder="Career" />
-        </div>
-        <div class="form-group">
+        <div class="form-group earnings-group">
           <label>Earnings</label>
           <input type="number" name="system.details.earningsRating"
-                 value="{{system.details.earningsRating}}" />
+                 value="{{system.details.earningsRating}}" min="0" max="5" />
+          <span class="earnings-title">{{earningsTitle}}</span>
+        </div>
+        <div class="form-group">
+          <label>Influence</label>
+          <input type="number" name="system.derivedStats.influence"
+                 value="{{system.derivedStats.influence}}" />
+        </div>
+        <div class="form-group">
+          <label>Experience</label>
+          <input type="number" name="system.details.experience"
+                 value="{{system.details.experience}}" />
         </div>
       </div>
+
     </div>
   </header>
 
@@ -52,7 +62,9 @@
     {{#if system.useMysticism}}
       <a class="item" data-tab="spells">Spells</a>
     {{/if}}
-    <a class="item" data-tab="lifepath">Life Path</a>
+    {{#if system.useLifePath}}
+      <a class="item" data-tab="lifepath">Life Path</a>
+    {{/if}}
   </nav>
 
   {{!-- ── Tab Body ───────────────────────────────────────────────── --}}
@@ -67,7 +79,9 @@
     {{#if system.useMysticism}}
       {{> actor/character/tabs/tab-spells}}
     {{/if}}
-    {{> actor/character/tabs/tab-lifepath}}
+    {{#if system.useLifePath}}
+      {{> actor/character/tabs/tab-lifepath}}
+    {{/if}}
   </section>
 
 </form>

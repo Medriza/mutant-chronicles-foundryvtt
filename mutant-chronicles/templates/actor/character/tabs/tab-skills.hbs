@@ -11,17 +11,23 @@
   {{#each skillsByAttribute as |skillGroup attrKey|}}
     {{#if skillGroup.length}}
     <div class="skill-group" data-attribute="{{attrKey}}">
-      <h3 class="skill-group-header">{{attrKey}}</h3>
+      {{!-- Attribute value input sits on the header band so the value is
+           visible alongside the skills it governs. Uses Handlebars lookup
+           to dynamically access system.attributes[attrKey].value. --}}
+      <div class="skill-group-header flexrow">
+        <span class="skill-group-name">{{camelToTitle attrKey}}</span>
+        <input class="skill-group-attr" type="number"
+               name="system.attributes.{{attrKey}}.value"
+               value="{{lookup (lookup ../system.attributes attrKey) 'value'}}"
+               min="2" max="17" title="{{camelToTitle attrKey}} value" />
+        <span class="skill-col-label" title="Expertise">EXP</span>
+        <span class="skill-col-label" title="Focus">FOC</span>
+        <span class="skill-col-label" title="Signature Skill">★</span>
+        <span class="skill-controls-spacer"></span>
+      </div>
       <ol class="skill-list">
-        <li class="skill-row skill-header flexrow">
-          <span class="skill-name"></span>
-          <span class="skill-col-label" title="Expertise">EXP</span>
-          <span class="skill-col-label" title="Focus">FOC</span>
-          <span class="skill-col-label" title="Signature Skill">★</span>
-          <span class="skill-controls-spacer"></span>
-        </li>
         {{#each skillGroup as |skill|}}
-        <li class="skill-row flexrow" data-item-id="{{skill.id}}">
+        <li class="skill-row flexrow{{#if skill.system.isAdvanced}} advanced{{/if}}" data-item-id="{{skill.id}}">
           <a class="skill-name skill-roll" title="Roll {{skill.name}}">{{skill.name}}</a>
           <span class="skill-exp">{{skill.system.expertise}}</span>
           <span class="skill-foc">{{skill.system.focus}}</span>
@@ -58,10 +64,5 @@
   </div>
   {{/if}}
 
-  <div class="tab-footer">
-    <a class="item-create" data-item-type="skill" title="Add Skill">
-      <i class="fas fa-plus"></i> Add Skill
-    </a>
-  </div>
 
 </div>

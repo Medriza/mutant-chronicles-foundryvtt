@@ -1,0 +1,23 @@
+{{!-- Weapon Quality Item Sheet --}}
+<form class="sheet weaponquality-sheet" autocomplete="off">
+
+  {{!-- Header: icon + item name --}}
+  <header class="item-sheet-header">
+    <img class="item-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="item-header-fields">
+      <input class="item-title-input" name="name" type="text" value="{{item.name}}" placeholder="Quality Name" />
+      <div class="item-type-badge">Weapon Quality</div>
+    </div>
+  </header>
+
+  {{!-- Body --}}
+  <section class="item-sheet-body">
+
+    {{!-- Description --}}
+    <div class="item-form-group item-form-group--grow">
+      <label>Description</label>
+      <textarea name="system.description" placeholder="Describe what this quality does...">{{system.description}}</textarea>
+    </div>
+
+  </section>
+</form>

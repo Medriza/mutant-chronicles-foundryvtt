@@ -30,6 +30,16 @@ const CHAT_TEMPLATE = 'systems/mutant-chronicles/templates/dice/roll-chat.hbs';
 export function registerRollHelpers() {
   // {{ne a b}} — true if a !== b. Used for pluralisation in the chat card.
   Handlebars.registerHelper('ne', (a, b) => a !== b);
+
+  // {{camelToTitle str}} — converts camelCase to Title Case with spaces.
+  // e.g. "mentalStrength" → "Mental Strength". Used for attribute group headers
+  // on the skills tab so the data key doesn't need to change.
+  Handlebars.registerHelper('camelToTitle', (str) =>
+    str
+      .replace(/([A-Z])/g, ' $1')        // insert space before each capital
+      .replace(/^./, s => s.toUpperCase()) // capitalise the first letter
+      .trim()
+  );
 }
 
 /**

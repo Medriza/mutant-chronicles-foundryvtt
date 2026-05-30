@@ -1,0 +1,111 @@
+{{!-- Dark Gift Item Sheet --}}
+{{!-- Dark Gifts are the Dark side counterpart to Spells. They share the same  --}}
+{{!-- general structure but use different field names:                          --}}
+{{!--   Row 1: Gift of... (dropdown) | Difficulty (text)                       --}}
+{{!--   Row 2: Duration (text) | Target (text)                                 --}}
+{{!--   Base Effect (textarea)                                                 --}}
+{{!--   Individual Bleed (textarea) — Bleed specific to this Dark Gift         --}}
+{{!--   Category Bleed (table) — header is section label; + Add in header col  --}}
+<form class="sheet darkgift-sheet" autocomplete="off">
+
+  {{!-- Header: icon + item name --}}
+  <header class="item-sheet-header">
+    <img class="item-img" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="item-header-fields">
+      <input class="item-title-input" name="name" type="text" value="{{item.name}}" placeholder="Dark Gift Name" />
+      <div class="item-type-badge item-type-badge--dark">Dark Gift</div>
+    </div>
+  </header>
+
+  {{!-- Body --}}
+  <section class="item-sheet-body">
+
+    {{!-- Row 1: Gift of... (dropdown) + Difficulty --}}
+    <div class="item-form-row">
+      <div class="item-form-group">
+        <label>Gift of...</label>
+        <select name="system.giftCategory">
+          <option value="" {{#if (eq system.giftCategory "")}}selected{{/if}}>— Select Category —</option>
+          <option value="Dark Symmetry Gift" {{#if (eq system.giftCategory "Dark Symmetry Gift")}}selected{{/if}}>Dark Symmetry Gift</option>
+          <option value="Gift of Ilian"      {{#if (eq system.giftCategory "Gift of Ilian")}}selected{{/if}}>Gift of Ilian</option>
+          <option value="Gift of Algeroth"   {{#if (eq system.giftCategory "Gift of Algeroth")}}selected{{/if}}>Gift of Algeroth</option>
+          <option value="Gift of Demnogonis" {{#if (eq system.giftCategory "Gift of Demnogonis")}}selected{{/if}}>Gift of Demnogonis</option>
+          <option value="Gift of Semai"      {{#if (eq system.giftCategory "Gift of Semai")}}selected{{/if}}>Gift of Semai</option>
+          <option value="Gift of Muawijhe"   {{#if (eq system.giftCategory "Gift of Muawijhe")}}selected{{/if}}>Gift of Muawijhe</option>
+        </select>
+      </div>
+      <div class="item-form-group">
+        <label>Difficulty</label>
+        <input type="text" name="system.difficulty" value="{{system.difficulty}}"
+               placeholder="e.g. D2, D2+" />
+      </div>
+    </div>
+
+    {{!-- Row 2: Duration + Target --}}
+    <div class="item-form-row">
+      <div class="item-form-group">
+        <label>Duration</label>
+        <input type="text" name="system.duration" value="{{system.duration}}"
+               placeholder="e.g. Instant, Scene" />
+      </div>
+      <div class="item-form-group">
+        <label>Target</label>
+        <input type="text" name="system.target" value="{{system.target}}"
+               placeholder="e.g. 1 creature, Self, Zone" />
+      </div>
+    </div>
+
+    {{!-- Base Effect --}}
+    <div class="item-form-group darkgift-base-effect">
+      <label>Effect</label>
+      <textarea name="system.baseEffect"
+                placeholder="Core Dark Gift effect, rules text...">{{system.baseEffect}}</textarea>
+    </div>
+
+    {{!-- Individual Bleed — specific to this Dark Gift (leave empty if none) --}}
+    <div class="item-form-group darkgift-individual-bleed">
+      <label>Bleed</label>
+      <textarea name="system.individualBleed"
+                placeholder="Bleed effect specific to this Dark Gift (leave empty if none)...">{{system.individualBleed}}</textarea>
+    </div>
+
+    {{!-- Category Bleed table — each row: threshold (e.g. "1+") + bleed effect. --}}
+    {{!-- The table header replaces the old section label. The column heading    --}}
+    {{!-- dynamically names the gift category ("Gift of Demnogonis Bleed" etc). --}}
+    {{!-- The + Add button lives in the controls-col header; effect cells use    --}}
+    {{!-- <textarea> so long descriptions wrap and can be resized vertically.   --}}
+    <table class="mc3-effect-table">
+      <thead>
+        <tr>
+          <th class="effect-threshold-col">Spent</th>
+          <th>{{#if system.giftCategory}}{{system.giftCategory}} Bleed{{else}}Category Bleed{{/if}}</th>
+          <th class="effect-controls-col">
+            <a class="dynamic-row-add" data-field="categoryBleed" title="Add row">
+              <i class="fas fa-plus"></i>
+            </a>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each system.categoryBleed}}
+        <tr class="effect-row">
+          <td class="effect-threshold-col">
+            <input type="text" name="system.categoryBleed.{{@index}}.threshold"
+                   value="{{this.threshold}}" placeholder="1+" />
+          </td>
+          <td>
+            <textarea name="system.categoryBleed.{{@index}}.effect"
+                      placeholder="Bleed effect description...">{{this.effect}}</textarea>
+          </td>
+          <td class="effect-controls-col">
+            <a class="dynamic-row-delete" data-field="categoryBleed" data-index="{{@index}}" title="Remove">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+  </section>
+</form>

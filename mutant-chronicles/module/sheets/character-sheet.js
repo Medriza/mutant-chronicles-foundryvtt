@@ -55,6 +55,15 @@ export class MC3CharacterSheet extends ActorSheet {
     context.system = actor.system;
     context.flags = actor.flags;
 
+    // Earnings descriptor — shown as a read-only label next to the rating number.
+    // Updates automatically each render so changing the rating (0–5) immediately
+    // reflects the correct title in the header without any extra JS handler.
+    const EARNINGS_TITLES = [
+      'Impoverished', 'Meagre', 'Average', 'Comfortable', 'Affluent', 'Wealthy'
+    ];
+    context.earningsTitle = EARNINGS_TITLES[actor.system.details?.earningsRating ?? 0]
+                         ?? 'Impoverished';
+
     // Bucket the actor's embedded items by type. This uses Array.prototype.filter
     // from Lesson 1.3 — Foundry stores all embedded items in one collection
     // (actor.items), and the template wants them split per type so it can render
@@ -109,21 +118,40 @@ export class MC3CharacterSheet extends ActorSheet {
     const SERIOUS_PHYSICAL_MAX  = 10;
     const CRITICAL_PHYSICAL_MAX = 6;
 
+    // Location metadata: display range (for the hit-location-grid range badge)
+    // and human-readable label. Range uses en-dashes per MC3 book typography.
+    const LOCATION_META = {
+      head:     { range: '1–2',   label: 'Head'      },
+      rightArm: { range: '3–5',   label: 'Right Arm'  },
+      leftArm:  { range: '6–8',   label: 'Left Arm'   },
+      torso:    { range: '9–14',  label: 'Torso'      },
+      rightLeg: { range: '15–17', label: 'Right Leg'  },
+      leftLeg:  { range: '18–20', label: 'Left Leg'   },
+    };
+
     const woundsData = actor.system.wounds;
 
-    // lightWoundSlots is an array of location objects so the template can iterate
-    // with a single {{#each}} and access loc, path, soak, and slots together.
-    context.lightWoundSlots = Object.entries(woundsData.light).map(([loc, data]) => ({
-      loc,
-      path:  `system.wounds.light.${loc}`,
-      soak:  data.soak ?? 0,
-      slots: Array.from(
-        { length: WOUND_PHYSICAL_MAX[loc] ?? 10 },
-        (_, i) => ({
-          state: i < data.value ? 'filled' : i < data.max ? 'active' : 'inactive',
-        })
-      ),
-    }));
+    // lightWoundSlots is now a keyed object so tab-stats.hbs can reference each
+    // location directly (e.g. {{lightWoundSlots.head.slots}}) rather than relying
+    // on iteration order. The template positions each card in a fixed grid layout
+    // matching the official MC3 character sheet.
+    context.lightWoundSlots = {};
+    for (const [loc, data] of Object.entries(woundsData.light)) {
+      const meta = LOCATION_META[loc] ?? { range: '?', label: loc };
+      context.lightWoundSlots[loc] = {
+        loc,
+        range: meta.range,
+        label: meta.label,
+        path:  `system.wounds.light.${loc}`,
+        soak:  data.soak ?? 0,
+        slots: Array.from(
+          { length: WOUND_PHYSICAL_MAX[loc] ?? 10 },
+          (_, i) => ({
+            state: i < data.value ? 'filled' : i < data.max ? 'active' : 'inactive',
+          })
+        ),
+      };
+    }
 
     context.seriousWoundSlots = {
       path:  'system.wounds.serious',
@@ -149,6 +177,37 @@ export class MC3CharacterSheet extends ActorSheet {
       ),
     };
 
+    // ── Chronicle Points ───────────────────────────────────────────────────────
+    // 5 circular tokens; filled from left. Left-click fills next, right clears last.
+    const cpValue = actor.system.chroniclePoints?.value ?? 0;
+    context.chroniclePointSlots = Array.from({ length: 5 }, (_, i) => ({
+      index:  i,
+      filled: i < cpValue,
+    }));
+
+    // ── Dread Track ────────────────────────────────────────────────────────────
+    // Stepped layout: 5 rows of 1/2/3/4/5 boxes = 15 total.
+    // When a row is completed the complication range escalates to that row's Range.
+    // The Severity (difficulty) column is used for Psychotherapy tests to cure Dread.
+    // Boxes fill globally left-to-right, top-to-bottom: globalIndex 0 is row-1 box-1.
+    const DREAD_ROW_DEFS = [
+      { range: '20',    count: 1, difficulty: null  },
+      { range: '19–20', count: 2, difficulty: 'D1'  },
+      { range: '18–20', count: 3, difficulty: 'D2'  },
+      { range: '17–20', count: 4, difficulty: 'D3'  },
+      { range: '16–20', count: 5, difficulty: 'D4'  },
+    ];
+    const dreadValue = actor.system.dread?.value ?? 0;
+    let dreadBoxIndex = 0;
+    context.dreadRows = DREAD_ROW_DEFS.map((def, rowIdx) => {
+      const slots = Array.from({ length: def.count }, (_, i) => {
+        const globalIndex = dreadBoxIndex + i;
+        return { globalIndex, state: globalIndex < dreadValue ? 'filled' : 'active' };
+      });
+      dreadBoxIndex += def.count;
+      return { range: def.range, difficulty: def.difficulty, rowIndex: rowIdx, slots };
+    });
+
     return context;
   }
 
@@ -162,7 +221,33 @@ export class MC3CharacterSheet extends ActorSheet {
                         'mentalStrength', 'personality', 'physique', 'strength'];
     const groups = {};
     for (const attr of attributes) {
-      groups[attr] = skills.filter(s => s.system.attribute === attr);
+      const attrSkills = skills.filter(s => s.system.attribute === attr);
+
+      // Separate parent skills (non-advanced) from advanced skills, sort each A→Z.
+      const parents  = attrSkills
+        .filter(s => !s.system.isAdvanced)
+        .sort((a, b) => a.name.localeCompare(b.name));
+      const advanced = attrSkills.filter(s => s.system.isAdvanced);
+
+      // Build the ordered list: each parent followed immediately by its children
+      // (alphabetically sorted). Any advanced skill whose parentSkill field doesn't
+      // match a known parent in this group is appended at the end (orphan guard).
+      const ordered = [];
+      for (const parent of parents) {
+        ordered.push(parent);
+        const children = advanced
+          .filter(s => s.system.parentSkill === parent.name)
+          .sort((a, b) => a.name.localeCompare(b.name));
+        ordered.push(...children);
+      }
+      // Orphaned advanced skills — parentSkill references something not in this group
+      const knownParentNames = new Set(parents.map(p => p.name));
+      const orphans = advanced
+        .filter(s => !knownParentNames.has(s.system.parentSkill))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      ordered.push(...orphans);
+
+      groups[attr] = ordered;
     }
     // Catch any skill items whose attribute field is blank or doesn't match
     // a known attribute — render them in a separate Unassigned cluster so the
@@ -202,6 +287,18 @@ export class MC3CharacterSheet extends ActorSheet {
     // so the handlers scan the slots object directly.
     html.find('.mental-slot').click(this._onMentalWoundFill.bind(this));
     html.find('.mental-slot').contextmenu(this._onMentalWoundClear.bind(this));
+
+    // Chronicle Points — 5 circular tokens; left-click fills next, right clears last.
+    html.find('.chronicle-point-slot').click(this._onCPFill.bind(this));
+    html.find('.chronicle-point-slot').contextmenu(this._onCPClear.bind(this));
+
+    // Dread track — 15 boxes in a stepped layout; left-click fills next, right clears last.
+    html.find('.dread-slot').click(this._onDreadFill.bind(this));
+    html.find('.dread-slot').contextmenu(this._onDreadClear.bind(this));
+
+    // Armour worn toggle — updates the item, which triggers prepareData() to
+    // recompute per-location soak and re-render the stats tab automatically.
+    html.find('.armour-worn-toggle').change(this._onToggleArmourWorn.bind(this));
   }
 
   /* ------------------------------------------------------------------------ */
@@ -243,6 +340,24 @@ export class MC3CharacterSheet extends ActorSheet {
     event.preventDefault();
     const li = event.currentTarget.closest('[data-item-id]');
     return this.actor.deleteEmbeddedDocuments('Item', [li.dataset.itemId]);
+  }
+
+  /**
+   * Toggle the worn state on an armour item directly from the Gear tab.
+   *
+   * The checkbox lives on the character sheet, but it controls an embedded
+   * Item — so we call item.update() rather than actor.update(). Foundry then
+   * fires prepareData() on the actor, which calls _prepareSoak(), which
+   * recomputes per-location soak from all currently worn armour pieces and
+   * writes the new values to system.wounds.light.{loc}.soak. The stats tab
+   * re-renders automatically with the updated numbers.
+   */
+  async _onToggleArmourWorn(event) {
+    event.preventDefault();
+    const row = event.currentTarget.closest('[data-item-id]');
+    const item = this.actor.items.get(row.dataset.itemId);
+    if (!item) return;
+    return item.update({ 'system.worn': event.currentTarget.checked });
   }
 
   /* ------------------------------------------------------------------------ */
@@ -310,6 +425,58 @@ export class MC3CharacterSheet extends ActorSheet {
     }
   }
 
+  /* ------------------------------------------------------------------------ */
+  /*   Chronicle Points handlers                                              */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * Left-click on a chronicle-point circle: spend the next available point
+   * (fills the leftmost unfilled token).
+   */
+  async _onCPFill(event) {
+    event.preventDefault();
+    const current = this.actor.system.chroniclePoints?.value ?? 0;
+    const next = Math.min(current + 1, 5);
+    if (next !== current) await this.actor.update({ 'system.chroniclePoints.value': next });
+  }
+
+  /**
+   * Right-click on a chronicle-point circle: recover the last spent point
+   * (clears the rightmost filled token).
+   */
+  async _onCPClear(event) {
+    event.preventDefault();
+    const current = this.actor.system.chroniclePoints?.value ?? 0;
+    const next = Math.max(current - 1, 0);
+    if (next !== current) await this.actor.update({ 'system.chroniclePoints.value': next });
+  }
+
+  /* ------------------------------------------------------------------------ */
+  /*   Dread track handlers                                                    */
+  /* ------------------------------------------------------------------------ */
+
+  /**
+   * Left-click on a dread box: add one point of Dread (fills the next box,
+   * advancing through the stepped layout globally left-to-right, top-to-bottom).
+   */
+  async _onDreadFill(event) {
+    event.preventDefault();
+    const current = this.actor.system.dread?.value ?? 0;
+    const next = Math.min(current + 1, 15);
+    if (next !== current) await this.actor.update({ 'system.dread.value': next });
+  }
+
+  /**
+   * Right-click on a dread box: remove one point of Dread (clears the last
+   * filled box).
+   */
+  async _onDreadClear(event) {
+    event.preventDefault();
+    const current = this.actor.system.dread?.value ?? 0;
+    const next = Math.max(current - 1, 0);
+    if (next !== current) await this.actor.update({ 'system.dread.value': next });
+  }
+
   async _onRollSkill(event) {
     event.preventDefault();
     const li    = event.currentTarget.closest('[data-item-id]');
@@ -322,5 +489,48 @@ export class MC3CharacterSheet extends ActorSheet {
     if (!rollParams?.numDice) return;
     const rollResult = await rollMC3({ ...rollParams, actor: this.actor });
     await sendRollToChat(rollResult);
+  }
+
+  /**
+   * Intercept item creation to handle multi-rank talents.
+   *
+   * When a talent is dropped onto the sheet, we check whether the actor
+   * already owns a talent with the same name. If it does, we increment that
+   * talent's Rank by 1 and discard the incoming duplicate. All other item
+   * types pass through to the default Foundry behaviour.
+   *
+   * This implements the MC3 rule that some talents (e.g. Catfall) can be
+   * taken multiple times, with each additional purchase increasing the Rank.
+   *
+   * @param {object|object[]} itemData  The item document data from the drop.
+   * @override
+   */
+  async _onDropItemCreate(itemData) {
+    // Foundry may pass a single object or an array — normalise to array.
+    const items = Array.isArray(itemData) ? itemData : [itemData];
+
+    const toCreate = [];
+
+    for (const data of items) {
+      if (data.type === 'talent') {
+        const existing = this.actor.items.find(
+          i => i.type === 'talent' && i.name === data.name
+        );
+        if (existing) {
+          // Duplicate talent found. Only increment rank if isRanked is true.
+          // Either way, never create a second copy.
+          if (existing.system.isRanked) {
+            const newRank = (existing.system.rank ?? 1) + 1;
+            await existing.update({ 'system.rank': newRank });
+          }
+          // isRanked = false: silently ignore the duplicate drop.
+          continue;
+        }
+      }
+      toCreate.push(data);
+    }
+
+    // Create any non-duplicate items normally.
+    if (toCreate.length) return super._onDropItemCreate(toCreate);
   }
 }
