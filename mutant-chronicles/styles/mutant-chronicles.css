@@ -3203,3 +3203,337 @@ a.skill-roll:hover {
 }
 
 /* ── End NPC Sheet ───────────────────────────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PC SHEET — LIFE PATH TAB
+   Dense character-creation worksheet: basics row, 4 careers, traits textarea,
+   8×7 attribute contribution matrix, 29×14 skill contribution matrix.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.app.mc3 .tab.lifepath.active {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+/* ── Basics row ──────────────────────────────────────────────────────────── */
+
+.app.mc3 .lifepath-basics {
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.app.mc3 .lifepath-basics .form-group {
+  display: flex;
+  flex: 1 1 0;      /* Education + Free Career Choices split remaining space equally */
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Birth Faction and Family Heritage — first two text fields, kept narrow */
+.app.mc3 .lifepath-basics .form-group:nth-child(1),
+.app.mc3 .lifepath-basics .form-group:nth-child(2) {
+  flex: 0 0 90px;
+}
+
+/* Number fields (Age / Life Points / Chronicle Points) — compact */
+.app.mc3 .lifepath-basics .form-group:has(input[type="number"]) {
+  flex: 0 0 52px;
+}
+
+.app.mc3 .lifepath-basics .form-group label {
+  color: #5a4020;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.82em;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.app.mc3 .lifepath-basics input[type="text"],
+.app.mc3 .lifepath-basics input[type="number"] {
+  background: rgba(200, 184, 122, 0.25);
+  border: 1px solid #8a7040;
+  border-radius: 2px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.88em;
+  height: 24px;
+  padding: 0 4px;
+  text-align: center;
+  width: 100%;
+}
+
+/* ── Careers section ─────────────────────────────────────────────────────── */
+
+.app.mc3 .careers-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* h3 inside careers-section and contribution-matrix — dark band header */
+.app.mc3 .careers-section > h3,
+.app.mc3 .contribution-matrix > h3 {
+  background: #2a2010;
+  border-radius: 2px 2px 0 0;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1em;
+  letter-spacing: 0.05em;
+  margin: 0;
+  padding: 4px 10px;
+  text-align: center;
+}
+
+.app.mc3 .career-block {
+  align-items: center;
+  background: rgba(200, 184, 122, 0.12);
+  border: 1px solid #c8a84b;
+  border-top: none;
+  display: flex;
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+.app.mc3 .career-block:last-child {
+  border-radius: 0 0 2px 2px;
+}
+
+/* Alternating career row tint */
+.app.mc3 .career-block:nth-child(odd) {
+  background: rgba(200, 184, 122, 0.20);
+}
+
+.app.mc3 .career-block > label {
+  color: #5a4020;
+  flex: 0 0 64px;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.9em;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.app.mc3 .career-block input[type="text"] {
+  background: rgba(200, 184, 122, 0.25);
+  border: 1px solid #8a7040;
+  border-radius: 2px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.88em;
+  height: 22px;
+  padding: 0 4px;
+}
+
+/* Career name narrower, description takes remaining space */
+.app.mc3 .career-block input[type="text"]:first-of-type {
+  flex: 0 0 160px;
+}
+
+.app.mc3 .career-block input[type="text"]:last-of-type {
+  flex: 1 1 0;
+}
+
+/* ── Decision checkboxes ─────────────────────────────────────────────────── */
+
+.app.mc3 .decisions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Reuses same dark-band h3 rule as .careers-section and .contribution-matrix */
+
+.app.mc3 .decisions-row {
+  background: rgba(200, 184, 122, 0.12);
+  border: 1px solid #c8a84b;
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 4px;
+}
+
+.app.mc3 .decision-box {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  gap: 4px;
+}
+
+/* Thin vertical divider between boxes */
+.app.mc3 .decision-box + .decision-box {
+  border-left: 1px solid rgba(138, 112, 64, 0.35);
+}
+
+.app.mc3 .decision-box label {
+  color: #5a4020;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.75em;
+  letter-spacing: 0.02em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.app.mc3 .decision-box input[type="checkbox"] {
+  accent-color: #c8a84b;
+  height: 16px;
+  margin: 0;
+  width: 16px;
+}
+
+/* Checked state: tint the whole box gold */
+.app.mc3 .decision-box:has(input:checked) {
+  background: rgba(200, 168, 75, 0.20);
+}
+
+.app.mc3 .decision-box:has(input:checked) label {
+  color: #3a2800;
+  font-weight: 700;
+}
+
+/* ── Traits & Events ─────────────────────────────────────────────────────── */
+
+.app.mc3 .traits-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* h3 inherits the shared dark-band rule from .careers-section / .contribution-matrix */
+
+.app.mc3 .traits-section textarea {
+  background: rgba(200, 184, 122, 0.18);
+  border: 1px solid #8a7040;
+  border-radius: 0 0 2px 2px;
+  border-top: none;
+  box-sizing: border-box;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.9em;
+  line-height: 1.5;
+  padding: 5px 8px;
+  resize: vertical;
+  width: 100%;
+}
+
+/* ── Contribution matrices — shared ──────────────────────────────────────── */
+
+.app.mc3 .contribution-matrix {
+  display: flex;
+  flex-direction: column;
+}
+
+.app.mc3 .attr-matrix,
+.app.mc3 .skill-matrix {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Header row */
+.app.mc3 .attr-matrix thead tr,
+.app.mc3 .skill-matrix thead tr {
+  background: #3a2e18;
+}
+
+.app.mc3 .attr-matrix thead th,
+.app.mc3 .skill-matrix thead th {
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.82em;
+  letter-spacing: 0.03em;
+  padding: 3px 4px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.app.mc3 .attr-matrix thead th:last-child,
+.app.mc3 .skill-matrix thead th:last-child {
+  border-right: none;
+}
+
+/* Attribute / skill name column — left-aligned, wider */
+.app.mc3 .attr-matrix thead th:first-child,
+.app.mc3 .skill-matrix thead th:first-child {
+  text-align: left;
+  padding-left: 6px;
+}
+
+/* Data rows */
+.app.mc3 .attr-matrix tbody tr,
+.app.mc3 .skill-matrix tbody tr {
+  border-bottom: 1px solid rgba(138, 112, 64, 0.30);
+}
+
+.app.mc3 .attr-matrix tbody tr:nth-child(even),
+.app.mc3 .skill-matrix tbody tr:nth-child(even) {
+  background: rgba(200, 184, 122, 0.14);
+}
+
+.app.mc3 .attr-matrix tbody tr:nth-child(odd),
+.app.mc3 .skill-matrix tbody tr:nth-child(odd) {
+  background: rgba(200, 184, 122, 0.06);
+}
+
+.app.mc3 .attr-matrix td,
+.app.mc3 .skill-matrix td {
+  padding: 2px 3px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Name label cell */
+.app.mc3 .matrix-label {
+  color: #2a1e08;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.82em;
+  padding-left: 6px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Number inputs inside the matrices */
+.app.mc3 .attr-matrix input[type="number"],
+.app.mc3 .skill-matrix input[type="number"] {
+  background: rgba(200, 184, 122, 0.25);
+  border: 1px solid #8a7040;
+  border-radius: 2px;
+  box-sizing: border-box;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.82em;
+  height: 20px;
+  padding: 0 1px;
+  text-align: center;
+  width: 28px;
+}
+
+/* Checkbox (Sig column on skill matrix) */
+.app.mc3 .skill-matrix input[type="checkbox"] {
+  accent-color: #c8a84b;
+  height: 14px;
+  margin: 0;
+  width: 14px;
+}
+
+/* ── Attribute matrix specifics ──────────────────────────────────────────── */
+
+/* Name column wider for attribute names */
+.app.mc3 .attr-matrix .matrix-label {
+  min-width: 120px;
+}
+
+/* ── Skill matrix specifics ──────────────────────────────────────────────── */
+
+/* Name column wider for skill names */
+.app.mc3 .skill-matrix .matrix-label {
+  min-width: 110px;
+}
+
+/* Sig checkbox column narrower */
+.app.mc3 .skill-matrix thead th:nth-child(2),
+.app.mc3 .skill-matrix td:nth-child(2) {
+  width: 24px;
+}
+
+/* ── End Life Path Tab ───────────────────────────────────────────────────── */

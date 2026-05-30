@@ -160,10 +160,20 @@
                         "description": ""
                     }
                 ],
-                "age": 0,
-                "lifePoints": 0,
+                "age": 16,
+                "lifePoints": 5,
                 "chroniclePoints": 0,
                 "traitsAndEvents": "",
+                "decisions": {
+                    "attributes": false,
+                    "birthFaction": false,
+                    "status": false,
+                    "environment": false,
+                    "education": false,
+                    "primaryCareer": false,
+                    "iconicCareers": false,
+                    "finalCustomization": false
+                },
                 "attributeContributions": {
                     "agility": {
                         "starting": 0,

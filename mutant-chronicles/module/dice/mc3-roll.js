@@ -31,6 +31,10 @@ export function registerRollHelpers() {
   // {{ne a b}} — true if a !== b. Used for pluralisation in the chat card.
   Handlebars.registerHelper('ne', (a, b) => a !== b);
 
+  // {{inc n}} — returns n + 1. Used to display 1-based career numbers in
+  // tab-lifepath.hbs ({{#each}} gives 0-based keys).
+  Handlebars.registerHelper('inc', (n) => parseInt(n) + 1);
+
   // {{camelToTitle str}} — converts camelCase to Title Case with spaces.
   // e.g. "mentalStrength" → "Mental Strength". Used for attribute group headers
   // on the skills tab so the data key doesn't need to change.

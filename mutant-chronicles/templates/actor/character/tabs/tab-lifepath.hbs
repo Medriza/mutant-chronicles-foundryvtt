@@ -5,6 +5,55 @@
      hundreds of individual input fields by hand. --}}
 <div class="tab lifepath flexcol" data-group="primary" data-tab="lifepath">
 
+  {{!-- Decision Checkboxes ────────────────────────────────────────────── --}}
+  {{!-- One checkbox per Life Path decision. Purely a progress tracker —
+       no automation. Check them off as each decision is completed. --}}
+  <div class="decisions-section">
+    <h3>Life Path Decisions</h3>
+    <div class="decisions-row">
+      <div class="decision-box">
+        <label>1. Attributes</label>
+        <input type="checkbox" name="system.lifePath.decisions.attributes"
+               data-dtype="Boolean" {{#if system.lifePath.decisions.attributes}}checked{{/if}} />
+      </div>
+      <div class="decision-box">
+        <label>2. Birth Faction</label>
+        <input type="checkbox" name="system.lifePath.decisions.birthFaction"
+               data-dtype="Boolean" {{#if system.lifePath.decisions.birthFaction}}checked{{/if}} />
+      </div>
+      <div class="decision-box">
+        <label>3. Status</label>
+        <input type="checkbox" name="system.lifePath.decisions.status"
+               data-dtype="Boolean" {{#if system.lifePath.decisions.status}}checked{{/if}} />
+      </div>
+      <div class="decision-box">
+        <label>4. Environment</label>
+        <input type="checkbox" name="system.lifePath.decisions.environment"
+               data-dtype="Boolean" {{#if system.lifePath.decisions.environment}}checked{{/if}} />
+      </div>
+      <div class="decision-box">
+        <label>5. Education</label>
+        <input type="checkbox" name="system.lifePath.decisions.education"
+               data-dtype="Boolean" {{#if system.lifePath.decisions.education}}checked{{/if}} />
+      </div>
+      <div class="decision-box">
+        <label>6. Primary Career</label>
+        <input type="checkbox" name="system.lifePath.decisions.primaryCareer"
+               data-dtype="Boolean" {{#if system.lifePath.decisions.primaryCareer}}checked{{/if}} />
+      </div>
+      <div class="decision-box">
+        <label>7. Iconic Careers</label>
+        <input type="checkbox" name="system.lifePath.decisions.iconicCareers"
+               data-dtype="Boolean" {{#if system.lifePath.decisions.iconicCareers}}checked{{/if}} />
+      </div>
+      <div class="decision-box">
+        <label>8. Final Custom.</label>
+        <input type="checkbox" name="system.lifePath.decisions.finalCustomization"
+               data-dtype="Boolean" {{#if system.lifePath.decisions.finalCustomization}}checked{{/if}} />
+      </div>
+    </div>
+  </div>
+
   {{!-- Basic fields ────────────────────────────────────────────────── --}}
   <div class="lifepath-basics flexrow">
     <div class="form-group">
@@ -23,24 +72,24 @@
              value="{{system.lifePath.education}}" />
     </div>
     <div class="form-group">
-      <label>Free Career Choice</label>
+      <label>Free Career Choices</label>
       <input type="text" name="system.lifePath.freeCareerChoice"
              value="{{system.lifePath.freeCareerChoice}}" />
     </div>
     <div class="form-group">
       <label>Age</label>
-      <input type="number" name="system.lifePath.age"
+      <input type="number"name="system.lifePath.age"
              value="{{system.lifePath.age}}" />
-    </div>
-    <div class="form-group">
-      <label>Life Points</label>
-      <input type="number" name="system.lifePath.lifePoints"
-             value="{{system.lifePath.lifePoints}}" />
     </div>
     <div class="form-group">
       <label>Chronicle Points</label>
       <input type="number" name="system.lifePath.chroniclePoints"
              value="{{system.lifePath.chroniclePoints}}" />
+    </div>
+    <div class="form-group">
+      <label>Life Points</label>
+      <input type="number"name="system.lifePath.lifePoints"
+             value="{{system.lifePath.lifePoints}}" />
     </div>
   </div>
 
@@ -51,7 +100,7 @@
          the path segment: system.lifePath.careers.0.name etc. --}}
     {{#each system.lifePath.careers as |career key|}}
     <div class="career-block flexrow">
-      <label>Career {{key}}</label>
+      <label>Career {{inc key}}</label>
       <input type="text" name="system.lifePath.careers.{{key}}.name"
              value="{{career.name}}" placeholder="Career name…" />
       <input type="text" name="system.lifePath.careers.{{key}}.description"
@@ -61,8 +110,10 @@
   </div>
 
   {{!-- Traits & Events ─────────────────────────────────────────────── --}}
-  <div class="form-group">
-    <label>Traits &amp; Events</label>
+  {{!-- Uses .traits-section / h3 pattern (same as .careers-section) so
+       the header renders as a full-width dark band. --}}
+  <div class="traits-section">
+    <h3>Traits &amp; Events</h3>
     <textarea name="system.lifePath.traitsAndEvents"
               rows="4">{{system.lifePath.traitsAndEvents}}</textarea>
   </div>
