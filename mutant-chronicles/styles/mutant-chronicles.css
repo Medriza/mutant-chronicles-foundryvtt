@@ -1499,6 +1499,102 @@ a.skill-roll:hover {
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   SPELLS TAB
+   Single table listing all spells / dark gifts / mutations on the character.
+   No add button — items come from compendium drag-and-drop only.
+   Columns: Name | Aspect | Difficulty | Target | Duration | Controls
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.app.mc3 .tab.spells.active {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 4px 0;
+}
+
+.app.mc3 .spells-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Header row */
+.app.mc3 .spells-table thead tr {
+  background: #3a2e18;
+}
+
+.app.mc3 .spells-table thead th {
+  border-right: 1px solid #2a2010;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.88em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  padding: 3px 6px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.app.mc3 .spells-table thead th:last-child {
+  border-right: none;
+}
+
+/* Data rows */
+.app.mc3 .spell-row {
+  border-bottom: 1px solid #2a2010;
+}
+
+.app.mc3 .spell-row:last-child {
+  border-bottom: none;
+}
+
+.app.mc3 .spell-row:hover {
+  background: rgba(255, 230, 150, 0.10);
+}
+
+.app.mc3 .spells-table td {
+  color: #2a1e08;
+  font-size: 0.85em;
+  padding: 3px 6px;
+  vertical-align: middle;
+}
+
+/* Controls column */
+.app.mc3 .spells-table th.controls,
+.app.mc3 .spells-table td.controls {
+  text-align: right;
+  white-space: nowrap;
+  width: 44px;
+}
+
+/* Hide edit/delete until row hover */
+.app.mc3 .spell-row .item-edit,
+.app.mc3 .spell-row .item-delete {
+  color: #6a6050;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-left: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.app.mc3 .spell-row:hover .item-edit,
+.app.mc3 .spell-row:hover .item-delete {
+  opacity: 1;
+}
+
+.app.mc3 .spell-row .item-edit:hover   { color: #c8a84b; }
+.app.mc3 .spell-row .item-delete:hover { color: #b83030; }
+
+/* Empty state */
+.app.mc3 .tab.spells .empty-label {
+  color: #8a7858;
+  font-size: 0.8em;
+  font-style: italic;
+  padding: 6px 4px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
    BIO TAB
    Simple textarea-heavy layout: Assets (text input) at top, then Biography
    and Notes as labeled textarea blocks. Labels use the dark section-header
@@ -1514,33 +1610,42 @@ a.skill-roll:hover {
   padding: 8px;
 }
 
-/* Assets row at the top — label + text input side by side */
+/* Assets — stacked title-bar label above full-width input */
 .app.mc3 .bio-fields {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  gap: 0;
 }
 
 .app.mc3 .bio-fields .form-group {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0;
 }
 
 .app.mc3 .bio-fields .form-group label {
-  color: #5a4020;
-  flex: 0 0 auto;
-  font-size: 1em;
-  white-space: nowrap;
+  background: #2a2010;
+  border-radius: 2px 2px 0 0;
+  color: #e8d080;
+  display: block;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.0em;
+  font-weight: 400;
+  letter-spacing: 0.10em;
+  padding: 3px 8px;
+  text-transform: uppercase;
+  width: 100%;
 }
 
-.app.mc3 .bio-fields .form-group input[type="text"] {
-  flex: 1 1 auto;
+.app.mc3 .bio-fields .form-group textarea {
+  border-radius: 0 0 2px 2px;
+  border-top: none;
+  box-sizing: border-box;
   font-size: 0.9em;
-  padding: 3px 8px;
-  width: auto;            /* override Foundry's input { width: 100% } */
+  line-height: 1.5;
+  padding: 6px 8px;
+  resize: vertical;
+  width: 100%;
 }
 
 /* Biography and Notes blocks — dark-band label above full-width textarea */
@@ -1565,6 +1670,7 @@ a.skill-roll:hover {
   margin-bottom: 0;
   padding: 3px 8px;
   text-transform: uppercase;
+  width: 100%;
 }
 
 /* Textarea: seamless continuation below the dark label band */
@@ -1713,6 +1819,27 @@ a.skill-roll:hover {
   padding: 3px 8px;
   text-transform: uppercase;
   margin-bottom: 0;
+}
+
+/* Momentum title bar — flex row so Add button sits on the right */
+.app.mc3.item .momentum-label-row {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.app.mc3.item .momentum-label-row .dynamic-row-add {
+  color: #c8b060;
+  cursor: pointer;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.78em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: none;
+}
+
+.app.mc3.item .momentum-label-row .dynamic-row-add:hover {
+  color: #f0d878;
 }
 
 /* ── Standard form group — label (fixed width) + control (flexible) ──────── */
@@ -2158,9 +2285,15 @@ a.skill-roll:hover {
   text-align: center;
 }
 
-/* Base Effect gets a bit more flex weight than the additional-effect field   */
+/* Base Effect — fixed min-height so Momentum table isn't pushed out of scroll */
 .app.mc3.item .spell-base-effect {
-  flex: 2 1 80px;
+  flex: 0 0 auto;
+}
+
+.app.mc3.item .spell-base-effect textarea {
+  flex: none;
+  min-height: 100px;
+  resize: vertical;
 }
 
 /* ── Dynamic effect table (Momentum on spell, Category Bleed on darkgift) ── */
@@ -2195,6 +2328,15 @@ a.skill-roll:hover {
 .app.mc3.item .mc3-effect-table .effect-controls-col {
   width: 26px;
   text-align: center;
+}
+
+/* Intro text above the Momentum table on spell sheets */
+.app.mc3.item .spell-momentum-intro {
+  color: #5a4020;
+  font-size: 0.94em;
+  line-height: 1.3;
+  margin: 0;
+  padding: 0;
 }
 
 /* Alternating row tint */
@@ -2255,6 +2397,15 @@ a.skill-roll:hover {
 .app.mc3.item .mc3-effect-table td.effect-controls-col {
   vertical-align: top;
   padding-top: 5px;
+}
+
+/* Spell sheet — Momentum textarea overrides.
+   No resize handle, no scrollbar; wraps within 2 rows and stays compact.     */
+.app.mc3.item .spell-sheet .mc3-effect-table tbody textarea {
+  font-size: 0.94em;
+  min-height: 0;
+  overflow: hidden;
+  resize: none;
 }
 
 /* Delete icon */
@@ -2638,6 +2789,10 @@ a.skill-roll:hover {
 .app.mc3.npc .npc-abilities,
 .app.mc3.npc .npc-notes {
   overflow: visible;
+}
+.app.mc3.npc .npc-notes h3.section-label {
+  text-align: left;
+  padding-left: 8px;
 }
 
 /* Section header band — dark strip with h3 on left and button/toggle on right.

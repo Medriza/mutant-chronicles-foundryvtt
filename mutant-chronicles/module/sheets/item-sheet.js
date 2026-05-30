@@ -219,6 +219,18 @@ export class MC3ItemSheet extends ItemSheet {
     if (this.item.type === 'darkgift') {
       html.find('[name="system.giftCategory"]').change(this._onGiftCategoryChange.bind(this));
     }
+    // Spell only — auto-resize Momentum effect textareas to fit their content.
+    if (this.item.type === 'spell') {
+      const autoResize = (el) => {
+        el.style.height = '0';              // collapse first to force reflow
+        el.style.height = `${el.scrollHeight}px`;
+      };
+      const textareas = html.find('.mc3-effect-table textarea');
+      // Defer until after Foundry finishes laying out the sheet window,
+      // so scrollHeight reflects the correct final line-wrapping width.
+      setTimeout(() => textareas.each((_, el) => autoResize(el)), 0);
+      textareas.on('input', (e) => autoResize(e.target));
+    }
   }
 
   /**

@@ -73,7 +73,12 @@ export class MC3CharacterSheet extends ActorSheet {
     context.weapons   = actor.items.filter(i => i.type === 'weapon');
     context.armours   = actor.items.filter(i => i.type === 'armour');
     context.equipment = actor.items.filter(i => i.type === 'equipment');
-    context.spells    = actor.items.filter(i => i.type === 'spell');
+    context.spells    = actor.items.filter(i => i.type === 'spell')
+                          .sort((a, b) => {
+                            const aspect = a.system.aspect.localeCompare(b.system.aspect);
+                            if (aspect !== 0) return aspect;
+                            return a.name.localeCompare(b.name);
+                          });
 
     // Skills tab renders skills grouped under their fixed governing attribute
     // (per the Lesson 5.1 design + the corrected MC3 mechanic that skills

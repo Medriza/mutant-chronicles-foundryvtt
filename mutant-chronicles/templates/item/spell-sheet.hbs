@@ -19,39 +19,54 @@
   {{!-- Body --}}
   <section class="item-sheet-body">
 
-    {{!-- Row 1: Aspect + Tier — equal width text inputs --}}
+    {{!-- Row 1: Aspect + Tier + Difficulty — three dropdowns --}}
     <div class="item-form-row">
       <div class="item-form-group">
         <label>Aspect</label>
-        <input type="text" name="system.aspect" value="{{system.aspect}}"
-               placeholder="e.g. Kinesetics" />
+        <select name="system.aspect">
+          <option value="" {{#if (eq system.aspect "")}}selected{{/if}}>—</option>
+          <option value="Kinetics"     {{#if (eq system.aspect "Kinetics")}}selected{{/if}}>Kinetics</option>
+          <option value="Mentalism"    {{#if (eq system.aspect "Mentalism")}}selected{{/if}}>Mentalism</option>
+          <option value="Exorcism"     {{#if (eq system.aspect "Exorcism")}}selected{{/if}}>Exorcism</option>
+          <option value="Manipulation" {{#if (eq system.aspect "Manipulation")}}selected{{/if}}>Manipulation</option>
+        </select>
       </div>
       <div class="item-form-group">
         <label>Tier</label>
-        <input type="text" name="system.tier" value="{{system.tier}}"
-               placeholder="e.g. Tier 1" />
+        <select name="system.tier">
+          <option value="" {{#if (eq system.tier "")}}selected{{/if}}>—</option>
+          <option value="0" {{#if (eq system.tier "0")}}selected{{/if}}>0</option>
+          <option value="1" {{#if (eq system.tier "1")}}selected{{/if}}>1</option>
+          <option value="2" {{#if (eq system.tier "2")}}selected{{/if}}>2</option>
+          <option value="3" {{#if (eq system.tier "3")}}selected{{/if}}>3</option>
+        </select>
+      </div>
+      <div class="item-form-group">
+        <label>Difficulty</label>
+        <select name="system.difficulty">
+          <option value="" {{#if (eq system.difficulty "")}}selected{{/if}}>—</option>
+          <option value="D0" {{#if (eq system.difficulty "D0")}}selected{{/if}}>D0 — Routine</option>
+          <option value="D1" {{#if (eq system.difficulty "D1")}}selected{{/if}}>D1 — Average</option>
+          <option value="D2" {{#if (eq system.difficulty "D2")}}selected{{/if}}>D2 — Challenging</option>
+          <option value="D3" {{#if (eq system.difficulty "D3")}}selected{{/if}}>D3 — Daunting</option>
+          <option value="D4" {{#if (eq system.difficulty "D4")}}selected{{/if}}>D4 — Dire</option>
+          <option value="D5" {{#if (eq system.difficulty "D5")}}selected{{/if}}>D5 — Epic</option>
+        </select>
       </div>
     </div>
 
-    {{!-- Row 2: Difficulty + Duration --}}
+    {{!-- Row 2: Target + Duration --}}
     <div class="item-form-row">
       <div class="item-form-group">
-        <label>Difficulty</label>
-        <input type="text" name="system.difficulty" value="{{system.difficulty}}"
-               placeholder="e.g. D2, D2+, D2 or D4" />
+        <label>Target</label>
+        <input type="text" name="system.target" value="{{system.target}}"
+               placeholder="e.g. 1 creature, Self, Zone" />
       </div>
       <div class="item-form-group">
         <label>Duration</label>
         <input type="text" name="system.duration" value="{{system.duration}}"
                placeholder="e.g. Instant, Scene" />
       </div>
-    </div>
-
-    {{!-- Row 3: Target — full width --}}
-    <div class="item-form-group">
-      <label>Target</label>
-      <input type="text" name="system.target" value="{{system.target}}"
-             placeholder="e.g. 1 creature, Self, Zone" />
     </div>
 
     {{!-- Base Effect — fills a large portion of remaining space --}}
@@ -62,7 +77,11 @@
     </div>
 
     {{!-- Momentum spend table — each row: threshold (e.g. "1+") + effect text --}}
-    <div class="item-section-label">Momentum</div>
+    <div class="item-section-label momentum-label-row">
+      <span>Momentum</span>
+      <a class="dynamic-row-add" data-field="momentum" title="Add row"><i class="fas fa-plus"></i> Add</a>
+    </div>
+    <p class="spell-momentum-intro">When casting this spell, Momentum gained may be used for the following additional effects:</p>
     <table class="mc3-effect-table">
       <thead>
         <tr>
@@ -79,8 +98,9 @@
                    value="{{this.threshold}}" placeholder="1+" />
           </td>
           <td>
-            <input type="text" name="system.momentum.{{@index}}.effect"
-                   value="{{this.effect}}" placeholder="Effect description..." />
+            <textarea name="system.momentum.{{@index}}.effect"
+                      rows="2"
+                      placeholder="Effect description...">{{this.effect}}</textarea>
           </td>
           <td class="effect-controls-col">
             <a class="dynamic-row-delete" data-field="momentum" data-index="{{@index}}" title="Remove">
@@ -91,7 +111,6 @@
         {{/each}}
       </tbody>
     </table>
-    <a class="dynamic-row-add" data-field="momentum"><i class="fas fa-plus"></i> Add</a>
 
   </section>
 </form>
