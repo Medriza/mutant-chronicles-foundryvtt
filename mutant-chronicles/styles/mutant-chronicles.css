@@ -3537,3 +3537,317 @@ a.skill-roll:hover {
 }
 
 /* ── End Life Path Tab ───────────────────────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MC3 JOURNAL PAGES
+   Wrap all journal page content in <div class="mc3-journal"> to scope these
+   styles. Uses the same font and colour palette as the character sheet.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.mc3-journal {
+  color: #2a1e08;
+  font-family: 'Oswald', sans-serif;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 720px;
+  padding: 8px 12px;
+}
+
+/* Headings */
+.mc3-journal h1 {
+  background: #2a2010;
+  border-radius: 2px;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.4em;
+  letter-spacing: 0.06em;
+  margin: 0 0 14px 0;
+  padding: 8px 16px;
+  text-align: center;
+}
+
+.mc3-journal h2 {
+  background: #3a2e18;
+  border-radius: 2px;
+  clear: right;       /* always drops below any right-floated sidebar */
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.1em;
+  letter-spacing: 0.05em;
+  margin: 18px 0 8px 0;
+  padding: 5px 12px;
+}
+
+.mc3-journal h3 {
+  color: #2a2010;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1em;
+  letter-spacing: 0.04em;
+  margin: 12px 0 6px 0;
+}
+
+/* Body text */
+.mc3-journal p {
+  font-size: 1em;
+  margin: 0 0 10px 0;
+}
+
+/* Sidebar — floats right, styled like the book's ruled box.
+   Targets both the classed form and bare <aside> since Foundry strips classes. */
+.mc3-journal aside.mc3-sidebar,
+.mc3-journal aside {
+  background: #f2e8c4;
+  border: 2px solid #8a7040;
+  border-radius: 3px;
+  float: right;
+  margin: 0 0 14px 18px;
+  padding: 10px 14px;
+  width: 52%;
+}
+
+.mc3-journal aside.mc3-sidebar h3 {
+  border-bottom: 1px solid #8a7040;
+  font-size: 1em;
+  margin: 0 0 8px 0;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.mc3-journal aside.mc3-sidebar p {
+  font-size: 0.9em;
+  margin: 0 0 8px 0;
+}
+
+.mc3-journal aside.mc3-sidebar p:last-child {
+  margin-bottom: 0;
+}
+
+/* Clearfix so the journal div encloses any floated sidebars */
+.mc3-journal::after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+/* Tables */
+.mc3-journal table {
+  border-collapse: collapse;
+  margin: 12px 0;
+  width: 100%;
+}
+
+.mc3-journal table thead tr {
+  background: #2a2010;
+}
+
+.mc3-journal table thead th {
+  border-right: 1px solid #3a3010;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.95em;
+  font-weight: 400;   /* Bebas Neue has no true bold — browser default bold looks wrong */
+  letter-spacing: 0.03em;
+  padding: 5px 8px;
+  text-align: center;
+}
+
+.mc3-journal table thead th:first-child {
+  text-align: left;
+}
+
+.mc3-journal table thead th:last-child {
+  border-right: none;
+}
+
+.mc3-journal table tbody tr:nth-child(even) {
+  background: rgba(200, 184, 122, 0.22);
+}
+
+.mc3-journal table tbody td {
+  border-bottom: 1px solid rgba(138, 112, 64, 0.25);
+  border-right: 1px solid rgba(138, 112, 64, 0.25);
+  font-size: 0.92em;
+  padding: 4px 8px;
+  vertical-align: top;
+}
+
+.mc3-journal table tbody td:last-child {
+  border-right: none;
+}
+
+/* Roll column — narrow, centred */
+.mc3-journal table tbody td:first-child {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.95em;
+  text-align: center;
+  width: 40px;
+}
+
+/* Callout box — for rules reminders, tips, warnings */
+.mc3-journal .mc3-callout {
+  background: rgba(200, 184, 122, 0.20);
+  border-left: 4px solid #c8a84b;
+  border-radius: 0 2px 2px 0;
+  font-size: 1em;
+  margin: 12px 0;
+  padding: 8px 12px;
+}
+
+/* Side-by-side table wrapper — used when two small tables sit next to each other */
+.mc3-journal .mc3-table-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.mc3-journal .mc3-table-col {
+  flex: 1 1 0;
+}
+
+.mc3-journal .mc3-table-col table {
+  margin: 0;
+}
+
+/* Footnote text — sits below a table, small and italic */
+.mc3-journal .mc3-footnote {
+  color: #5a4020;
+  font-size: 0.82em;
+  font-style: italic;
+  line-height: 1.5;
+  margin: 4px 0 12px 0;
+}
+
+/* Bullet lists — applies to both .mc3-laws (classed) and plain <ul> (unclassed,
+   since Foundry strips classes from ul elements) */
+.mc3-journal .mc3-laws,
+.mc3-journal ul {
+  list-style: none;
+  margin: 6px 0 10px 0;
+  padding: 0;
+}
+
+.mc3-journal .mc3-laws li,
+.mc3-journal ul li {
+  border-bottom: 1px solid rgba(138, 112, 64, 0.20);
+  font-size: 1em;
+  padding: 5px 0 5px 4px;
+}
+
+.mc3-journal .mc3-laws li:last-child,
+.mc3-journal ul li:last-child {
+  border-bottom: none;
+}
+
+.mc3-journal .mc3-laws li strong,
+.mc3-journal ul li strong {
+  color: #2a1e08;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.05em;
+  letter-spacing: 0.03em;
+  margin-right: 4px;
+}
+
+/* Faction Event Table — wide reference table, scrolls horizontally if needed */
+.mc3-journal .mc3-event-table-wrap {
+  overflow-x: auto;
+}
+
+.mc3-journal .mc3-event-table {
+  min-width: 860px;
+}
+
+.mc3-journal .mc3-event-table thead th {
+  font-size: 0.85em;
+  width: calc((100% - 44px) / 6); /* equal faction columns */
+}
+
+.mc3-journal .mc3-event-table thead th:first-child {
+  width: 44px;
+}
+
+.mc3-journal .mc3-event-table tbody td {
+  font-size: 0.82em;
+  vertical-align: top;
+}
+
+/* Attribute improvement grid — table-based, single row of 8 */
+.mc3-journal table.mc3-attr-grid {
+  border-collapse: separate;
+  border-spacing: 1px;
+  background: #2a2010;
+  margin: 6px 0 10px 0;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.mc3-journal table.mc3-attr-grid thead tr {
+  background: transparent;
+}
+
+.mc3-journal table.mc3-attr-grid thead th {
+  background: #3a2e18;
+  border-right: none;
+  color: #c8b060;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.78em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  padding: 3px 2px 1px 2px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.mc3-journal table.mc3-attr-grid tbody tr {
+  background: transparent;
+}
+
+.mc3-journal table.mc3-attr-grid tbody td {
+  background: #3a2e18;
+  border-bottom: none;
+  border-right: none;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1em;
+  font-weight: 400;
+  padding: 2px 2px 4px 2px;
+  text-align: center !important;
+  vertical-align: middle;
+}
+
+/* Education / Career entry block */
+.mc3-journal .mc3-entry {
+  border-bottom: 1px solid rgba(138, 112, 64, 0.30);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+}
+
+.mc3-journal .mc3-entry:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.mc3-journal .mc3-entry p {
+  margin: 0 0 1px 0 !important;
+  line-height: 1.4;
+}
+
+/* All journal h2s are flex rows — era spans (when present) push to the right.
+   Regular section headers have no child span, so they are visually unchanged. */
+.mc3-journal h2 {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Era text — plain span inside the flex h2; Foundry strips classes from spans
+   so we target the element directly. Floats to the right via justify-content. */
+.mc3-journal h2.mc3-iconic-header span {
+  flex-shrink: 0;
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+  margin-left: 12px;
+  opacity: 0.85;
+}
+
+/* ── End MC3 Journal Pages ───────────────────────────────────────────────── */
