@@ -3850,4 +3850,17 @@ a.skill-roll:hover {
   opacity: 0.85;
 }
 
+/* Tables inside sidebars — auto width so they don't stretch to fill the float */
+.mc3-journal aside.mc3-sidebar table {
+  width: auto;
+  min-width: 160px;
+}
+
+/* Last column (Bonus / value column) in sidebar tables — narrow and centered */
+.mc3-journal aside.mc3-sidebar table th:last-child,
+.mc3-journal aside.mc3-sidebar table td:last-child {
+  text-align: center !important;
+  width: 64px;
+}
+
 /* ── End MC3 Journal Pages ───────────────────────────────────────────────── */

@@ -138,7 +138,7 @@
       <tbody>
         {{#each system.lifePath.attributeContributions as |contrib attr|}}
         <tr>
-          <td class="matrix-label">{{attr}}</td>
+          <td class="matrix-label">{{camelToTitle attr}}</td>
           <td><input type="number"
                name="system.lifePath.attributeContributions.{{attr}}.starting"
                value="{{contrib.starting}}" /></td>
@@ -191,7 +191,7 @@
       <tbody>
         {{#each system.lifePath.skillContributions as |contrib skill|}}
         <tr>
-          <td class="matrix-label">{{skill}}</td>
+          <td class="matrix-label">{{camelToTitle skill}}</td>
           <td><input type="checkbox"
                name="system.lifePath.skillContributions.{{skill}}.signature"
                data-dtype="Boolean" {{#if contrib.signature}}checked{{/if}} /></td>
