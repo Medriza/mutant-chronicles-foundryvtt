@@ -73,15 +73,18 @@
       </div>
     </div>{{!-- end .weapon-stats-grid --}}
 
-    {{!-- Qualities --}}
-    <div class="item-form-group">
-      <label>Qualities</label>
-      <input type="text" name="system.qualities" value="{{system.qualities}}"
-             placeholder="e.g. Armour Piercing 1, Vicious 1" />
-    </div>
-
-    {{!-- Restriction + Cost --}}
+{{!-- Weapon Type + Restriction + Cost --}}
     <div class="item-form-row">
+      <div class="item-form-group">
+        <label>Weapon Type</label>
+        <select name="system.weaponType">
+          <option value="melee"   {{#if (eq system.weaponType "melee")}}selected{{/if}}>Melee</option>
+          <option value="unarmed" {{#if (eq system.weaponType "unarmed")}}selected{{/if}}>Unarmed</option>
+          <option value="ranged"  {{#if (eq system.weaponType "ranged")}}selected{{/if}}>Ranged</option>
+          <option value="heavy"   {{#if (eq system.weaponType "heavy")}}selected{{/if}}>Heavy</option>
+          <option value="gunnery" {{#if (eq system.weaponType "gunnery")}}selected{{/if}}>Gunnery</option>
+        </select>
+      </div>
       <div class="item-form-group">
         <label>Restriction</label>
         <input type="number" name="system.restriction" value="{{system.restriction}}" min="0" />
@@ -92,17 +95,24 @@
       </div>
     </div>
 
+    {{!-- Qualities --}}
+    <div class="item-form-group">
+      <label>Qualities</label>
+      <input type="text" name="system.qualities" value="{{system.qualities}}"
+             placeholder="" />
+    </div>
+
     {{!-- Faction --}}
     <div class="item-form-group">
       <label>Faction</label>
       <input type="text" name="system.faction" value="{{system.faction}}"
-             placeholder="e.g. Bauhaus, Brotherhood" />
+             placeholder="" />
     </div>
 
     {{!-- Description --}}
     <div class="item-form-group item-form-group--grow">
       <label>Description</label>
-      <textarea name="system.description" placeholder="Weapon description, special rules...">{{system.description}}</textarea>
+      <textarea name="system.description" placeholder="">{{system.description}}</textarea>
     </div>
 
   </section>

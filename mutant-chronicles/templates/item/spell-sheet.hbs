@@ -60,12 +60,12 @@
       <div class="item-form-group">
         <label>Target</label>
         <input type="text" name="system.target" value="{{system.target}}"
-               placeholder="e.g. 1 creature, Self, Zone" />
+               placeholder="" />
       </div>
       <div class="item-form-group">
         <label>Duration</label>
         <input type="text" name="system.duration" value="{{system.duration}}"
-               placeholder="e.g. Instant, Scene" />
+               placeholder="" />
       </div>
     </div>
 
@@ -73,7 +73,7 @@
     <div class="item-form-group item-form-group--grow spell-base-effect">
       <label>Base Effect</label>
       <textarea name="system.baseEffect"
-                placeholder="Core spell effect, rules text, momentum spends...">{{system.baseEffect}}</textarea>
+                placeholder="">{{system.baseEffect}}</textarea>
     </div>
 
     {{!-- Momentum spend table — each row: threshold (e.g. "1+") + effect text --}}
@@ -100,7 +100,7 @@
           <td>
             <textarea name="system.momentum.{{@index}}.effect"
                       rows="2"
-                      placeholder="Effect description...">{{this.effect}}</textarea>
+                      placeholder="">{{this.effect}}</textarea>
           </td>
           <td class="effect-controls-col">
             <a class="dynamic-row-delete" data-field="momentum" data-index="{{@index}}" title="Remove">
