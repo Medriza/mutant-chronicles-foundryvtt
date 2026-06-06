@@ -3931,3 +3931,258 @@ a.skill-roll:hover {
 }
 
 /* ── End MC3 Journal Pages ───────────────────────────────────────────────── */
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   MODULE 9 — POOL TRACKER  (ApplicationV2 floating window)
+   Window element:  #mc3-pool-tracker    (id from DEFAULT_OPTIONS.id)
+   Window class:    .mc3-pool-tracker    (classes from DEFAULT_OPTIONS.classes)
+   HBS root div:    .mc3-pools-body      (top-level wrapper in pool-tracker.hbs)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Window chrome ─────────────────────────────────────────────────────────── */
+#mc3-pool-tracker {
+  background: #1a1410;
+  border: 1px solid #8a7040;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.75),
+              inset 0 0 0 1px rgba(200, 184, 122, 0.06);
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  min-width: 240px;
+}
+
+#mc3-pool-tracker .window-header {
+  background: linear-gradient(180deg, #2e2410 0%, #1e180a 100%);
+  border-bottom: 1px solid #6a5830;
+  padding: 5px 10px;
+}
+
+#mc3-pool-tracker .window-title {
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.05em;
+  letter-spacing: 0.14em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+#mc3-pool-tracker .window-content {
+  background: #1a1410;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── Body wrapper ──────────────────────────────────────────────────────────── */
+.mc3-pools-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Section containers ────────────────────────────────────────────────────── */
+.mc3-pools-body .pool-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 0 14px;
+}
+
+.mc3-pools-body .ds-section {
+  border-top: 1px solid rgba(138, 112, 64, 0.25);
+  background: rgba(80, 10, 10, 0.06);
+}
+
+/* ── Section header band ───────────────────────────────────────────────────── */
+.mc3-pools-body .pool-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 5px 12px;
+  background: #2a2010;
+  border-bottom: 1px solid rgba(232, 208, 128, 0.15);
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.85em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mc3-pools-body .pool-header i {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+.mc3-pools-body .pool-header.ds-header {
+  background: #220a0a;
+  border-bottom-color: rgba(140, 30, 30, 0.35);
+  color: #c04040;
+}
+
+.mc3-pools-body .pool-header.ds-header i {
+  color: #8b2020;
+}
+
+/* ── Momentum display area ─────────────────────────────────────────────────── */
+.mc3-pools-body .momentum-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 0;
+}
+
+/* ── Momentum pip circles ──────────────────────────────────────────────────── */
+.mc3-pools-body .momentum-pips {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mc3-pools-body .momentum-pip {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #5a4820;
+  background: rgba(200, 184, 122, 0.06);
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  flex-shrink: 0;
+}
+
+.mc3-pools-body .momentum-pip.filled {
+  background: radial-gradient(circle at 35% 35%, #f0dc90 0%, #c8a84b 55%, #7a5a18 100%);
+  border-color: #d8c060;
+  box-shadow: 0 0 7px rgba(220, 192, 80, 0.65),
+              inset 0 1px 3px rgba(255, 255, 200, 0.35);
+}
+
+/* ── DS large number display ───────────────────────────────────────────────── */
+.mc3-pools-body .ds-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px 0;
+}
+
+.mc3-pools-body .ds-value {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 3.6em;
+  line-height: 1;
+  color: #922020;
+  text-shadow: 0 0 16px rgba(180, 20, 20, 0.45),
+               0 2px 5px rgba(0, 0, 0, 0.9);
+  letter-spacing: 0.04em;
+}
+
+/* ── +/− controls row ─────────────────────────────────────────────────────── */
+.mc3-pools-body .pool-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 12px;
+}
+
+.mc3-pools-body .pool-value {
+  min-width: 30px;
+  text-align: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.35em;
+  font-weight: 500;
+  color: #c8b87a;
+  line-height: 1;
+}
+
+.mc3-pools-body .ds-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.78em;
+  color: #804040;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* ── +/− buttons ──────────────────────────────────────────────────────────── */
+.mc3-pools-body .pool-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #6a5830;
+  border-radius: 3px;
+  background: rgba(200, 184, 122, 0.08);
+  color: #b8a868;
+  font-size: 1.1em;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.mc3-pools-body .pool-btn:hover:not(:disabled) {
+  background: rgba(200, 184, 122, 0.22);
+  border-color: #b8a060;
+  color: #e8d080;
+}
+
+.mc3-pools-body .pool-btn:disabled {
+  opacity: 0.22;
+  cursor: default;
+}
+
+/* DS section buttons ── red tones */
+.mc3-pools-body .ds-section .pool-btn {
+  border-color: #5a1010;
+  background: rgba(107, 16, 16, 0.12);
+  color: #a03030;
+}
+
+.mc3-pools-body .ds-section .pool-btn:hover:not(:disabled) {
+  background: rgba(107, 16, 16, 0.30);
+  border-color: #922020;
+  color: #d04040;
+}
+
+/* ── New Session button ────────────────────────────────────────────────────── */
+.mc3-pools-body .pool-actions {
+  display: flex;
+  justify-content: center;
+  padding: 0 12px;
+  margin-top: 2px;
+}
+
+.mc3-pools-body .new-session-btn {
+  padding: 4px 14px;
+  border: 1px solid #4a0e0e;
+  border-radius: 3px;
+  background: rgba(107, 16, 16, 0.15);
+  color: #b03030;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 0.88em;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mc3-pools-body .new-session-btn i {
+  font-size: 0.82em;
+  opacity: 0.8;
+}
+
+.mc3-pools-body .new-session-btn:hover {
+  background: rgba(107, 16, 16, 0.32);
+  border-color: #8b2020;
+  color: #d04040;
+}
+
+/* ── Read-only view (players) ──────────────────────────────────────────────── */
+.mc3-pools-body .pool-controls.read-only .pool-value {
+  font-size: 1.6em;
+  color: #a89858;
+}
+
+/* ── End Pool Tracker ────────────────────────────────────────────────────── */

@@ -1,0 +1,66 @@
+{{!--
+  MC3 Pool Tracker template.
+  Context from PoolTrackerApp._prepareContext():
+    isGM         {boolean}  — true if the current user is the GM
+    momentum     {number}   — current Group Momentum (0–6)
+    momentumPips {Array}    — 6 objects: [{ filled: bool }, ...]
+    darkSymmetry {number}   — current Dark Symmetry value
+--}}
+
+<div class="mc3-pools-body">
+
+  {{!-- ── GROUP MOMENTUM ──────────────────────────────────────────────── --}}
+  <section class="pool-section momentum-section">
+    <div class="pool-header">
+      <i class="fas fa-bolt"></i>
+      <span>Group Momentum</span>
+    </div>
+
+    <div class="momentum-display">
+      {{!-- Six pip circles --}}
+      <div class="momentum-pips">
+        {{#each momentumPips}}
+          <div class="momentum-pip {{#if this.filled}}filled{{/if}}"></div>
+        {{/each}}
+      </div>
+
+      {{#if isGM}}
+      <div class="pool-controls">
+        <button class="pool-btn momentum-decrease" title="Spend 1 Momentum" {{#unless momentum}}disabled{{/unless}}>−</button>
+        <span class="pool-value">{{momentum}}</span>
+        <button class="pool-btn momentum-increase" title="Bank 1 Momentum" {{#if (eq momentum 6)}}disabled{{/if}}>+</button>
+      </div>
+      {{else}}
+      <div class="pool-controls read-only">
+        <span class="pool-value">{{momentum}}</span>
+      </div>
+      {{/if}}
+    </div>
+  </section>
+
+  {{!-- ── DARK SYMMETRY ───────────────────────────────────────────────── --}}
+  <section class="pool-section ds-section">
+    <div class="pool-header ds-header">
+      <i class="fas fa-eye"></i>
+      <span>Dark Symmetry</span>
+    </div>
+
+    <div class="ds-display">
+      <span class="ds-value">{{darkSymmetry}}</span>
+    </div>
+
+    {{#if isGM}}
+    <div class="pool-controls">
+      <button class="pool-btn ds-decrease" title="Spend 1 Dark Symmetry" {{#unless darkSymmetry}}disabled{{/unless}}>−</button>
+      <span class="ds-label">pts</span>
+      <button class="pool-btn ds-increase" title="Add 1 Dark Symmetry">+</button>
+    </div>
+    <div class="pool-actions">
+      <button class="new-session-btn" title="Reset Momentum to 0 and set DS to total PC Chronicle Points">
+        <i class="fas fa-hourglass-start"></i> New Session
+      </button>
+    </div>
+    {{/if}}
+  </section>
+
+</div>

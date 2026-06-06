@@ -13,6 +13,7 @@ import { MC3NpcSheet } from "./module/sheets/npc-sheet.js";
 import { MC3ItemSheet } from "./module/sheets/item-sheet.js";
 import { preloadHandlebarsTemplates } from "./module/templates.js";
 import { registerRollHelpers } from "./module/dice/mc3-roll.js";
+import { PoolTrackerApp } from "./module/apps/pool-tracker.js";
 
 const { Actors, Items } = foundry.documents.collections;
 
@@ -29,6 +30,33 @@ Hooks.once('init', () => {
   // the base Actor class. Same for Item.
   CONFIG.Actor.documentClass = MC3Actor;
   CONFIG.Item.documentClass  = MC3Item;
+
+  // ---------------------------------------------------------------------------
+  // World settings — persisted server-side, synced to all clients automatically.
+  // config: false hides them from the Settings UI; we manage them via our own HUD.
+  // ---------------------------------------------------------------------------
+  game.settings.register('mutant-chronicles', 'momentumPool', {
+    name: 'Group Momentum Pool',
+    scope: 'world',
+    config: false,
+    type: Number,
+    default: 0,
+  });
+
+  game.settings.register('mutant-chronicles', 'darkSymmetryPool', {
+    name: 'Dark Symmetry Pool',
+    scope: 'world',
+    config: false,
+    type: Number,
+    default: 0,
+  });
+
+  // ---------------------------------------------------------------------------
+  // Pool Tracker — register as a UI singleton so ui.mc3pools is always
+  // available. The updateSetting hook and the hotbar macro both reference it.
+  // Open via macro: ui.mc3pools.render({ force: true })
+  // ---------------------------------------------------------------------------
+  CONFIG.ui.mc3pools = PoolTrackerApp;
 
   // Register custom Handlebars helpers (ne, etc.) used by dice templates.
   registerRollHelpers();
@@ -55,4 +83,21 @@ Hooks.once('init', () => {
     makeDefault: true,
     label: 'MC3.SheetClassItem'
   });
+});
+
+// ---------------------------------------------------------------------------
+// Re-render the pool tracker on every client whenever a pool setting changes.
+//
+// game.settings.set() for a world setting updates a Setting document on the
+// server, which Foundry then broadcasts to all connected clients — triggering
+// this hook on each machine. So the GM clicks +/−, and every player's sidebar
+// tab refreshes automatically with the new value.
+// ---------------------------------------------------------------------------
+Hooks.on('updateSetting', (setting) => {
+  if (
+    setting.key === 'mutant-chronicles.momentumPool' ||
+    setting.key === 'mutant-chronicles.darkSymmetryPool'
+  ) {
+    ui.mc3pools?.render();
+  }
 });

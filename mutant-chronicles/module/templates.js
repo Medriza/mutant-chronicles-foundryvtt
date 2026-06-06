@@ -40,6 +40,7 @@ export async function preloadHandlebarsTemplates() {
   // network delay when the first dialog or chat card fires.
   // NOTE: roll-chat.hbs is added here in Lesson 6.5 once the file exists.
   await foundry.applications.handlebars.loadTemplates([
+    "systems/mutant-chronicles/templates/apps/pool-tracker.hbs",
     "systems/mutant-chronicles/templates/dice/roll-dialog.hbs",
     "systems/mutant-chronicles/templates/dice/roll-chat.hbs",
     // Item sheets — one per type
