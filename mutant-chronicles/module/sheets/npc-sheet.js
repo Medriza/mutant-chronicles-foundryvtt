@@ -74,6 +74,7 @@ export class MC3NpcSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
     html.find('.expertise-roll').click(this._onRollExpertise.bind(this));
+    html.find('.weapon-attack').click(this._onWeaponAttack.bind(this));
     if (!this.isEditable) return;
 
     // Item CRUD — same pattern as character-sheet.js.
@@ -140,6 +141,28 @@ export class MC3NpcSheet extends ActorSheet {
     }
 
     if (toCreate.length) return super._onDropItemCreate(toCreate);
+  }
+
+  /**
+   * Click on an attack name in the Attacks table: trigger a Combat FoE roll.
+   *
+   * NPCs don't differentiate weapon types — all attacks use the Combat Field
+   * of Expertise regardless of whether the weapon is melee, ranged, or heavy.
+   * This contrasts with the PC sheet, which maps weaponType → specific skill.
+   */
+  async _onWeaponAttack(event) {
+    event.preventDefault();
+    const li     = event.currentTarget.closest('[data-item-id]');
+    const weapon = this.actor.items.get(li.dataset.itemId);
+    if (!weapon) return;
+
+    const expertise = this.actor.system.expertise?.combat;
+    if (!expertise) return;
+
+    const rollParams = await showExpertiseRollDialog(this.actor, 'combat', expertise);
+    if (!rollParams?.numDice) return;
+    const rollResult = await rollMC3({ ...rollParams, actor: this.actor });
+    await sendRollToChat(rollResult);
   }
 
   async _onRollExpertise(event) {

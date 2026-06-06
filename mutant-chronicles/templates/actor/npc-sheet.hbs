@@ -276,7 +276,7 @@
         <tbody>
           {{#each attacks as |attack|}}
           <tr class="item" data-item-id="{{attack.id}}">
-            <td>{{attack.name}}</td>
+            <td><a class="weapon-attack">{{attack.name}}</a></td>
             <td>{{attack.system.weaponType}}</td>
             <td>{{attack.system.range}}</td>
             <td>{{attack.system.damageFlat}}+{{attack.system.damageDice}}CD</td>

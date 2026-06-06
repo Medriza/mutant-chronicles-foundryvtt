@@ -13,6 +13,20 @@ import { rollMC3, sendRollToChat }      from '../dice/mc3-roll.js';
 
 const { ActorSheet } = foundry.appv1.sheets;
 
+/**
+ * Maps a weapon's weaponType value to the name of the skill used for attack rolls.
+ * Stored at module level so it's defined once and shared by any method that needs it.
+ * Using an object as a lookup table (rather than a switch or if/else chain) keeps
+ * the mapping readable and easy to extend if new weapon types are added later.
+ */
+const WEAPON_SKILL_MAP = {
+  melee:   'Close Combat',
+  unarmed: 'Unarmed Combat',
+  ranged:  'Ranged Weapons',
+  heavy:   'Heavy Weapons',
+  gunnery: 'Gunnery',
+};
+
 export class MC3CharacterSheet extends ActorSheet {
 
   /**
@@ -269,6 +283,7 @@ export class MC3CharacterSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
     html.find('.skill-roll').click(this._onRollSkill.bind(this));
+    html.find('.weapon-attack').click(this._onWeaponAttack.bind(this));
 
     // Don't wire up edit handlers if the current user can't edit the sheet
     // (e.g. a player viewing another player's sheet without owner permission).
@@ -480,6 +495,42 @@ export class MC3CharacterSheet extends ActorSheet {
     const current = this.actor.system.dread?.value ?? 0;
     const next = Math.max(current - 1, 0);
     if (next !== current) await this.actor.update({ 'system.dread.value': next });
+  }
+
+  /**
+   * Click on a weapon name in the Gear tab: look up the governing skill from
+   * WEAPON_SKILL_MAP and open a skill roll dialog pre-populated for that weapon.
+   *
+   * The pattern here — weapon holds a type key, map translates it to a skill name,
+   * we find that skill in the actor's items — will recur in Lesson 9.4 for NPCs.
+   */
+  async _onWeaponAttack(event) {
+    event.preventDefault();
+    const li     = event.currentTarget.closest('[data-item-id]');
+    const weapon = this.actor.items.get(li.dataset.itemId);
+    if (!weapon) return;
+
+    // Translate weaponType → skill name. If the type isn't in the map
+    // (e.g. a weapon was created before 9.2 and has no type set), warn and bail.
+    const skillName = WEAPON_SKILL_MAP[weapon.system.weaponType];
+    if (!skillName) {
+      ui.notifications.warn(`No skill mapped for weapon type "${weapon.system.weaponType}". Open the weapon and set its type.`);
+      return;
+    }
+
+    // Find the skill item on this actor. A character without the relevant skill
+    // (e.g. no Gunnery) gets a helpful warning rather than a silent failure.
+    const skill = this.actor.items.find(i => i.type === 'skill' && i.name === skillName);
+    if (!skill) {
+      ui.notifications.warn(`${this.actor.name} doesn't have the ${skillName} skill.`);
+      return;
+    }
+
+    // From here it's identical to _onRollSkill — same dialog, same pipeline.
+    const rollParams = await showSkillRollDialog(this.actor, skill);
+    if (!rollParams?.numDice) return;
+    const rollResult = await rollMC3({ ...rollParams, actor: this.actor });
+    await sendRollToChat(rollResult);
   }
 
   async _onRollSkill(event) {
