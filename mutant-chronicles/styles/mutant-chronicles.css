@@ -2272,9 +2272,15 @@ a.skill-roll:hover {
 .app.mc3.item .weapon-stats-grid .wsg-dmg-sep,
 .app.mc3.item .weapon-stats-grid .wsg-dmg-cd {
   color: #5a4020;
-  font-size: 0.78em;
+  font-size: 1.2em;
   flex: 0 0 auto;
   line-height: 1;
+}
+
+/* Dark Symmetry Dice icon — used inline in gear/attack tables */
+.dsd-icon {
+  font-size: 1.1em;
+  color: #5a4020;
 }
 
 /* Size select — slightly wider for text options */
