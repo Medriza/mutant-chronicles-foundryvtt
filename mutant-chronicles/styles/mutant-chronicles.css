@@ -3593,7 +3593,9 @@ a.skill-roll:hover {
 }
 
 /* Sidebar — floats right, styled like the book's ruled box.
-   Targets both the classed form and bare <aside> since Foundry strips classes. */
+   Targets both the classed form and bare <aside> since Foundry strips classes.
+   width: fit-content lets the aside shrink to its content (the table columns);
+   max-width: 52% keeps it from ever being wider than half the journal. */
 .mc3-journal aside.mc3-sidebar,
 .mc3-journal aside {
   background: #f2e8c4;
@@ -3602,7 +3604,8 @@ a.skill-roll:hover {
   float: right;
   margin: 0 0 14px 18px;
   padding: 10px 14px;
-  width: 52%;
+  width: fit-content;
+  max-width: 52%;
 }
 
 .mc3-journal aside.mc3-sidebar h3 {
@@ -3683,6 +3686,62 @@ a.skill-roll:hover {
   width: 40px;
 }
 
+/* Aging table — both headers nowrap (sizes the aside to fit "ATTRIBUTE AFFECTED");
+   Roll column centered and narrow, Attribute column takes remaining width */
+.mc3-journal table.mc3-aging-table thead th {
+  white-space: nowrap;
+}
+.mc3-journal table.mc3-aging-table thead th:first-child,
+.mc3-journal table.mc3-aging-table tbody td:first-child {
+  text-align: center;
+  width: 1%;          /* compress to minimum — content determines actual width */
+  white-space: nowrap;
+}
+
+/* Decision 2 faction/skills table — fixed layout, Faction col wider, Skills col trimmed */
+.mc3-journal table.mc3-faction-skills-table {
+  table-layout: fixed;
+}
+.mc3-journal table.mc3-faction-skills-table thead th:nth-child(1) { width: 18%; text-align: center; }
+.mc3-journal table.mc3-faction-skills-table thead th:nth-child(2) { width: 22%; }
+.mc3-journal table.mc3-faction-skills-table thead th:nth-child(3) { width: 30%; }
+.mc3-journal table.mc3-faction-skills-table thead th:nth-child(4) { width: 30%; }
+
+/* Region Table — fixed layout; Environment col 20%, three faction cols share remaining 80% equally */
+.mc3-journal table.mc3-region-table {
+  table-layout: fixed;
+}
+.mc3-journal table.mc3-region-table thead th {
+  text-align: center;
+}
+.mc3-journal table.mc3-region-table thead th:first-child {
+  text-align: center;
+  width: 20%;
+}
+
+/* Decision 4 Regional Equipment table — first col sized to header, not capped at 40px */
+.mc3-journal table.mc3-env-equipment thead th:first-child {
+  white-space: nowrap;    /* "ENVIRONMENT" header sets the column's minimum width */
+  text-align: center;     /* override global th:first-child left-align */
+}
+.mc3-journal table.mc3-env-equipment tbody td:first-child {
+  width: auto;            /* override the global 40px */
+}
+
+/* Starting Wounds table — first col nowrap, all data centered, value cols compact */
+.mc3-journal table.mc3-wounds-table thead th:first-child {
+  text-align: center;     /* override global th:first-child left-align */
+  white-space: nowrap;    /* keep "PHYS + STR" on one line */
+}
+.mc3-journal table.mc3-wounds-table tbody td:first-child {
+  text-align: center;
+  white-space: nowrap;    /* keep "10-11" etc. on one line */
+  width: auto;            /* override the global 40px */
+}
+.mc3-journal table.mc3-wounds-table tbody td {
+  text-align: center;
+}
+
 /* Callout box — for rules reminders, tips, warnings */
 .mc3-journal .mc3-callout {
   background: rgba(200, 184, 122, 0.20);
@@ -3753,12 +3812,11 @@ a.skill-roll:hover {
 }
 
 .mc3-journal .mc3-event-table {
-  min-width: 860px;
+  width: 100%;
 }
 
 .mc3-journal .mc3-event-table thead th {
-  font-size: 0.85em;
-  width: calc((100% - 44px) / 6); /* equal faction columns */
+  width: calc((100% - 44px) / 3); /* 3 faction columns per table */
 }
 
 .mc3-journal .mc3-event-table thead th:first-child {
@@ -3766,7 +3824,6 @@ a.skill-roll:hover {
 }
 
 .mc3-journal .mc3-event-table tbody td {
-  font-size: 0.82em;
   vertical-align: top;
 }
 
@@ -3850,15 +3907,25 @@ a.skill-roll:hover {
   opacity: 0.85;
 }
 
-/* Tables inside sidebars — auto width so they don't stretch to fill the float */
-.mc3-journal aside.mc3-sidebar table {
-  width: auto;
-  min-width: 160px;
+/* Tables inside sidebars — fill the aside (which is already fit-content sized).
+   Both selectors needed: Foundry strips class attrs from <aside> in its editor. */
+.mc3-journal aside.mc3-sidebar table,
+.mc3-journal aside table {
+  width: 100%;
+  min-width: 0;
+}
+
+/* All header cells in sidebar tables — centered (overrides global th:first-child left) */
+.mc3-journal aside.mc3-sidebar table thead th,
+.mc3-journal aside table thead th {
+  text-align: center;
 }
 
 /* Last column (Bonus / value column) in sidebar tables — narrow and centered */
 .mc3-journal aside.mc3-sidebar table th:last-child,
-.mc3-journal aside.mc3-sidebar table td:last-child {
+.mc3-journal aside.mc3-sidebar table td:last-child,
+.mc3-journal aside table th:last-child,
+.mc3-journal aside table td:last-child {
   text-align: center !important;
   width: 64px;
 }
