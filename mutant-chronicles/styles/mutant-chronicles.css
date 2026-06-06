@@ -4000,13 +4000,13 @@ a.skill-roll:hover {
   border-bottom: 1px solid rgba(232, 208, 128, 0.15);
   color: #e8d080;
   font-family: 'Bebas Neue', 'Impact', sans-serif;
-  font-size: 0.85em;
+  font-size: 1.1em;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .mc3-pools-body .pool-header i {
-  font-size: 0.85em;
+  font-size: 0.9em;
   opacity: 0.8;
 }
 
@@ -4084,7 +4084,7 @@ a.skill-roll:hover {
   min-width: 30px;
   text-align: center;
   font-family: 'Oswald', sans-serif;
-  font-size: 1.35em;
+  font-size: 1.8em;
   font-weight: 500;
   color: #c8b87a;
   line-height: 1;
