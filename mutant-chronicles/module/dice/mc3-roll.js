@@ -82,8 +82,7 @@ export async function sendRollToChat(rollResult) {
  *
  * @returns {Promise<object>} rollResult — see structure below
  */
-export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel }) {
-
+export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel, rollFormula, weaponName }) {
   // ── 1. Roll the dice ──────────────────────────────────────────────────────
   // Foundry's Roll class evaluates a dice expression and stores each
   // individual die result in roll.dice[0].results. We ask for numDice d20s.
@@ -128,6 +127,8 @@ export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel }) {
   // Every key here maps directly to a {{variable}} in roll-chat.hbs.
   return {
     rollLabel,
+    rollFormula,
+    weaponName,
     tn,
     focus,
     difficulty,

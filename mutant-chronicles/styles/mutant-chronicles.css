@@ -141,7 +141,7 @@
   border: 1px solid #3d3020;
   border-radius: 4px;
   color: #d0c8b8;
-  font-size: 0.9em;
+  font-size: 14px;
   overflow: hidden;
   margin: 2px 0;
 }
@@ -155,9 +155,9 @@
 }
 
 .roll-card-title {
-  color: #c8a84b;           /* brass / corporate gold */
-  font-size: 1em;
-  font-weight: 700;
+  color: #e8c860;           /* bright gold — matches .roll-card-weapon-name */
+  font-size: 1.35em;
+  font-weight: 400;         /* Bebas has no true bold */
   letter-spacing: 0.06em;
   margin: 0 0 3px 0;
   padding: 0;
@@ -167,12 +167,51 @@
   line-height: 1.2;
 }
 
+/* Weapon name — shown above the skill name when a weapon attack is rolled.
+   Larger and brighter than the skill line so it reads first. */
+.roll-card-weapon-name {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  color: #e8c860;           /* brighter gold — more prominent than skill */
+  font-size: 1.35em;
+  font-weight: 400;         /* Bebas has no true bold; 400 renders cleanest */
+  letter-spacing: 0.06em;
+  margin: 0 0 1px 0;
+  padding: 0;
+  border: none;
+  text-shadow: none;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* Formula span — shown after skill/field name in both title and secondary-skill contexts.
+   Smaller and dimmer so the name reads first. */
+.roll-card-formula {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.6em;
+  font-weight: 400;
+  color: #9a8870;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+/* Skill / field name — secondary line shown below the weapon name */
+.roll-card-skill {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  color: #9a8870;
+  font-size: 0.88em;
+  margin: 0 0 3px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .roll-card-meta {
   display: flex;
   gap: 5px;
   align-items: center;
-  color: #7a7060;
-  font-size: 0.8em;
+  color: #a09878;
+  font-size: 0.9em;
 }
 
 .meta-sep {
@@ -201,13 +240,13 @@
 }
 
 .die-value {
-  font-size: 1.05em;
+  font-size: 1.25em;
   font-weight: 700;
   line-height: 1;
 }
 
 .die-successes {
-  font-size: 0.65em;
+  font-size: 0.8em;
   line-height: 1;
   margin-top: 2px;
 }
@@ -231,7 +270,7 @@
 .die-result.miss {
   background: #141414;
   border-color: #282828;
-  color: #484848;
+  color: #6a6a6a;
 }
 
 /* Complication — roll of 20: blood red */
@@ -248,17 +287,18 @@
   gap: 8px;
   align-items: center;
   padding: 4px 10px;
-  font-size: 0.8em;
+  font-size: 0.9em;
   border-top: 1px solid #262220;
   color: #7a7060;
 }
 
 .total-successes {
-  color: #9a9080;
+  color: #c0b090;
 }
 
 .total-complications {
-  color: #8a3030;
+  color: #b83030;
+  font-weight: 700;
 }
 
 /* ── Verdict ─────────────────────────────────────────────────────────────── */
@@ -269,7 +309,7 @@
   gap: 8px;
   padding: 6px 10px;
   border-top: 1px solid #262220;
-  font-size: 0.88em;
+  font-size: 1em;
 }
 
 .roll-card-verdict.success {
@@ -298,8 +338,9 @@
 }
 
 .shortfall {
-  color: #8a3030;
+  color: #b83030;
   font-size: 0.9em;
+  font-weight: 700;
 }
 
 

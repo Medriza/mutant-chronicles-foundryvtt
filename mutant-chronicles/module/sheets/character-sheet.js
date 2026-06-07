@@ -529,7 +529,7 @@ export class MC3CharacterSheet extends ActorSheet {
     // From here it's identical to _onRollSkill — same dialog, same pipeline.
     const rollParams = await showSkillRollDialog(this.actor, skill);
     if (!rollParams?.numDice) return;
-    const rollResult = await rollMC3({ ...rollParams, actor: this.actor });
+    const rollResult = await rollMC3({ ...rollParams, actor: this.actor, weaponName: weapon.name });
     await sendRollToChat(rollResult);
   }
 

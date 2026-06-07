@@ -90,7 +90,8 @@ export async function showSkillRollDialog(actor, skill) {
             focus,
             difficulty,
             numDice:   2 + bonusDice,
-            rollLabel: skill.name,
+            rollLabel:   skill.name,
+            rollFormula: `${ATTRIBUTE_LABELS[attrKey]} ${attrValue} + EXP ${expertise}`,
           };
         },
       },
@@ -159,7 +160,8 @@ export async function showExpertiseRollDialog(actor, field, expertise) {
             focus:     foc,
             difficulty,
             numDice:   2 + bonusDice,
-            rollLabel: `${fieldLabel} (${ATTRIBUTE_LABELS[attrKey] ?? attrKey} ${attrValue} + EXP ${exp})`,
+            rollLabel:   fieldLabel,
+            rollFormula: `${ATTRIBUTE_LABELS[attrKey] ?? attrKey} ${attrValue} + EXP ${exp}`,
           };
         },
       },

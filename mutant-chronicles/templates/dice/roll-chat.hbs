@@ -15,7 +15,12 @@
 
   {{!-- Header: roll name + key numbers --}}
   <div class="roll-card-header">
-    <h3 class="roll-card-title">{{rollLabel}}</h3>
+    {{#if weaponName}}
+      <h3 class="roll-card-weapon-name">{{weaponName}}</h3>
+      <div class="roll-card-skill">{{rollLabel}}{{#if rollFormula}} <span class="roll-card-formula">{{rollFormula}}</span>{{/if}}</div>
+    {{else}}
+      <h3 class="roll-card-title">{{rollLabel}}{{#if rollFormula}} <span class="roll-card-formula">{{rollFormula}}</span>{{/if}}</h3>
+    {{/if}}
     <div class="roll-card-meta">
       <span title="Target Number">TN {{tn}}</span>
       <span class="meta-sep">·</span>
