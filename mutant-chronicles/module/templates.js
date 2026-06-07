@@ -43,6 +43,7 @@ export async function preloadHandlebarsTemplates() {
     "systems/mutant-chronicles/templates/apps/pool-tracker.hbs",
     "systems/mutant-chronicles/templates/dice/roll-dialog.hbs",
     "systems/mutant-chronicles/templates/dice/roll-chat.hbs",
+    "systems/mutant-chronicles/templates/dice/damage-chat.hbs",
     // Item sheets — one per type
     "systems/mutant-chronicles/templates/item/skill-sheet.hbs",
     "systems/mutant-chronicles/templates/item/talent-sheet.hbs",

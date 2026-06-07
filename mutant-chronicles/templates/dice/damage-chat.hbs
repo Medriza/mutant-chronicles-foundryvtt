@@ -1,0 +1,52 @@
+{{!-- ── MC3 Damage Chat Card ─────────────────────────────────────────────── --}}
+{{!-- Rendered into the chat log after a DSD damage roll.
+     Context keys (all set by rollDSD() in damage-roll.js):
+       weaponName    — name of the weapon rolled
+       numDice       — total DSD rolled
+       flatBonus     — weapon's flat damage bonus
+       dice          — array of { result, damage, isDSI, cssClass }
+       totalDamage   — sum of die damage values + flatBonus
+       dsiCount      — number of 6s (Dark Symmetry Icons)                    --}}
+
+<div class="mc3-damage-card">
+
+  {{!-- Header: weapon name + DAMAGE label --}}
+  <div class="damage-card-header">
+    <h3 class="damage-card-title">{{weaponName}}</h3>
+    <div class="damage-card-subtitle">DAMAGE</div>
+  </div>
+
+  {{!-- Per-die results --}}
+  {{#if dice.length}}
+  <div class="damage-card-dice">
+    {{#each dice as |die|}}
+    <div class="dsd-result {{die.cssClass}}"
+         title="{{#if die.isDSI}}Dark Symmetry Icon{{else}}{{die.damage}} damage{{/if}}">
+      <span class="dsd-value">
+        {{#if die.isDSI}}
+          <i class="fas fa-eclipse"></i>
+        {{else}}
+          {{die.damage}}
+        {{/if}}
+      </span>
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+
+  {{!-- Totals --}}
+  <div class="damage-card-totals">
+    <span class="damage-total">
+      <strong>{{totalDamage}}</strong> Damage
+      {{#if flatBonus}}
+        <span class="damage-flat">(+{{flatBonus}} flat)</span>
+      {{/if}}
+    </span>
+    {{#if dsiCount}}
+    <span class="damage-dsi">
+      · {{dsiCount}} DSI <i class="fas fa-eclipse"></i>
+    </span>
+    {{/if}}
+  </div>
+
+</div>

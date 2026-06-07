@@ -529,7 +529,11 @@ export class MC3CharacterSheet extends ActorSheet {
     // From here it's identical to _onRollSkill — same dialog, same pipeline.
     const rollParams = await showSkillRollDialog(this.actor, skill);
     if (!rollParams?.numDice) return;
-    const rollResult = await rollMC3({ ...rollParams, actor: this.actor, weaponName: weapon.name });
+    if (rollParams.dsSpend > 0) {
+      const currentDS = game.settings.get('mutant-chronicles', 'darkSymmetryPool');
+      await game.settings.set('mutant-chronicles', 'darkSymmetryPool', currentDS + rollParams.dsSpend);
+    }
+    const rollResult = await rollMC3({ ...rollParams, actor: this.actor, weaponName: weapon.name, weaponId: weapon.id });
     await sendRollToChat(rollResult);
   }
 
@@ -540,9 +544,11 @@ export class MC3CharacterSheet extends ActorSheet {
 
     // Open the dialog. If the user cancels, rollParams is null — bail out.
     const rollParams = await showSkillRollDialog(this.actor, skill);
-    if (!rollParams) return;
-
     if (!rollParams?.numDice) return;
+    if (rollParams.dsSpend > 0) {
+      const currentDS = game.settings.get('mutant-chronicles', 'darkSymmetryPool');
+      await game.settings.set('mutant-chronicles', 'darkSymmetryPool', currentDS + rollParams.dsSpend);
+    }
     const rollResult = await rollMC3({ ...rollParams, actor: this.actor });
     await sendRollToChat(rollResult);
   }

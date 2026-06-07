@@ -63,6 +63,7 @@ export async function showSkillRollDialog(actor, skill) {
     expertiseValue: expertise,
     focusValue:     focus,
     tn,
+    currentDS: game.settings.get('mutant-chronicles', 'darkSymmetryPool'),
   };
 
   // foundry.applications.handlebars.renderTemplate replaces the deprecated
@@ -85,13 +86,15 @@ export async function showSkillRollDialog(actor, skill) {
           // dialog.element is the root DOM node of the rendered dialog.
           const difficulty = parseInt(dialog.element.querySelector('[name="difficulty"]').value, 10);
           const bonusDice  = parseInt(dialog.element.querySelector('[name="bonusDice"]').value,  10) || 0;
+          const dsSpend    = Math.min(parseInt(dialog.element.querySelector('[name="dsSpend"]').value, 10) || 0, 3);
           return {
             tn,
             focus,
             difficulty,
-            numDice:   2 + bonusDice,
+            numDice:     2 + bonusDice + dsSpend,
             rollLabel:   skill.name,
             rollFormula: `${ATTRIBUTE_LABELS[attrKey]} ${attrValue} + EXP ${expertise}`,
+            dsSpend,
           };
         },
       },

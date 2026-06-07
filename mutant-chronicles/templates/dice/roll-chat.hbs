@@ -71,4 +71,20 @@
     {{/if}}
   </div>
 
+  {{!-- Damage controls — only on successful weapon attack rolls.
+       State (remaining momentum, bonus dice) is managed via ChatMessage flags
+       and kept current by the renderChatMessage hook in mutant-chronicles.js. --}}
+  {{#if isSuccess}}
+  {{#if weaponId}}
+  <div class="roll-card-damage-controls">
+    <span class="damage-momentum-remaining">+{{momentum}} <i class="fas fa-bolt"></i></span>
+    <button class="add-damage-die-btn" type="button" title="Spend 1 Momentum for +1 Dark Symmetry Die">
+      +1 <i class="fas fa-eclipse"></i>
+    </button>
+    <span class="damage-bonus-dsd" style="display:none">+0 <i class="fas fa-eclipse"></i></span>
+    <button class="roll-damage-btn" type="button">Roll Damage</button>
+  </div>
+  {{/if}}
+  {{/if}}
+
 </div>

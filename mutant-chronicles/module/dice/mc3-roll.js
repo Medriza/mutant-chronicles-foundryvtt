@@ -58,15 +58,25 @@ export async function sendRollToChat(rollResult) {
     rollResult
   );
 
+  // For successful weapon attacks, store state in ChatMessage flags so the
+  // renderChatMessage hook can wire up the interactive damage controls.
+  // Flags persist across reloads and sync to all connected clients.
+  const flags = {};
+  if (rollResult.weaponId && rollResult.isSuccess) {
+    flags['mutant-chronicles'] = {
+      isWeaponAttack:   true,
+      weaponId:         rollResult.weaponId,
+      actorId:          rollResult.actorId,
+      rollMomentum:     rollResult.momentum,  // momentum this roll generated
+      bonusDamageDice:  0,
+    };
+  }
+
   await ChatMessage.create({
     content,
-    // Attach the Roll object so Foundry renders the built-in dice tooltip
-    // (the expandable formula bar under each chat message).
     rolls:   [rollResult.roll],
-    // ChatMessage.getSpeaker() reads the currently-selected token, falling
-    // back to the actor name — so rolls appear attributed to the character
-    // rather than the GM's user account.
     speaker: ChatMessage.getSpeaker({ actor: rollResult.actor }),
+    ...(Object.keys(flags).length ? { flags } : {}),
   });
 }
 
@@ -82,7 +92,7 @@ export async function sendRollToChat(rollResult) {
  *
  * @returns {Promise<object>} rollResult — see structure below
  */
-export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel, rollFormula, weaponName }) {
+export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel, rollFormula, weaponName, actor, weaponId }) {
   // ── 1. Roll the dice ──────────────────────────────────────────────────────
   // Foundry's Roll class evaluates a dice expression and stores each
   // individual die result in roll.dice[0].results. We ask for numDice d20s.
@@ -129,6 +139,9 @@ export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel, rollF
     rollLabel,
     rollFormula,
     weaponName,
+    actor,
+    actorId: actor?.id  ?? null,
+    weaponId: weaponId  ?? null,
     tn,
     focus,
     difficulty,

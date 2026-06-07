@@ -23,6 +23,12 @@
     </p>
     <p class="roll-focus">Focus ≤ {{focusValue}} → 2 successes</p>
   </div>
+
+  <div class="form-group">
+    <label for="ds-spend">Spend Dark Symmetry <span class="hint">(Pool: {{currentDS}})</span></label>
+    <input id="ds-spend" name="dsSpend" type="number" value="0" min="0" max="3" />
+    <span class="hint">Each point adds +1d20 (max 3) and increases the DS pool.</span>
+  </div>
   {{/if}}
 
   {{!-- ── NPC Expertise Roll ──────────────────────────────────────────── --}}

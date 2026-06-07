@@ -161,7 +161,7 @@ export class MC3NpcSheet extends ActorSheet {
 
     const rollParams = await showExpertiseRollDialog(this.actor, 'combat', expertise);
     if (!rollParams?.numDice) return;
-    const rollResult = await rollMC3({ ...rollParams, actor: this.actor, weaponName: weapon.name });
+    const rollResult = await rollMC3({ ...rollParams, actor: this.actor, weaponName: weapon.name, weaponId: weapon.id });
     await sendRollToChat(rollResult);
   }
 

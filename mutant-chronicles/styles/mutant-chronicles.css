@@ -343,6 +343,191 @@
   font-weight: 700;
 }
 
+/* ── Damage Controls (bottom of successful weapon attack cards) ───────────── */
+
+.roll-card-damage-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-top: 1px solid #2a2010;
+  background: #141210;
+}
+
+.damage-momentum-remaining {
+  flex: 1;
+  color: #78b030;
+  font-size: 0.88em;
+  font-weight: 700;
+}
+
+.add-damage-die-btn {
+  background: #1e1a10;
+  border: 1px solid #6a5020;
+  border-radius: 3px;
+  color: #c8a84b;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.82em;
+  padding: 3px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-damage-die-btn:hover {
+  background: #2a2418;
+  border-color: #c8a84b;
+  color: #e8c860;
+}
+
+.damage-bonus-dsd {
+  color: #c8a84b;
+  font-size: 0.88em;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.roll-damage-btn {
+  background: #1e0c0c;
+  border: 1px solid #6b1a1a;
+  border-radius: 3px;
+  color: #b83030;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.82em;
+  padding: 3px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.roll-damage-btn:hover {
+  background: #2a1010;
+  border-color: #b83030;
+  color: #d84040;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MC3 Damage Chat Card
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.mc3-damage-card {
+  background: #1a1410;
+  border: 1px solid #5a3020;
+  border-radius: 4px;
+  color: #d0c8b8;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 14px;
+  overflow: hidden;
+  margin: 2px 0;
+}
+
+.damage-card-header {
+  background: #201408;
+  border-bottom: 1px solid #5a3020;
+  padding: 6px 10px;
+}
+
+.damage-card-title {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  color: #e8c860;
+  font-size: 1.35em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  margin: 0 0 1px 0;
+  padding: 0;
+  border: none;
+  text-shadow: none;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.damage-card-subtitle {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  color: #9a6040;
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── DSD dice grid ───────────────────────────────────────────────────────── */
+
+.damage-card-dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 8px 10px;
+}
+
+.dsd-result {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 3px;
+  border: 1px solid #333;
+  box-sizing: border-box;
+}
+
+.dsd-value {
+  font-size: 1.25em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Face 1 — 1 damage: amber */
+.dsd-result.dsd-one {
+  background: #1e1a10;
+  border-color: #6a5020;
+  color: #c8a84b;
+}
+
+/* Face 2 — 2 damage: bright gold + glow */
+.dsd-result.dsd-two {
+  background: #281e08;
+  border-color: #c8a84b;
+  color: #f0c860;
+  box-shadow: 0 0 4px rgba(200, 168, 75, 0.3);
+}
+
+/* Faces 3–5 — 0 damage: dim grey */
+.dsd-result.dsd-miss {
+  background: #141414;
+  border-color: #282828;
+  color: #6a6a6a;
+}
+
+/* Face 6 — DSI: blood red */
+.dsd-result.dsd-effect {
+  background: #1e0c0c;
+  border-color: #6b1a1a;
+  color: #b83030;
+}
+
+/* ── Totals row ──────────────────────────────────────────────────────────── */
+
+.damage-card-totals {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  border-top: 1px solid #2a1a10;
+}
+
+.damage-total strong {
+  color: #e8c860;
+  font-size: 1.1em;
+}
+
+.damage-flat {
+  color: #9a8870;
+  font-size: 0.88em;
+}
+
+.damage-dsi {
+  color: #b83030;
+  font-weight: 700;
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SKILLS TAB
