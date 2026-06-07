@@ -1,15 +1,15 @@
 {{!-- ── MC3 Roll Chat Card ───────────────────────────────────────────── --}}
 {{!-- Rendered into the chat log after every MC3 skill/expertise roll.
      Context keys (all set by rollMC3() in mc3-roll.js):
-       rollLabel         — skill or field name + attribute summary
-       tn                — Target Number
-       focus             — Focus threshold
-       difficulty        — D0–D5
-       dice              — array of { result, successes, isComplication, cssClass }
-       totalSuccesses    — sum of all die successes
-       totalComplications
-       momentum          — totalSuccesses - difficulty (can be negative)
-       isSuccess         — boolean                                               --}}
+       rollLabel          — skill or field name + attribute summary
+       tn                 — Target Number
+       focus              — Focus threshold
+       difficulty         — D0–D5
+       dice               — array of { result, successes, isRepercussion, cssClass }
+       totalSuccesses     — sum of all die successes
+       totalRepercussions — count of natural 20s rolled
+       momentum           — totalSuccesses - difficulty (can be negative)
+       isSuccess          — boolean                                              --}}
 
 <div class="mc3-roll-card">
 
@@ -36,7 +36,7 @@
     <div class="die-result {{die.cssClass}}" title="{{die.result}} → {{die.successes}} success(es)">
       <span class="die-value">{{die.result}}</span>
       <span class="die-successes">
-        {{#if die.isComplication}}
+        {{#if die.isRepercussion}}
           ⚠
         {{else}}
           {{die.successes}}✓
@@ -51,9 +51,9 @@
     <span class="total-successes">
       {{totalSuccesses}} success{{#if (ne totalSuccesses 1)}}es{{/if}}
     </span>
-    {{#if totalComplications}}
-    <span class="total-complications">
-      · {{totalComplications}} complication{{#if (ne totalComplications 1)}}s{{/if}}
+    {{#if totalRepercussions}}
+    <span class="total-repercussions">
+      · {{totalRepercussions}} repercussion{{#if (ne totalRepercussions 1)}}s{{/if}}
     </span>
     {{/if}}
   </div>
@@ -70,6 +70,20 @@
       <span class="shortfall">{{momentum}} short</span>
     {{/if}}
   </div>
+
+  {{!-- Repercussion row — visible to all, but the Bank button is GM-only.
+       The renderChatMessage hook hides this entire row once repercussionsBanked
+       is true, or hides just the button for non-GM users. --}}
+  {{#if totalRepercussions}}
+  <div class="roll-card-repercussions">
+    <span class="repercussion-label">
+      ⚠ {{totalRepercussions}} repercussion{{#if (ne totalRepercussions 1)}}s{{/if}}
+    </span>
+    <button class="bank-repercussions-btn" type="button">
+      Bank to <i class="fas fa-eclipse"></i> Pool (+2 per <i class="fas fa-eclipse"></i>)
+    </button>
+  </div>
+  {{/if}}
 
   {{!-- Damage controls — only on successful weapon attack rolls.
        State (remaining momentum, bonus dice) is managed via ChatMessage flags

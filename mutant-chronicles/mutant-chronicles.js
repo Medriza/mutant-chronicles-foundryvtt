@@ -121,7 +121,39 @@ Hooks.on('updateSetting', (setting) => {
 // ---------------------------------------------------------------------------
 Hooks.on('renderChatMessage', (message, html) => {
   const mcFlags = message.flags?.['mutant-chronicles'];
-  if (!mcFlags?.isWeaponAttack) return;
+
+  // Exit early if this card has nothing for us to wire up.
+  const hasWeaponAttack  = mcFlags?.isWeaponAttack;
+  const hasRepercussions = (mcFlags?.totalRepercussions ?? 0) > 0;
+  if (!hasWeaponAttack && !hasRepercussions) return;
+
+  // ── Repercussion row ──────────────────────────────────────────────────────
+  // HBS renders the row whenever totalRepercussions > 0. We show/hide the
+  // Bank button based on GM status, and hide the whole row once banked.
+  if (hasRepercussions) {
+    if (mcFlags.repercussionsBanked) {
+      // Already handled — hide the entire row for everyone.
+      html.find('.roll-card-repercussions').hide();
+    } else if (!game.user.isGM) {
+      // Players see the repercussion count but not the button — GM's call.
+      html.find('.bank-repercussions-btn').hide();
+    } else {
+      // GM: wire up the Bank button.
+      // Re-read flags inside the handler (stale closure guard).
+      html.find('.bank-repercussions-btn').off('click').on('click', async () => {
+        const msg       = game.messages.get(message.id);
+        const reps      = msg?.flags?.['mutant-chronicles']?.totalRepercussions ?? 0;
+        const dsGain    = reps * 2;   // +2 DS per repercussion
+        const currentDS = game.settings.get('mutant-chronicles', 'darkSymmetryPool');
+        await game.settings.set('mutant-chronicles', 'darkSymmetryPool', currentDS + dsGain);
+        await msg.update({ 'flags.mutant-chronicles.repercussionsBanked': true });
+        ui.notifications.info(`+${dsGain} added to the Dark Symmetry Pool.`);
+      });
+    }
+  }
+
+  // Exit here if this card has no weapon-attack controls to wire up.
+  if (!hasWeaponAttack) return;
 
   const { weaponId, actorId } = mcFlags;
   const rollMomentum    = mcFlags.rollMomentum    ?? 0;

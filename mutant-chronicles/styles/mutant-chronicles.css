@@ -273,8 +273,8 @@
   color: #6a6a6a;
 }
 
-/* Complication — roll of 20: blood red */
-.die-result.complication {
+/* Repercussion — roll of 20: blood red */
+.die-result.repercussion {
   background: #1e0c0c;
   border-color: #6b1a1a;
   color: #b83030;
@@ -296,9 +296,46 @@
   color: #c0b090;
 }
 
-.total-complications {
+.total-repercussions {
   color: #b83030;
   font-weight: 700;
+}
+
+/* ── Repercussion row (below verdict — GM banking prompt) ────────────────── */
+
+.roll-card-repercussions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-top: 1px solid #3a1a1a;
+  background: #160a0a;
+}
+
+.repercussion-label {
+  color: #b83030;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.88em;
+  flex: 1;
+}
+
+.bank-repercussions-btn {
+  background: #220808;
+  border: 1px solid #6b1a1a;
+  color: #c04040;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.95em;
+  letter-spacing: 0.05em;
+  padding: 2px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bank-repercussions-btn:hover {
+  background: #3a1010;
+  border-color: #9b2020;
+  color: #e05050;
 }
 
 /* ── Verdict ─────────────────────────────────────────────────────────────── */

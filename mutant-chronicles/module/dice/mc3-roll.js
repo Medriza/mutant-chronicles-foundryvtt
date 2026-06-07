@@ -58,10 +58,11 @@ export async function sendRollToChat(rollResult) {
     rollResult
   );
 
-  // For successful weapon attacks, store state in ChatMessage flags so the
-  // renderChatMessage hook can wire up the interactive damage controls.
-  // Flags persist across reloads and sync to all connected clients.
+  // Store state in ChatMessage flags so the renderChatMessage hook can wire up
+  // interactive controls. Flags persist across reloads and sync to all clients.
   const flags = {};
+
+  // Weapon attack flags — enable the damage controls row.
   if (rollResult.weaponId && rollResult.isSuccess) {
     flags['mutant-chronicles'] = {
       isWeaponAttack:   true,
@@ -69,6 +70,17 @@ export async function sendRollToChat(rollResult) {
       actorId:          rollResult.actorId,
       rollMomentum:     rollResult.momentum,  // momentum this roll generated
       bonusDamageDice:  0,
+    };
+  }
+
+  // Repercussion flags — enable the "Bank to DS Pool" button for the GM.
+  // Each repercussion gives the GM a choice: impose a complication OR +2 DS.
+  // Note: repercussion range can expand with Dread (future enhancement).
+  if (rollResult.totalRepercussions > 0) {
+    flags['mutant-chronicles'] = {
+      ...(flags['mutant-chronicles'] ?? {}),
+      totalRepercussions:  rollResult.totalRepercussions,
+      repercussionsBanked: false,
     };
   }
 
@@ -106,10 +118,10 @@ export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel, rollF
   // roll.dice[0].results is an array of objects: { result: <number>, active: true }
   // We map each raw value to a richer object the template can render directly.
   const dice = roll.dice[0].results.map(({ result }) => {
-    const isComplication = result === 20;
+    const isRepercussion = result === 20;
 
-    // A complication always gives 0 successes, even if TN ≥ 20 somehow.
-    const successes = isComplication ? 0
+    // A repercussion always gives 0 successes, even if TN ≥ 20 somehow.
+    const successes = isRepercussion ? 0
                     : result <= focus ? 2
                     : result <= tn    ? 1
                     :                   0;
@@ -117,20 +129,20 @@ export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel, rollF
     // CSS class drives the colour in the chat card:
     //   focus       → gold  (double success)
     //   hit         → green (normal success)
-    //   complication→ red
+    //   repercussion→ red
     //   miss        → grey
-    const cssClass = isComplication           ? 'complication'
+    const cssClass = isRepercussion            ? 'repercussion'
                    : result <= focus          ? 'focus'
                    : result <= tn             ? 'hit'
                    :                           'miss';
 
-    return { result, successes, isComplication, cssClass };
+    return { result, successes, isRepercussion, cssClass };
   });
 
   // ── 3. Totals ─────────────────────────────────────────────────────────────
-  const totalSuccesses    = dice.reduce((sum, d) => sum + d.successes, 0);
-  const totalComplications = dice.filter(d => d.isComplication).length;
-  const momentum          = totalSuccesses - difficulty;
+  const totalSuccesses     = dice.reduce((sum, d) => sum + d.successes, 0);
+  const totalRepercussions = dice.filter(d => d.isRepercussion).length;
+  const momentum           = totalSuccesses - difficulty;
   const isSuccess         = momentum >= 0;
 
   // ── 4. Build the result object ────────────────────────────────────────────
@@ -152,7 +164,7 @@ export async function rollMC3({ tn, focus, difficulty, numDice, rollLabel, rollF
 
     // Totals
     totalSuccesses,
-    totalComplications,
+    totalRepercussions,
     momentum,           // positive = bonus momentum, negative = shortfall
     isSuccess,
 
