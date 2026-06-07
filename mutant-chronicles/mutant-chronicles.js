@@ -15,6 +15,7 @@ import { preloadHandlebarsTemplates } from "./module/templates.js";
 import { registerRollHelpers } from "./module/dice/mc3-roll.js";
 import { rollDSD, sendDamageToChat } from "./module/dice/damage-roll.js";
 import { PoolTrackerApp } from "./module/apps/pool-tracker.js";
+import { MC3Combat }     from "./module/combat.js";
 
 const { Actors, Items } = foundry.documents.collections;
 
@@ -29,8 +30,9 @@ Hooks.once('init', () => {
 
   // Tell Foundry: when you instantiate an Actor, use MC3Actor instead of
   // the base Actor class. Same for Item.
-  CONFIG.Actor.documentClass = MC3Actor;
-  CONFIG.Item.documentClass  = MC3Item;
+  CONFIG.Actor.documentClass  = MC3Actor;
+  CONFIG.Item.documentClass   = MC3Item;
+  CONFIG.Combat.documentClass = MC3Combat;
 
   // ---------------------------------------------------------------------------
   // World settings — persisted server-side, synced to all clients automatically.
@@ -101,6 +103,172 @@ Hooks.on('updateSetting', (setting) => {
   ) {
     ui.mc3pools?.render();
   }
+});
+
+// ---------------------------------------------------------------------------
+// Combat tracker — MC3 styling, roll-button suppression, up/down reorder
+// arrows (GM only), disposition-based row colours, PC/NPC group divider,
+// initiative-box hiding, and done-indicator for combatants whose turn has
+// already passed this round.
+//
+// MC3 uses manual initiative ordering (PCs 100–51, NPCs 50–1). The GM clicks
+// ↑/↓ to move a combatant one slot within its group. Moves that would cross
+// the PC/NPC boundary are blocked.
+// ---------------------------------------------------------------------------
+
+/**
+ * Move a combatant one slot up (direction = -1) or down (direction = 1).
+ * Blocks moves that would cross the PC/NPC group boundary.
+ */
+async function moveCombatant(combatantId, direction) {
+  const combat = game.combat;
+  if (!combat) return;
+
+  // Sort descending by initiative — this is the tracker's display order.
+  const sorted = combat.combatants.contents
+    .filter(c => c.initiative !== null)
+    .sort((a, b) => (b.initiative ?? 0) - (a.initiative ?? 0));
+
+  const idx       = sorted.findIndex(c => c.id === combatantId);
+  const targetIdx = idx + direction;
+  if (idx === -1 || targetIdx < 0 || targetIdx >= sorted.length) return;
+
+  const mover    = sorted[idx];
+  const neighbor = sorted[targetIdx];
+
+  // Block moves that would cross the PC/NPC boundary.
+  const moverIsPC    = mover.actor?.type    === 'character';
+  const neighborIsPC = neighbor.actor?.type === 'character';
+  if (moverIsPC !== neighborIsPC) {
+    ui.notifications.warn('Cannot move across the PC/NPC boundary.');
+    return;
+  }
+
+  if (mover.initiative === neighbor.initiative) {
+    // Equal initiatives — nudge the mover to force a distinction.
+    await combat.updateEmbeddedDocuments('Combatant', [{
+      _id:        mover.id,
+      initiative: mover.initiative + (direction < 0 ? 0.5 : -0.5),
+    }]);
+  } else {
+    // Swap initiative values — Foundry re-sorts on the next render.
+    await combat.updateEmbeddedDocuments('Combatant', [
+      { _id: mover.id,    initiative: neighbor.initiative },
+      { _id: neighbor.id, initiative: mover.initiative    },
+    ]);
+  }
+}
+
+Hooks.on('renderCombatTracker', (app, html, data) => {
+  // v13 passes a raw HTMLElement here (not jQuery). Wrap once so we can use
+  // .find(), .hide(), and .on() throughout without worrying about the API.
+  const $html = $(html);
+  $html.addClass('mc3-combat-tracker');
+
+  // Hide per-combatant d20 roll button and header Roll All / Roll NPCs buttons.
+  $html.find('[data-control="rollInitiative"]').hide();
+  $html.find('[data-action="rollAll"], [data-action="rollNPC"]').hide();
+  $html.find('.combat-control[title*="Initiative"]').hide();
+
+  const combat = game.combat;
+
+  // Build the turn-order list so we can mark "already acted" combatants.
+  // combat.turn is the index (0-based) of the *current* combatant; everyone
+  // with a lower sorted index has already had their turn this round.
+  const sortedCombatants = (combat?.combatants.contents ?? [])
+    .filter(c => c.initiative !== null)
+    .sort((a, b) => (b.initiative ?? 0) - (a.initiative ?? 0));
+  const sortedIds = sortedCombatants.map(c => c.id);
+
+  let firstNPCEl = null;   // track where to insert the ENEMIES divider
+
+  $html.find('[data-combatant-id]').each((i, el) => {
+    const $el       = $(el);
+    const id        = el.dataset.combatantId;
+    const combatant = combat?.combatants.get(id);
+    if (!combatant) return;
+
+    // ── Disposition-based row colour ──────────────────────────────────────
+    const disposition = combatant.token?.disposition;
+    if (disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY) {
+      $el.addClass('mc3-combatant-pc');
+    } else if (disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE) {
+      $el.addClass('mc3-combatant-npc');
+    } else {
+      $el.addClass('mc3-combatant-neutral');
+    }
+
+    // ── Track first NPC row for group divider ─────────────────────────────
+    if (combatant.actor?.type !== 'character' && !firstNPCEl) {
+      firstNPCEl = $el;
+    }
+
+    // ── Done indicator — dimmed + ✓ for combatants whose turn has passed ──
+    const sortedIdx = sortedIds.indexOf(id);
+    if (combat?.started && sortedIdx >= 0 && sortedIdx < (combat.turn ?? 0)) {
+      $el.addClass('mc3-turn-done');
+    }
+
+    // ── Up/down arrows — GM only, guard against double-injection ──────────
+    if (!game.user.isGM || $el.find('.mc3-init-arrows').length) return;
+
+    const $arrows = $(`
+      <div class="mc3-init-arrows">
+        <a class="mc3-init-up"   title="Move Up"   data-id="${id}"><i class="fas fa-caret-up"></i></a>
+        <a class="mc3-init-down" title="Move Down"  data-id="${id}"><i class="fas fa-caret-down"></i></a>
+      </div>
+    `);
+
+    // Insert before the initiative box if present; otherwise append to the row.
+    const $initBox = $el.find('.token-initiative');
+    if ($initBox.length) $initBox.before($arrows);
+    else $el.append($arrows);
+  });
+
+  // ── PC/NPC group divider ──────────────────────────────────────────────────
+  if (firstNPCEl) {
+    firstNPCEl.before('<li class="mc3-group-label">Enemies</li>');
+  }
+
+  // ── Wire click handlers ───────────────────────────────────────────────────
+  if (!game.user.isGM) return;
+  $html.find('.mc3-init-up, .mc3-init-down').on('click', async (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    const direction = ev.currentTarget.classList.contains('mc3-init-up') ? -1 : 1;
+    await moveCombatant(ev.currentTarget.dataset.id, direction);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Momentum attrition — fires when the combat round advances.
+//
+// At the end of each combat round the Group Momentum Pool loses 1 point
+// (min 0). This represents unspent momentum dissipating under pressure.
+// Only runs on the GM client to avoid double-applying from multiple users.
+// ---------------------------------------------------------------------------
+Hooks.on('updateCombat', (combat, changed, options, userId) => {
+  // Only the GM applies attrition (world setting change still broadcasts
+  // to all clients via the updateSetting hook, keeping the pool tracker fresh).
+  if (!game.user.isGM) return;
+
+  // changed.round is present only when the round number actually changed.
+  // Round 1 start (changed.round === 1) is combat beginning — no attrition yet.
+  if (!changed.round || changed.round <= 1) return;
+
+  const current = game.settings.get('mutant-chronicles', 'momentumPool');
+  const newValue = Math.max(0, current - 1);
+  game.settings.set('mutant-chronicles', 'momentumPool', newValue);
+
+  // Post a brief chat notice so the table can see the pool shrink.
+  ChatMessage.create({
+    content: `<div class="mc3-attrition-notice">
+      <i class="fas fa-bolt"></i>
+      Round ${changed.round - 1} ended — Momentum Pool: ${newValue}
+      <span class="attrition-delta">(-1 attrition)</span>
+    </div>`,
+    speaker: { alias: 'MC3 Combat' },
+  });
 });
 
 // ---------------------------------------------------------------------------
