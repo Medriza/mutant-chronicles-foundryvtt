@@ -70,10 +70,46 @@ export async function showSkillRollDialog(actor, skill) {
   // global renderTemplate().
   const content = await foundry.applications.handlebars.renderTemplate(DIALOG_TEMPLATE, templateData);
 
+  // Wire stepper buttons after the dialog renders.
+  // Foundry strips inline event handlers (onclick, oninput) from content HTML,
+  // so we use the renderDialogV2 hook to add them after render.
+  // Hooks.once fires exactly once for the next DialogV2 that renders — ours.
+  Hooks.once('renderDialogV2', (_app, html) => {
+    const root  = html instanceof HTMLElement ? html : html[0];
+    const total = root.querySelector('.bonus-total-value');
+
+    function syncTotal() {
+      if (!total) return;
+      const b = parseInt(root.querySelector('[name="buyDice"]')?.value   || '0') || 0;
+      const e = parseInt(root.querySelector('[name="extraDice"]')?.value || '0') || 0;
+      total.textContent = Math.max(0, b) + Math.max(0, e);
+    }
+
+    // Wire every stepper button in this dialog
+    root.querySelectorAll('.counter-stepper .stepper-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name   = btn.dataset.name;
+        const input  = root.querySelector(`[name="${name}"]`);
+        if (!input) return;
+        const min    = parseInt(input.dataset.min  ?? '0');
+        const max    = parseInt(input.dataset.max  ?? '99');
+        const delta  = btn.classList.contains('stepper-up') ? 1 : -1;
+        const next   = Math.min(max, Math.max(min, (parseInt(input.value) || 0) + delta));
+        input.value  = next;
+        // Update the display span in the same .counter-stepper
+        const display = btn.closest('.counter-stepper')?.querySelector('.stepper-val');
+        if (display) display.textContent = next;
+        syncTotal();
+      });
+    });
+  });
+
   // DialogV2.wait() returns a Promise that resolves to whatever the
   // clicked button's callback returns, or null if the window is closed.
   return DialogV2.wait({
     window:       { title: `Roll: ${skill.name}` },
+    classes:      ['mc3-dialog'],
+    position:     { width: 420 },
     content,
     rejectClose:  false,   // resolve null on window-X rather than throwing
     buttons: [
@@ -85,16 +121,16 @@ export async function showSkillRollDialog(actor, skill) {
         callback: (event, button, dialog) => {
           // dialog.element is the root DOM node of the rendered dialog.
           const difficulty = parseInt(dialog.element.querySelector('[name="difficulty"]').value, 10);
-          const bonusDice  = parseInt(dialog.element.querySelector('[name="bonusDice"]').value,  10) || 0;
-          const dsSpend    = Math.min(parseInt(dialog.element.querySelector('[name="dsSpend"]').value, 10) || 0, 3);
+          const buyDice    = Math.min(3, parseInt(dialog.element.querySelector('[name="buyDice"]').value,   10) || 0);
+          const extraDice  = Math.max(0, parseInt(dialog.element.querySelector('[name="extraDice"]').value, 10) || 0);
           return {
             tn,
             focus,
             difficulty,
-            numDice:     2 + bonusDice + dsSpend,
+            numDice:     2 + buyDice + extraDice,
             rollLabel:   skill.name,
             rollFormula: `${ATTRIBUTE_LABELS[attrKey]} ${attrValue} + EXP ${expertise}`,
-            dsSpend,
+            dsSpend:     buyDice,   // each bought die costs 1 DS
           };
         },
       },
@@ -140,8 +176,29 @@ export async function showExpertiseRollDialog(actor, field, expertise) {
 
   const content = await foundry.applications.handlebars.renderTemplate(DIALOG_TEMPLATE, templateData);
 
+  // Wire stepper buttons for the NPC expertise dialog.
+  Hooks.once('renderDialogV2', (_app, html) => {
+    const root = html instanceof HTMLElement ? html : html[0];
+    root.querySelectorAll('.counter-stepper .stepper-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name  = btn.dataset.name;
+        const input = root.querySelector(`[name="${name}"]`);
+        if (!input) return;
+        const min   = parseInt(input.dataset.min  ?? '0');
+        const max   = parseInt(input.dataset.max  ?? '99');
+        const delta = btn.classList.contains('stepper-up') ? 1 : -1;
+        const next  = Math.min(max, Math.max(min, (parseInt(input.value) || 0) + delta));
+        input.value = next;
+        const display = btn.closest('.counter-stepper')?.querySelector('.stepper-val');
+        if (display) display.textContent = next;
+      });
+    });
+  });
+
   return DialogV2.wait({
     window:       { title: `Roll: ${fieldLabel}` },
+    classes:      ['mc3-dialog'],
+    position:     { width: 420 },
     content,
     rejectClose:  false,
     buttons: [
@@ -157,12 +214,12 @@ export async function showExpertiseRollDialog(actor, field, expertise) {
           const foc        = expertise.foc ?? 0;
           const tn         = attrValue + exp;
           const difficulty = parseInt(dialog.element.querySelector('[name="difficulty"]').value, 10);
-          const bonusDice  = parseInt(dialog.element.querySelector('[name="bonusDice"]').value,  10) || 0;
+          const extraDice  = Math.max(0, parseInt(dialog.element.querySelector('[name="extraDice"]').value, 10) || 0);
           return {
             tn,
             focus:     foc,
             difficulty,
-            numDice:   2 + bonusDice,
+            numDice:   2 + extraDice,
             rollLabel:   fieldLabel,
             rollFormula: `${ATTRIBUTE_LABELS[attrKey] ?? attrKey} ${attrValue} + EXP ${exp}`,
           };

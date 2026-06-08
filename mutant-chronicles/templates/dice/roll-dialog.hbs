@@ -1,65 +1,70 @@
-{{!-- ── MC3 Roll Dialog ──────────────────────────────────────────────── --}}
-{{!-- Rendered inside a Foundry Dialog popup before any dice are thrown.
+{{!-- ── MC3 Roll Dialog ──────────────────────────────────────────────────── --}}
+{{!-- Rendered inside a Foundry DialogV2 popup before any dice are thrown.
      The 'mode' helper variable determines which block renders:
-       mode === 'skill'      → PC skill roll  (TN pre-calculated)
-       mode === 'expertise'  → NPC expertise roll (attribute chosen here)
+       isSkill      → PC skill roll  (TN pre-calculated; Buy Dice adds to DS pool)
+       isExpertise  → NPC expertise roll (attribute chosen here)
 
-     All <input> elements are read by the Dialog's confirm callback via
-     the html argument: html.find('[name="difficulty"]').val(), etc.       --}}
+     Field names read by the dialog callbacks in roll-dialog.js:
+       isSkill:     buyDice, extraDice, difficulty
+       isExpertise: attribute, extraDice, difficulty
 
-<form class="mc3-roll-dialog">
+     NOTE: Foundry's HTML sanitizer strips inline event handlers (oninput,
+     onkeydown, onclick). All event wiring is in roll-dialog.js via Hooks.once.
 
-  {{!-- ── PC Skill Roll ─────────────────────────────────────────────── --}}
+     Counter stepper structure for Buy/Extra Dice:
+       .counter-stepper  → flex row with − | value | + buttons
+       hidden input       → stores the actual value for the JS callback
+     Click handlers update the display span and the hidden input, then call
+     syncTotal() to keep Bonus Dice in sync.                                  --}}
+
+<div class="mc3-roll-dialog">
+
+  {{!-- ── PC Skill Roll ─────────────────────────────────────────────────── --}}
   {{#if isSkill}}
-  <div class="roll-summary">
-    <p class="roll-label">
-      <strong>{{skillName}}</strong>
-      &nbsp;·&nbsp;
-      {{attributeLabel}} {{attributeValue}}
-      &nbsp;+&nbsp;
-      EXP {{expertiseValue}}
-      &nbsp;=&nbsp;
-      <strong>TN {{tn}}</strong>
-    </p>
-    <p class="roll-focus">Focus ≤ {{focusValue}} → 2 successes</p>
+
+  {{!-- Bar 1: Main formula — darkest band, brightest font --}}
+  <div class="roll-formula-bar">
+    <strong>{{skillName}}</strong>
+    &nbsp;·&nbsp;
+    {{attributeLabel}} {{attributeValue}}
+    &nbsp;+&nbsp; EXP {{expertiseValue}}
+    &nbsp;=&nbsp;
+    <span class="roll-tn-value">TN {{tn}}</span>
   </div>
 
-  <div class="form-group">
-    <label for="ds-spend">Spend Dark Symmetry <span class="hint">(Pool: {{currentDS}})</span></label>
-    <input id="ds-spend" name="dsSpend" type="number" value="0" min="0" max="3" />
-    <span class="hint">Each point adds +1d20 (max 3) and increases the DS pool.</span>
-  </div>
-  {{/if}}
-
-  {{!-- ── NPC Expertise Roll ──────────────────────────────────────────── --}}
-  {{#if isExpertise}}
-  <div class="roll-summary">
-    <p class="roll-label">
-      <strong>{{fieldLabel}}</strong>
-      &nbsp;·&nbsp;
-      EXP {{expertiseValue}}
-      &nbsp;|&nbsp;
-      FOC {{focusValue}}
-    </p>
+  {{!-- Bar 2: Focus line — slightly lighter band --}}
+  <div class="roll-focus-bar">
+    Focus ≤ {{focusValue}} → 2 successes
   </div>
 
-  {{!-- NPC: GM picks which attribute to combine with this Field of Expertise --}}
-  <div class="form-group">
-    <label for="attr-select">Attribute</label>
-    <select id="attr-select" name="attribute">
-      {{#each attributes as |attr|}}
-      <option value="{{attr.key}}">{{attr.label}} ({{attr.value}})</option>
-      {{/each}}
-    </select>
+  {{!-- Dice counters — side by side --}}
+  <div class="dice-inputs-row">
+
+    <div class="dice-counter">
+      <div class="counter-label">Buy Dice</div>
+      <div class="counter-hint">+1 DS per die · max 3</div>
+      <div class="counter-stepper">
+        <button type="button" class="stepper-btn stepper-down" data-name="buyDice">−</button>
+        <span class="stepper-val">0</span>
+        <button type="button" class="stepper-btn stepper-up"   data-name="buyDice">+</button>
+      </div>
+      <input type="hidden" name="buyDice" value="0" data-min="0" data-max="3" />
+    </div>
+
+    <div class="dice-counter">
+      <div class="counter-label">Extra Dice</div>
+      <div class="counter-hint">Free bonus d20s</div>
+      <div class="counter-stepper">
+        <button type="button" class="stepper-btn stepper-down" data-name="extraDice">−</button>
+        <span class="stepper-val">0</span>
+        <button type="button" class="stepper-btn stepper-up"   data-name="extraDice">+</button>
+      </div>
+      <input type="hidden" name="extraDice" value="0" data-min="0" data-max="99" />
+    </div>
+
   </div>
 
-  <p class="roll-tn-preview">
-    TN = selected attribute + EXP ({{expertiseValue}})
-    <span class="tn-preview-note">(calculated when you confirm)</span>
-  </p>
-  {{/if}}
-
-  {{!-- ── Shared controls ─────────────────────────────────────────────── --}}
+  {{!-- Difficulty --}}
   <div class="form-group">
     <label for="difficulty">Difficulty</label>
     <select id="difficulty" name="difficulty">
@@ -72,10 +77,68 @@
     </select>
   </div>
 
-  <div class="form-group">
-    <label for="bonus-dice">Bonus Dice</label>
-    <input id="bonus-dice" name="bonusDice" type="number" value="0" min="0" max="5" />
-    <span class="hint">Extra d20s (Momentum spends, assists, etc.)</span>
+  {{!-- Total bonus dice — display box, same visual as Buy/Extra counters --}}
+  <div class="dice-bonus-row">
+    <div class="dice-counter dice-bonus-box">
+      <div class="counter-label">Bonus Dice</div>
+      <div class="counter-hint">Total extra d20s</div>
+      <div class="bonus-total-value">0</div>
+    </div>
   </div>
 
-</form>
+  {{/if}}
+
+
+  {{!-- ── NPC Expertise Roll ──────────────────────────────────────────────── --}}
+  {{#if isExpertise}}
+
+  {{!-- Bar 1: Field summary --}}
+  <div class="roll-formula-bar">
+    <strong>{{fieldLabel}}</strong>
+    &nbsp;·&nbsp; EXP {{expertiseValue}}
+    &nbsp;|&nbsp; FOC {{focusValue}}
+  </div>
+
+  {{!-- Bar 2: TN preview note --}}
+  <div class="roll-focus-bar">
+    TN = selected attribute + EXP ({{expertiseValue}})
+  </div>
+
+  {{!-- Attribute select --}}
+  <div class="form-group">
+    <label for="attr-select">Attribute</label>
+    <select id="attr-select" name="attribute">
+      {{#each attributes as |attr|}}
+      <option value="{{attr.key}}">{{attr.label}} ({{attr.value}})</option>
+      {{/each}}
+    </select>
+  </div>
+
+  {{!-- Extra dice stepper --}}
+  <div class="form-group">
+    <label>Extra Dice</label>
+    <div class="counter-stepper npc-stepper">
+      <button type="button" class="stepper-btn stepper-down" data-name="extraDice">−</button>
+      <span class="stepper-val">0</span>
+      <button type="button" class="stepper-btn stepper-up"   data-name="extraDice">+</button>
+    </div>
+    <input type="hidden" name="extraDice" value="0" data-min="0" data-max="99" />
+    <span class="counter-hint">Free bonus d20s</span>
+  </div>
+
+  {{!-- Difficulty --}}
+  <div class="form-group">
+    <label for="difficulty">Difficulty</label>
+    <select id="difficulty" name="difficulty">
+      <option value="0">D0 — Routine</option>
+      <option value="1" selected>D1 — Average</option>
+      <option value="2">D2 — Challenging</option>
+      <option value="3">D3 — Daunting</option>
+      <option value="4">D4 — Dire</option>
+      <option value="5">D5 — Epic</option>
+    </select>
+  </div>
+
+  {{/if}}
+
+</div>

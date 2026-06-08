@@ -132,6 +132,308 @@
 
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   MC3 ROLL DIALOG
+   DialogV2.wait() is called with classes: ['mc3-dialog'], which puts that
+   class on the root window element. We use it to style the window chrome
+   and then scope inner rules through .mc3-roll-dialog (the root <div>).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Window chrome ────────────────────────────────────────────────────────── */
+
+/* Same parchment as the actor sheets */
+.mc3-dialog .window-content {
+  background-color: #c8b87a;
+  background-image: none;
+  color: #2a1e08;
+  padding: 0;          /* padding handled by form interior */
+}
+
+/* Dark header band matching sheet section-header */
+.mc3-dialog .window-header {
+  background: #2a2010;
+  border-bottom: 1px solid #5a4010;
+}
+
+.mc3-dialog .window-title {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  color: #e8d080;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-shadow: none;
+}
+
+/* Footer — breathing room for Roll/Cancel buttons */
+.mc3-dialog .dialog-footer,
+.mc3-dialog footer {
+  padding: 8px 12px 14px !important;
+  gap: 8px !important;
+}
+
+/* Roll button — prominent dark band with gold text */
+.mc3-dialog .dialog-footer .dialog-button[data-action="roll"],
+.mc3-dialog footer .dialog-button[data-action="roll"] {
+  background: #2a2010;
+  border: 1px solid #5a4010;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.1em;
+  letter-spacing: 0.08em;
+}
+
+.mc3-dialog .dialog-footer .dialog-button[data-action="roll"]:hover,
+.mc3-dialog footer .dialog-button[data-action="roll"]:hover {
+  background: #3a2e14;
+  border-color: #c8a84b;
+  color: #f0d880;
+}
+
+/* Cancel button — low emphasis */
+.mc3-dialog .dialog-footer .dialog-button[data-action="cancel"],
+.mc3-dialog footer .dialog-button[data-action="cancel"] {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #8a6030;
+  color: #5a4020;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.9em;
+  letter-spacing: 0.04em;
+}
+
+.mc3-dialog .dialog-footer .dialog-button[data-action="cancel"]:hover,
+.mc3-dialog footer .dialog-button[data-action="cancel"]:hover {
+  background: rgba(0, 0, 0, 0.18);
+  border-color: #c8a84b;
+  color: #3a2010;
+}
+
+/* ── Form interior ────────────────────────────────────────────────────────── */
+
+.mc3-roll-dialog {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  color: #2a1e08;
+}
+
+/* ── Header bars ─────────────────────────────────────────────────────────── */
+
+/* Bar 1 — main skill formula: darkest, brightest text */
+.mc3-roll-dialog .roll-formula-bar {
+  background: #2a2010 !important;
+  color: #d0c8a0 !important;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif !important;
+  font-size: 0.95em;
+  letter-spacing: 0.02em;
+  padding: 8px 12px;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.mc3-roll-dialog .roll-formula-bar strong {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  color: #e8d080;
+  font-size: 1.2em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mc3-roll-dialog .roll-tn-value {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  color: #f0d880;
+  font-size: 1.15em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+/* Bar 2 — focus line: same text style as formula bar body */
+.mc3-roll-dialog .roll-focus-bar {
+  background: #3a2e18 !important;
+  color: #d0c8a0 !important;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif !important;
+  font-size: 0.95em;
+  letter-spacing: 0.02em;
+  padding: 5px 12px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ── Dice counter row (Buy Dice | Extra Dice) ────────────────────────────── */
+
+.mc3-roll-dialog .dice-inputs-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px;
+  padding: 0 12px;
+  margin-bottom: 12px;
+}
+
+.mc3-roll-dialog .dice-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #8a6030;
+  border-radius: 3px;
+  padding: 8px 6px;
+}
+
+.mc3-roll-dialog .counter-label {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.3em;
+  font-weight: 400;
+  color: #2a1e08;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.mc3-roll-dialog .counter-hint {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.84em;
+  color: #7a5a30;
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+/* ── Custom stepper (replaces native number-input spinners) ──────────────── */
+/* Each counter box contains: .counter-stepper > [−] .stepper-val [+]        */
+
+.mc3-roll-dialog .counter-stepper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 48px;
+  gap: 4px;
+}
+
+/* − / + buttons */
+.mc3-roll-dialog .stepper-btn {
+  flex-shrink: 0;
+  width: 30px;
+  background: #2a2010;
+  border: 1px solid #5a4010;
+  border-radius: 3px;
+  color: #e8d080;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.8em;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.1s, border-color 0.1s;
+  user-select: none;
+}
+
+.mc3-roll-dialog .stepper-btn:hover {
+  background: #3a2e14;
+  border-color: #c8a84b;
+  color: #f0d880;
+}
+
+.mc3-roll-dialog .stepper-btn:active {
+  background: #1a1208;
+}
+
+/* Center value display */
+.mc3-roll-dialog .stepper-val {
+  flex: 1;
+  display: block;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #8a6030;
+  border-radius: 3px;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 2em;
+  color: #2a1e08;
+}
+
+/* NPC form-group stepper: narrower, sits inside a .form-group row */
+.mc3-roll-dialog .npc-stepper {
+  height: 36px;
+  margin-bottom: 0;
+}
+
+.mc3-roll-dialog .npc-stepper .stepper-btn {
+  width: 26px;
+  font-size: 1.4em;
+}
+
+.mc3-roll-dialog .npc-stepper .stepper-val {
+  height: 36px;
+  line-height: 36px;
+  font-size: 1.6em;
+}
+
+/* ── Form groups (Difficulty, NPC Extra Dice) ────────────────────────────── */
+
+/* High-specificity selector to override Foundry's .application .form-group */
+.mc3-dialog .mc3-roll-dialog .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 0 12px;
+  margin-bottom: 10px;
+}
+
+.mc3-dialog .mc3-roll-dialog .form-group label {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.82em;
+  color: #5a4020;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.mc3-dialog .mc3-roll-dialog .form-group select {
+  background: rgba(255, 255, 255, 0.45) !important;
+  border: 1px solid #8a6030 !important;
+  border-radius: 3px;
+  color: #2a1e08 !important;
+  font-family: 'Oswald', 'Arial Narrow', sans-serif !important;
+  font-size: 0.95em !important;
+  padding: 4px 8px !important;
+  height: 30px !important;
+  width: 100%;
+}
+
+.mc3-dialog .mc3-roll-dialog .form-group select:focus {
+  border-color: #5a3010 !important;
+  outline: none;
+}
+
+/* ── Bonus Dice total display ────────────────────────────────────────────── */
+/* Full-width box, same visual language as the Buy/Extra counter boxes       */
+
+.mc3-roll-dialog .dice-bonus-row {
+  padding: 0 12px;
+  margin-bottom: 12px;
+}
+
+/* .dice-bonus-box reuses .dice-counter styles; only the value display differs */
+.mc3-roll-dialog .dice-bonus-box {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.mc3-roll-dialog .bonus-total-value {
+  font-family: 'Bebas Neue', 'Impact', sans-serif !important;
+  font-size: 2em !important;
+  font-weight: 400;
+  color: #2a1e08;
+  letter-spacing: 0.06em;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  width: 100%;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
    MC3 ROLL CHAT CARD
    Rendered into Foundry's chat log by sendRollToChat() in mc3-roll.js.
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -184,10 +486,11 @@
 }
 
 /* Formula span — shown after skill/field name in both title and secondary-skill contexts.
-   Smaller and dimmer so the name reads first. */
+   Smaller and dimmer so the name reads first.
+   Using absolute px to stay readable regardless of parent font-size context. */
 .roll-card-formula {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: 0.6em;
+  font-size: 11px;
   font-weight: 400;
   color: #9a8870;
   letter-spacing: 0.02em;
@@ -394,7 +697,7 @@
 .damage-momentum-remaining {
   flex: 1;
   color: #78b030;
-  font-size: 0.88em;
+  font-size: 0.9em;
   font-weight: 700;
 }
 
@@ -404,8 +707,8 @@
   border-radius: 3px;
   color: #c8a84b;
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: 0.82em;
-  padding: 3px 8px;
+  font-size: 0.88em;
+  padding: 3px 9px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -418,27 +721,28 @@
 
 .damage-bonus-dsd {
   color: #c8a84b;
-  font-size: 0.88em;
+  font-size: 0.9em;
   font-weight: 700;
   white-space: nowrap;
 }
 
 .roll-damage-btn {
-  background: #1e0c0c;
-  border: 1px solid #6b1a1a;
+  background: #2a0c0c;
+  border: 1px solid #8b2020;
   border-radius: 3px;
-  color: #b83030;
-  font-family: 'Oswald', 'Arial Narrow', sans-serif;
-  font-size: 0.82em;
-  padding: 3px 8px;
+  color: #d84040;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.05em;
+  letter-spacing: 0.06em;
+  padding: 3px 12px;
   cursor: pointer;
   white-space: nowrap;
 }
 
 .roll-damage-btn:hover {
-  background: #2a1010;
-  border-color: #b83030;
-  color: #d84040;
+  background: #3a1010;
+  border-color: #c83030;
+  color: #ff5050;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -543,27 +847,84 @@
 
 .damage-card-totals {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
-  padding: 5px 10px;
-  font-size: 0.9em;
+  justify-content: center;
+  padding: 6px 10px;
   border-top: 1px solid #2a1a10;
+  font-size: 1em;
+}
+
+.damage-total {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
 }
 
 .damage-total strong {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
   color: #e8c860;
-  font-size: 1.1em;
+  font-size: 2em;         /* ~28px — the hero number */
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.damage-total-label {
+  color: #9a8870;
+  font-size: 0.88em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .damage-flat {
   color: #9a8870;
-  font-size: 0.88em;
+  font-size: 0.82em;
 }
 
 .damage-dsi {
   color: #b83030;
   font-weight: 700;
+  font-size: 0.95em;
 }
+
+/* ── Hit Location row ────────────────────────────────────────────────────── */
+
+.damage-card-location {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 10px 7px;
+  border-top: 1px solid #2a1a10;
+}
+
+.loc-label {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.78em;
+  color: #6a5030;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex: 0 0 auto;
+}
+
+.loc-name {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: 1.1em;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.loc-roll {
+  font-family: 'Oswald', 'Arial Narrow', sans-serif;
+  font-size: 0.78em;
+  color: #6a5030;
+  flex: 0 0 auto;
+}
+
+/* All locations use the same gold — clean and consistent */
+.loc-name { color: #e8c860; }
 
 
 /* ═══════════════════════════════════════════════════════════════════════════

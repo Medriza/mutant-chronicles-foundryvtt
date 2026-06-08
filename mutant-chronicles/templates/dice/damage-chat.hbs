@@ -1,12 +1,15 @@
 {{!-- ── MC3 Damage Chat Card ─────────────────────────────────────────────── --}}
 {{!-- Rendered into the chat log after a DSD damage roll.
      Context keys (all set by rollDSD() in damage-roll.js):
-       weaponName    — name of the weapon rolled
-       numDice       — total DSD rolled
-       flatBonus     — weapon's flat damage bonus
-       dice          — array of { result, damage, isDSI, cssClass }
-       totalDamage   — sum of die damage values + flatBonus
-       dsiCount      — number of 6s (Dark Symmetry Icons)                    --}}
+       weaponName       — name of the weapon rolled
+       numDice          — total DSD rolled
+       flatBonus        — weapon's flat damage bonus
+       dice             — array of { result, damage, isDSI, cssClass }
+       totalDamage      — sum of die damage values + flatBonus
+       dsiCount         — number of 6s (Dark Symmetry Icons)
+       hitRoll          — raw d20 result (1–20)
+       hitLocation      — location name: Head / Right Arm / Left Arm / Torso / Right Leg / Left Leg
+       hitLocationClass — CSS class: loc-head / loc-arm / loc-torso / loc-leg             --}}
 
 <div class="mc3-damage-card">
 
@@ -37,16 +40,21 @@
   {{!-- Totals --}}
   <div class="damage-card-totals">
     <span class="damage-total">
-      <strong>{{totalDamage}}</strong> Damage
-      {{#if flatBonus}}
-        <span class="damage-flat">(+{{flatBonus}} flat)</span>
-      {{/if}}
+      <strong>{{totalDamage}}</strong>
+      <span class="damage-total-label">Damage{{#if flatBonus}} <span class="damage-flat">(+{{flatBonus}} flat)</span>{{/if}}</span>
     </span>
     {{#if dsiCount}}
     <span class="damage-dsi">
       · {{dsiCount}} DSI <i class="fas fa-eclipse"></i>
     </span>
     {{/if}}
+  </div>
+
+  {{!-- Hit location --}}
+  <div class="damage-card-location {{hitLocationClass}}">
+    <span class="loc-label">Hit Location</span>
+    <span class="loc-name">{{hitLocation}}</span>
+    <span class="loc-roll">({{hitRoll}})</span>
   </div>
 
 </div>
