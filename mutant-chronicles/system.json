@@ -31,6 +31,20 @@
             "path": "packs/mc3-skills",
             "type": "Item",
             "system": "mutant-chronicles"
+        },
+         {
+            "name": "mc3-weapons",
+            "label": "MC3 Weapons",
+            "path": "packs/mc3-weapons",
+            "type": "Item",
+            "system": "mutant-chronicles"
+        },
+         {
+            "name": "mc3-armour",
+            "label": "MC3 Armour",
+            "path": "packs/mc3-armour",
+            "type": "Item",
+            "system": "mutant-chronicles"
         }
     ]
 }

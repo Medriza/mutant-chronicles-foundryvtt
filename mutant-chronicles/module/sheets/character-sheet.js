@@ -10,6 +10,7 @@
  */
 import { showSkillRollDialog }          from '../dice/roll-dialog.js';
 import { rollMC3, sendRollToChat }      from '../dice/mc3-roll.js';
+import { findLinkedParts }              from '../item.js';
 
 const { ActorSheet } = foundry.appv1.sheets;
 
@@ -590,6 +591,12 @@ export class MC3CharacterSheet extends ActorSheet {
         }
       }
       toCreate.push(data);
+
+      // Multi-part weapon? Pull its companion parts (e.g. an integral grenade
+      // launcher) out of the compendium so they arrive together.
+      if (data.type === 'weapon') {
+        toCreate.push(...await findLinkedParts(data, this.actor));
+      }
     }
 
     // Create any non-duplicate items normally.

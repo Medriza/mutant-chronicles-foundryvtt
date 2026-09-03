@@ -19,6 +19,7 @@
  */
 import { showExpertiseRollDialog }      from '../dice/roll-dialog.js';
 import { rollMC3, sendRollToChat }      from '../dice/mc3-roll.js';
+import { findLinkedParts }              from '../item.js';
 
 const { ActorSheet } = foundry.appv1.sheets;
 
@@ -138,6 +139,12 @@ export class MC3NpcSheet extends ActorSheet {
         }
       }
       toCreate.push(data);
+
+      // Multi-part weapon? Pull its companion parts (e.g. an integral grenade
+      // launcher) out of the compendium so they arrive together.
+      if (data.type === 'weapon') {
+        toCreate.push(...await findLinkedParts(data, this.actor));
+      }
     }
 
     if (toCreate.length) return super._onDropItemCreate(toCreate);

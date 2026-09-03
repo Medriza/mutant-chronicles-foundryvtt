@@ -746,6 +746,7 @@
             "restriction": 0,
             "cost": 0,
             "faction": "",
+            "manufacturer": "",
             "description": ""
         },
         "armour": {
